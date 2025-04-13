@@ -13,14 +13,27 @@
      --text-color-style6: #555; /* Dark Grey text */
      --text-color-light-style6: #757575; /* Lighter Grey */
      --bg-color-forms: #eee; /* Form background */
-     --bg-color-main: #ecf0f3; /* Light grey base */
+     /* --- Updated Background --- */
+     --bg-color-main: #dde1e4;   /* Slightly Darker Grey */
      --bg-gradient: linear-gradient(135deg, #cfd8dc 0%, #607d8b 100%, #b0bec5 100%);
-     --shadow-convex-outer: 6px 6px 12px #cbced1, -6px -6px 12px #ffffff; /* Adjusted shadow */
-     --shadow-inset: inset 5px 5px 10px #cbced1, inset -5px -5px 10px #ffffff; /* Adjusted inset shadow */
+     /* --- Updated Shadows --- */
+     --shadow-convex-outer: 6px 6px 12px #babecc, -6px -6px 12px #feffff; /* Adjusted shadow */
+     --shadow-inset: inset 5px 5px 10px #babecc, inset -5px -5px 10px #feffff; /* Adjusted inset shadow */
+
      --border-radius-container: 10px; /* Consistent radius */
      --border-radius-button: 8px; /* Button radius */
      --border-radius-input: 8px; /* Input radius */
      --transition-duration: 0.4s; /* Smoother transition */
+
+     /* --- Dark Theme Variables --- */
+     --bg-color-main-dark: #2a2a2e;
+     --bg-color-forms-dark: #3a3a3e;
+     --text-color-style6-dark: #e0e0e0;
+     --text-color-light-style6-dark: #b0b0b0;
+     --shadow-convex-outer-dark: 6px 6px 12px #222224, -6px -6px 12px #323236;
+     --shadow-inset-dark: inset 5px 5px 10px #222224, inset -5px -5px 10px #323236;
+     --primary-color-style6-dark: #36d7ed; /* Slightly brighter teal for dark */
+     --secondary-color-style6-dark: #ff6f6b; /* Slightly brighter red for dark */
 }
 
 html {
@@ -34,17 +47,18 @@ body {
     flex-direction: column; /* Stack header and wizard */
     align-items: center; /* Center direct children horizontally */
     padding: 2em;
-    background: var(--bg-color-main); /* Solid background */
+    background: var(--bg-color-main); /* Solid background using variable */
     font-family: 'Poppins', sans-serif;
     color: var(--text-color-style6);
     font-size: 16px;
     line-height: 1.5; /* Improved line height */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Theme transition */
 }
 
 /* Header */
 header {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */ /* Removed for auto margin */
     align-items: center;
     width: 100%;
     max-width: 900px; /* Max width */
@@ -53,6 +67,7 @@ header {
     border-bottom: 1px solid #ddd; /* Subtle separator */
     flex-wrap: wrap;
     box-sizing: border-box;
+    gap: 1em; /* Add gap between items */
 }
 header h1 {
     font-weight: 900;
@@ -60,12 +75,32 @@ header h1 {
     color: var(--primary-color-style6);
     letter-spacing: 0.5px;
     margin: 0;
+    margin-right: auto; /* Push toggle button to the right */
 }
 header img {
     height: 45px; /* Adjusted size */
     width: auto;
     display: block;
     max-height: 45px;
+    flex-shrink: 0; /* Prevent logo shrinking */
+}
+
+/* Theme Toggle Button Specific Style (already in HTML, added here for clarity) */
+#themeToggleBtn {
+    margin-left: auto; /* Pushes it to the far right */
+    height: 35px;
+    width: 50px;
+    font-size: 1.2em;
+    padding: 0;
+    background: #d1d9e6; /* Light theme specific */
+    color: var(--text-color-light-style6); /* Light theme specific */
+    box-shadow: 3px 3px 6px #b8c1d1, -3px -3px 6px #ffffff; /* Light theme specific */
+    border-radius: var(--border-radius-button);
+    cursor: pointer;
+    display: flex; /* Center icon */
+    align-items: center; /* Center icon */
+    justify-content: center; /* Center icon */
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Wizard Container */
@@ -81,6 +116,7 @@ header img {
     padding: 0; /* Remove padding here, add to steps */
     box-sizing: border-box;
     min-height: 500px; /* Adjust as needed - Moved from inline style */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Wizard Step Styling & Transition */
@@ -97,7 +133,8 @@ header img {
    transform: translateX(30px); /* Start slightly off-screen right */
    transition: opacity var(--transition-duration) ease-out,
                transform var(--transition-duration) ease-out,
-               visibility 0s linear var(--transition-duration);
+               visibility 0s linear var(--transition-duration),
+               background-color 0.3s ease; /* Added theme transition */
 }
 .wizard-step.active {
     opacity: 1;
@@ -106,7 +143,8 @@ header img {
     position: relative; /* Take space */
     transition: opacity var(--transition-duration) ease-out,
                 transform var(--transition-duration) ease-out,
-                visibility 0s linear 0s;
+                visibility 0s linear 0s,
+                background-color 0.3s ease;
 }
 .wizard-step.hiding {
     opacity: 0;
@@ -115,7 +153,8 @@ header img {
     position: absolute; /* Don't affect layout */
     transition: opacity var(--transition-duration) ease-out,
                 transform var(--transition-duration) ease-out,
-                visibility 0s linear var(--transition-duration);
+                visibility 0s linear var(--transition-duration),
+                background-color 0.3s ease;
 }
 
 
@@ -127,6 +166,7 @@ header img {
     font-size: 1.6rem;
     letter-spacing: 0.5px;
     text-align: center; /* Centered title */
+    transition: color 0.3s ease;
 }
  .step-instructions {
     font-weight: 400;
@@ -135,6 +175,7 @@ header img {
     font-size: 1em;
     line-height: 1.5;
     text-align: center;
+    transition: color 0.3s ease;
  }
  .step-navigation {
      display: flex;
@@ -142,6 +183,7 @@ header img {
      margin-top: 2.5em; /* More space above nav */
      padding-top: 1.5em;
      border-top: 1px solid #ccc; /* Slightly darker separator */
+     transition: border-color 0.3s ease;
  }
  .step-indicator {
      text-align: center;
@@ -150,13 +192,14 @@ header img {
      color: var(--primary-color-style6);
      opacity: 0.7;
      font-size: 0.9em;
+     transition: color 0.3s ease;
  }
 
 /* Example Image Toggle/Container */
 #exampleImageContainer { margin-bottom: 1.5em; text-align: center; }
 #toggleExampleBtn { margin-bottom: 1em; }
 #exampleImage { text-align: center; margin-top: 1em; display: none; }
-#exampleImage img { max-width: 90%; height: auto; border-radius: 10px; box-shadow: var(--shadow-convex-outer); } /* Outset shadow */
+#exampleImage img { max-width: 90%; height: auto; border-radius: 10px; box-shadow: var(--shadow-convex-outer); transition: box-shadow 0.3s ease; } /* Outset shadow */
 
 /* Form Sections Styling */
 .part, .section {
@@ -166,6 +209,7 @@ header img {
     border-radius: var(--border-radius-container);
     box-shadow: var(--shadow-inset);
     text-align: left;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 #roughEstimateContainer h2, .part h2 { /* Merged selectors */
      font-size: 1.1rem;
@@ -175,6 +219,7 @@ header img {
      padding-bottom: 0.3em;
      border-bottom: 1px solid #ddd;
      text-align: left;
+     transition: color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Sections Container & Individual Section */
@@ -204,12 +249,13 @@ header img {
      padding: 3px 8px;
      border-radius: 5px;
      margin-right: auto; /* Push button away */
+     transition: background-color 0.3s ease;
  }
  #addSectionBtn { margin-top: 0; display: block; margin-left: auto; margin-right: auto; width: auto; padding: 0 25px;} /* Center add button */
 
 /* General Form Elements */
 label, input, button, select { display: block; width: 100%; padding: 0; border: none; outline: none; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-label { margin-bottom: 6px; font-size: 0.85em; font-weight: 600; color: #666; text-align: left; padding-left: 10px; }
+label { margin-bottom: 6px; font-size: 0.85em; font-weight: 600; color: #666; text-align: left; padding-left: 10px; transition: color 0.3s ease;}
 label:not(:first-child) { margin-top: 15px; }
 input::placeholder { color: #aaa; }
 input[type="number"], select {
@@ -222,9 +268,14 @@ input[type="number"], select {
     color: var(--text-color-style6);
     text-align: left;
     margin-top: 0; /* Reset margin-top */
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 1px solid transparent; /* Placeholder for dark mode border */
 }
- input[type="number"]:focus, select:focus { box-shadow: var(--shadow-inset), 0 0 0 2px rgba(38, 198, 218, 0.3); /* Focus ring */ }
- select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23777' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; background-size: 16px 12px; padding-right: 40px; cursor: pointer;}
+ input[type="number"]:focus, select:focus {
+     box-shadow: var(--shadow-inset), 0 0 0 2px rgba(38, 198, 218, 0.3); /* Focus ring */
+     /* Keep transition for focus ring color if needed */
+ }
+ select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23777' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; background-size: 16px 12px; padding-right: 40px; cursor: pointer; transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-image 0.3s ease; } /* Added background-image transition */
 
 /* Button Styles */
 button {
@@ -236,7 +287,7 @@ button {
     cursor: pointer;
     font-weight: 900; /* Bolder */
     box-shadow: var(--shadow-convex-outer);
-    transition: 0.3s ease;
+    transition: 0.3s ease; /* Keep general transition */
     font-size: 0.9em;
     letter-spacing: 0.5px;
 }
@@ -258,13 +309,13 @@ button:disabled {
 }
 
 /* Specific Buttons */
-#addSectionBtn, .wizard-nav-btn, #calculateBtn, #toggleExampleBtn, #startOverBtn, #printEstimate, #toggleDetailsBtn { width: auto; padding-left: 25px; padding-right: 25px; display: inline-block; }
+#addSectionBtn, .wizard-nav-btn, #calculateBtn, #toggleExampleBtn, #startOverBtn, #printEstimate { width: auto; padding-left: 25px; padding-right: 25px; display: inline-block; } /* Removed #toggleDetailsBtn */
 .wizard-nav-btn.prev, #startOverBtn { background: #b0bec5; box-shadow: 6px 6px 6px #a0acb1, -6px -6px 6px #c0ced3; color: #546e7a;}
 .wizard-nav-btn.prev:hover:not(:disabled), #startOverBtn:hover:not(:disabled) { box-shadow: none; filter: brightness(1.05); }
 #calculateBtn { font-size: 1.1em; display: block; margin: 0 auto;} /* Centered Calculate button */
 #formActions { margin-top: 2em; text-align: center; } /* Container for calc button */
 
-#toggleExampleBtn, #toggleDetailsBtn {
+#toggleExampleBtn { /* Removed #toggleDetailsBtn */
     margin-top: 0;
     height: 35px;
     font-size: 0.8em;
@@ -274,8 +325,8 @@ button:disabled {
     box-shadow: 3px 3px 6px #b8c1d1, -3px -3px 6px #ffffff;
     font-weight: 600;
 }
-#toggleExampleBtn:hover:not(:disabled), #toggleDetailsBtn:hover:not(:disabled) { box-shadow: none; filter: brightness(1.05); }
-#toggleExampleBtn:active:not(:disabled), #toggleDetailsBtn:active:not(:disabled) { box-shadow: inset 2px 2px 4px #b8c1d1, inset -2px -2px 4px #ffffff; } /* Inset press effect */
+#toggleExampleBtn:hover:not(:disabled) { box-shadow: none; filter: brightness(1.05); } /* Removed #toggleDetailsBtn */
+#toggleExampleBtn:active:not(:disabled) { box-shadow: inset 2px 2px 4px #b8c1d1, inset -2px -2px 4px #ffffff; } /* Inset press effect - Removed #toggleDetailsBtn */
 
 
 button.remove-button {
@@ -311,42 +362,195 @@ button.remove-button:active:not(:disabled) { filter: brightness(0.9); box-shadow
     box-shadow: var(--shadow-convex-outer);
     color: var(--text-color-style6);
     border: none;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
-.invoice-header { text-align: center; margin-bottom: 1.5em; padding-bottom: 1.5em; border-bottom: 1px solid #d1d9e6; }
-.invoice-header h1 { color: var(--primary-color-style6); margin-bottom: 0.2em; font-size: 1.8em; font-weight: 900; }
-.invoice-header p { font-size: 0.9em; color: #777; }
-.invoice h2 { font-size: 1.3em; color: var(--primary-color-style6); margin-bottom: 1em; border-bottom: none; font-weight: 900; text-align: center; }
+.invoice-header { text-align: center; margin-bottom: 1.5em; padding-bottom: 1.5em; border-bottom: 1px solid #d1d9e6; transition: border-color 0.3s ease; }
+.invoice-header h1 { color: var(--primary-color-style6); margin-bottom: 0.2em; font-size: 1.8em; font-weight: 900; transition: color 0.3s ease; }
+.invoice-header p { font-size: 0.9em; color: #777; transition: color 0.3s ease; }
+.invoice h3 { font-size: 1.3em; color: var(--primary-color-style6); margin-bottom: 1em; border-bottom: 1px solid #ccc; padding-bottom: 0.3em; font-weight: 900; text-align: left; transition: color 0.3s ease, border-color 0.3s ease; } /* Changed to left align, added border */
 .summary-table, .details-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5em; margin-bottom: 1.5em; }
-.summary-table td, .details-table td { padding: 0.8em 1em; border-bottom: none; vertical-align: middle; }
-.summary-table tr, .details-table tr { background: #f8f8f8; border-radius: var(--border-radius-input); box-shadow: var(--shadow-inset); }
+.summary-table td, .details-table td, .details-table th { padding: 0.8em 1em; border-bottom: none; vertical-align: middle; transition: color 0.3s ease; } /* Added th */
+.summary-table tr, .details-table tr { background: #f8f8f8; border-radius: var(--border-radius-input); box-shadow: var(--shadow-inset); transition: background-color 0.3s ease, box-shadow 0.3s ease;}
 .summary-table .table-label, .details-table th { /* Use th for details header */
     text-align: left; padding-right: 1em; color: #555; font-weight: 600;
 }
 .summary-table .table-value, .details-table td { /* Apply to all td in details */
     text-align: right; font-weight: 600; color: #555; /* Normal weight for details */
 }
+.details-table thead { background: none; box-shadow: none; } /* Style thead separately */
+.details-table thead th { background: #e0e0e0; color: #333; padding: 0.6em 1em; font-size: 0.9em; border-radius: 5px 5px 0 0; transition: background-color 0.3s ease, color 0.3s ease;}
 .details-table td:first-child { text-align: center; font-weight: normal;} /* Center section number */
-.details-table td:last-child { font-weight: 700; color: #333; } /* Bold cost */
+.details-table td:last-child { font-weight: 700; color: #333; transition: color 0.3s ease;} /* Bold cost */
 
 
-.summary-table tfoot { border-top: 2px solid #ccc; margin-top: 1em; }
+.summary-table tfoot { border-top: 2px solid #ccc; margin-top: 1em; transition: border-color 0.3s ease;}
 .summary-table tfoot tr { background: none; box-shadow: none; } /* Remove background from footer row */
 .summary-table tfoot td { border-bottom: none; padding-top: 1em; }
-.summary-table .total-row td { font-size: 1.2em; font-weight: 900; color: var(--primary-color-style6); padding-top: 1em; background: none; box-shadow: none; }
-.details-section { margin-top: 1.5em; padding: 1.5em; background: #f0f0f0; border-radius: 8px; border: 1px solid #ddd; box-shadow: var(--shadow-inset);}
-.details-section h3 { font-size: 1.1em; color: var(--primary-color-style6); margin-bottom: 1em; text-align: center; font-weight: 900;}
-.details-table thead { background: none; box-shadow: none; } /* Style thead separately */
-.details-table thead th { background: #e0e0e0; color: #333; padding: 0.6em 1em; font-size: 0.9em; border-radius: 5px 5px 0 0; }
+.summary-table .total-row td { font-size: 1.2em; font-weight: 900; color: var(--primary-color-style6); padding-top: 1em; background: none; box-shadow: none; transition: color 0.3s ease;}
+/* Removed .details-section styles as it's no longer separate */
 .details-table td { padding: 0.5em 0.8em; font-size: 0.9em; }
-.details-table tbody tr { border-radius: 0.6em; background: #fff; box-shadow: inset 2px 2px 3px #ddd, inset -2px -2px 3px #fff;}
-#toggleDetailsBtn { margin-bottom: 1.5em; max-width: 200px; display: block; margin-left: auto; margin-right: auto; } /* Center toggle button */
-.estimate-footer { text-align: center; margin-top: 2em; font-size: 0.85em; color: #777; }
+.details-table tbody tr { border-radius: 0.6em; background: #fff; box-shadow: inset 2px 2px 3px #ddd, inset -2px -2px 3px #fff; transition: background-color 0.3s ease, box-shadow 0.3s ease;}
+/* Removed #toggleDetailsBtn styles */
+.estimate-footer { text-align: center; margin-top: 2em; font-size: 0.85em; color: #777; transition: color 0.3s ease;}
 #printButtonContainer { margin-top: 1.5em; text-align: center; display: none; } /* Hidden by default */
 #printEstimate { padding: 0.8em 1.5em; font-size: 1em; width: auto; }
-small { display: block; font-size: 0.85em; color: #888; margin-top: 5px; margin-left: 5px; line-height: 1.3; text-align: left; }
-.invoice-error { padding: 1em; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; margin: 1em auto; max-width: 95%; } /* Use % width */
+small { display: block; font-size: 0.85em; color: #888; margin-top: 5px; margin-left: 5px; line-height: 1.3; text-align: left; transition: color 0.3s ease;}
+.invoice-error { padding: 1em; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; margin: 1em auto; max-width: 95%; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;} /* Use % width */
 .invoice-error p { margin: 0.2em 0; }
-.invoice-loading { text-align:center; padding: 2em; color: var(--text-color-light-style6); font-style: italic; }
+.invoice-loading { text-align:center; padding: 2em; color: var(--text-color-light-style6); font-style: italic; transition: color 0.3s ease; }
+
+/* --- Dark Theme Application --- */
+body[data-theme="dark"] {
+    /* Override base colors */
+    --bg-color-main: var(--bg-color-main-dark);
+    --bg-color-forms: var(--bg-color-forms-dark);
+    --text-color-style6: var(--text-color-style6-dark);
+    --text-color-light-style6: var(--text-color-light-style6-dark);
+    color: var(--text-color-style6-dark); /* Apply base text color */
+    background: var(--bg-color-main-dark); /* Apply base background */
+
+    /* Override shadows */
+    --shadow-convex-outer: var(--shadow-convex-outer-dark);
+    --shadow-inset: var(--shadow-inset-dark);
+
+    /* Optional: Override accent colors */
+    --primary-color-style6: var(--primary-color-style6-dark);
+    --secondary-color-style6: var(--secondary-color-style6-dark);
+}
+
+/* Specific element overrides for dark theme */
+body[data-theme="dark"] header {
+    border-bottom-color: #444; /* Darker border */
+}
+/* Style for the toggle button itself in dark mode */
+body[data-theme="dark"] #themeToggleBtn {
+    background: #4a5a6a;
+    color: #ddd;
+    box-shadow: var(--shadow-convex-outer-dark); /* Use dark theme shadow */
+}
+body[data-theme="dark"] #wizard {
+    background-color: var(--bg-color-forms-dark);
+    box-shadow: var(--shadow-convex-outer-dark);
+}
+body[data-theme="dark"] .wizard-step {
+     background-color: var(--bg-color-forms-dark);
+}
+body[data-theme="dark"] .step-title,
+body[data-theme="dark"] .step-indicator {
+    color: var(--primary-color-style6-dark);
+}
+body[data-theme="dark"] .step-instructions {
+    color: var(--text-color-light-style6-dark);
+}
+body[data-theme="dark"] .step-navigation {
+    border-top-color: #555;
+}
+body[data-theme="dark"] .part,
+body[data-theme="dark"] .section {
+    background-color: #333; /* Slightly darker form section */
+    box-shadow: var(--shadow-inset-dark);
+}
+body[data-theme="dark"] .part h2 {
+     color: var(--primary-color-style6-dark);
+     border-bottom-color: #555;
+}
+ body[data-theme="dark"] label {
+     color: #bbb;
+ }
+ body[data-theme="dark"] input[type="number"],
+ body[data-theme="dark"] select {
+     background: var(--bg-color-forms-dark); /* Keep existing background color */
+     color: var(--text-color-style6-dark); /* Keep existing text color */
+     box-shadow: var(--shadow-inset-dark); /* Keep existing shadow */
+     border: 1px solid #555; /* Keep existing border */
+
+     /* --- ADD THESE LINES --- */
+     background-image: none; /* Remove the custom arrow SVG */
+     padding-right: 20px; /* Reset padding to match number inputs */
+     /* --- END ADDITION --- */
+ }
+ body[data-theme="dark"] input[type="number"]:focus,
+ body[data-theme="dark"] select:focus {
+     box-shadow: var(--shadow-inset-dark), 0 0 0 2px rgba(54, 215, 237, 0.4); /* Adjust focus ring color */
+ }
+  body[data-theme="dark"] select {
+      /* Update dropdown arrow color for dark mode */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='' width='16' height='16' fill='%23bbb' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  }
+  body[data-theme="dark"] button {
+       background: var(--primary-color-style6-dark);
+       box-shadow: var(--shadow-convex-outer-dark);
+       color: #111; /* Darker text on lighter button */
+  }
+   body[data-theme="dark"] button:hover:not(:disabled) {
+       filter: brightness(1.1);
+       box-shadow: none;
+   }
+   body[data-theme="dark"] button:active:not(:disabled) { /* Dark theme active state */
+        filter: brightness(0.95);
+        box-shadow: var(--shadow-inset-dark); /* Press effect */
+    }
+   body[data-theme="dark"] button:disabled {
+       background: #555 !important;
+       color: #999 !important;
+       box-shadow: var(--shadow-inset-dark);
+   }
+   body[data-theme="dark"] button.remove-button {
+       background: var(--secondary-color-style6-dark);
+       /* Adjust shadow for dark theme remove button */
+       box-shadow: 3px 3px 3px #7e2c2a, -3px -3px 3px #a04c49;
+       color: #fff;
+   }
+    body[data-theme="dark"] button.remove-button:active:not(:disabled) {
+        filter: brightness(0.9);
+        box-shadow: inset 1px 1px 2px #6f2624, inset -1px -1px 2px #b35b58; /* Dark theme inset */
+    }
+   body[data-theme="dark"] button.wizard-nav-btn.prev,
+   body[data-theme="dark"] #startOverBtn {
+        background: #5a6a72;
+        box-shadow: 6px 6px 6px #49565c, -6px -6px 6px #6b7e88;
+        color: #ddd;
+   }
+    body[data-theme="dark"] #toggleExampleBtn {
+         background: #4a5a6a;
+         color: #ddd;
+         box-shadow: var(--shadow-convex-outer-dark);
+    }
+     body[data-theme="dark"] #toggleExampleBtn:active:not(:disabled) {
+         box-shadow: var(--shadow-inset-dark);
+     }
+    body[data-theme="dark"] .invoice {
+         background: var(--bg-color-main-dark);
+         box-shadow: var(--shadow-convex-outer-dark);
+         color: var(--text-color-style6-dark);
+    }
+    body[data-theme="dark"] .invoice-header { border-bottom-color: #555; }
+    body[data-theme="dark"] .invoice-header h1 { color: var(--primary-color-style6-dark); }
+    body[data-theme="dark"] .invoice-header p { color: #aaa; }
+    body[data-theme="dark"] .invoice h3 { color: var(--primary-color-style6-dark); border-bottom-color: #555; }
+    body[data-theme="dark"] .summary-table tr,
+    body[data-theme="dark"] .details-table tr {
+         background: #3f3f43; /* Darker table row */
+         box-shadow: var(--shadow-inset-dark);
+    }
+    body[data-theme="dark"] .summary-table .table-label,
+    body[data-theme="dark"] .details-table th {
+         color: #ccc;
+    }
+     body[data-theme="dark"] .summary-table .table-value,
+     body[data-theme="dark"] .details-table td {
+          color: #ddd;
+     }
+     body[data-theme="dark"] .details-table td:last-child { color: #eee; } /* Slightly brighter cost */
+     body[data-theme="dark"] .summary-table tfoot { border-top-color: #666; }
+     body[data-theme="dark"] .summary-table .total-row td { color: var(--primary-color-style6-dark); }
+     body[data-theme="dark"] .details-table thead th { background: #4f4f53; color: #fff; }
+     body[data-theme="dark"] .details-table tbody tr { background: #454549; box-shadow: inset 2px 2px 3px #333, inset -2px -2px 3px #555;}
+     body[data-theme="dark"] .estimate-footer { color: #aaa; }
+     body[data-theme="dark"] small { color: #999; }
+     body[data-theme="dark"] .invoice-error { background-color: #582a2e; color: #f5c6cb; border-color: #a04a4e; }
+     body[data-theme="dark"] .invoice-loading { color: var(--text-color-light-style6-dark); }
+
 
 /* Responsive */
 @media (max-width: 1200px) { /* Add breakpoint for wider screens */
@@ -366,18 +570,19 @@ small { display: block; font-size: 0.85em; color: #888; margin-top: 5px; margin-
 
 @media (max-width: 768px) { /* Smaller tablet / large phone */
     body { padding: 1em; }
-    header { flex-direction: column; gap: 0.5em; text-align: center; }
-    header h1 { font-size: 1.5em; }
+    header { flex-direction: row; gap: 0.5em; text-align: left; align-items: center;} /* Adjusted header for mobile */
+    header h1 { font-size: 1.2em; margin-right: auto; } /* Adjust H1 size */
+    header img { height: 35px; max-height: 35px;}
+    #themeToggleBtn { width: 40px; height: 30px; font-size: 1em; } /* Smaller theme button */
     #wizard { padding: 20px; max-width: 95%; min-height: 450px; } /* Adjust height */
     .section {
          flex-basis: 100%; /* Stack sections */
          max-width: 100%;
          min-width: 0; /* Let it shrink */
      }
-    /* #otherPartsContainer .part { flex-basis: 100%; min-width: 0; } */ /* Remove if not used */
     .step-navigation { flex-direction: column; gap: 0.8em; align-items: center;}
     .wizard-nav-btn { width: 100%; max-width: 250px; }
-     #addSectionBtn, #toggleExampleBtn, #toggleDetailsBtn, #startOverBtn, #printEstimate { width: 100%; max-width: 250px; margin-left: auto; margin-right: auto; display: block;} /* Center toggle buttons */
+     #addSectionBtn, #toggleExampleBtn, #startOverBtn, #printEstimate { width: 100%; max-width: 250px; margin-left: auto; margin-right: auto; display: block;} /* Center toggle buttons */
      button.remove-button { width: 28px; height: 28px; font-size: 1em; line-height: 26px; } /* Slightly smaller remove */
     .invoice { max-width: 95%; padding: 1.5em; }
     .summary-table td, .details-table td, .details-table th { padding: 0.6em 0.8em; } /* Adjust padding */
@@ -385,7 +590,7 @@ small { display: block; font-size: 0.85em; color: #888; margin-top: 5px; margin-
 
 @media (max-width: 480px) { /* Small phone */
      body { padding: 0.5em; }
-     header h1 { font-size: 1.3em; }
+     header h1 { font-size: 1.1em; } /* Further reduce h1 */
      .wizard-step { padding: 20px 15px; } /* Reduce horizontal padding */
      .step-title { font-size: 1.4rem; }
      input[type="number"], select { height: 45px; padding: 8px 15px; font-size: 13px; }
@@ -399,40 +604,176 @@ small { display: block; font-size: 0.85em; color: #888; margin-top: 5px; margin-
 
 /* Print Styles */
 @media print {
-    /* Simplified Print styles */
-    body { background: white !important; color: black !important; margin: 0.5in; font-size: 10pt; font-family: 'Times New Roman', Times, serif; padding: 0 !important;}
-    header, #wizard .step-navigation, #wizard .step-indicator, #exampleImageContainer, #results button, form button:not(#calculateBtn), button.remove-button, #formActions, #printButtonContainer, #toggleDetailsBtn { display: none !important; } /* Hide more elements */
-    #wizard { box-shadow: none !important; padding: 0 !important; margin: 0 !important; width: 100% !important; max-width: 100% !important; border: none !important; min-height: auto !important; overflow: visible !important; }
-    .wizard-step { display: block !important; opacity: 1 !important; visibility: visible !important; transform: none !important; position: relative !important; page-break-inside: avoid !important; background: none !important; box-shadow: none !important; border: none !important; padding: 0 0 1em 0 !important; margin-bottom: 1em !important; width: 100% !important; max-width: 100% !important; }
-    .wizard-step#step-4 { border-top: 1px solid #ccc; padding-top: 1em; } /* Add separator before results */
-    .part, .section { background: none !important; box-shadow: none !important; border: 1px solid #ccc !important; padding: 0.5em !important; margin-bottom: 0.5em !important; display: block !important; width: 100% !important; max-width: 100% !important; page-break-inside: avoid !important; }
-    h2, .step-title, label { color: black !important; text-align: left; font-size: 11pt !important; margin-bottom: 0.3em !important;}
-    .step-instructions { display: none; } /* Hide instructions in print */
-    input, select { border: 1px solid #ccc !important; background: white !important; color: black !important; box-shadow: none !important; border-radius: 0 !important; padding: 2px 4px !important; height: auto !important; font-size: 10pt !important; }
-    select { background-image: none !important; -webkit-appearance: none; appearance: none;}
-    small { color: #333 !important; font-size: 8pt !important; margin-top: 2px !important;}
-    #sectionsContainer { display: block !important; } /* Ensure sections stack */
-    .section { width: 100% !important; max-width: 100% !important; flex-basis: auto !important; }
-    /* Details section printing */
-    #internalDetails { display: block !important; background-color: #f8f8f8 !important; border: 1px solid #ccc !important; margin-top: 1em !important; padding: 0.5em !important; color: black !important; box-shadow: none !important; page-break-before: auto; /* Allow page break before details if needed */}
-    #internalDetails h3 { color: black !important; text-align: left; font-size: 11pt; margin-bottom: 0.5em;}
-    #internalDetails .details-table { margin-bottom: 0.5em; border-spacing: 0 2px;}
-    #internalDetails .details-table td, #internalDetails .details-table th { color: black !important; border: 1px solid #eee !important; background: none !important; box-shadow: none !important; padding: 2px 4px !important; font-size: 9pt;}
-    #internalDetails .details-table thead th { background-color: #e0e0e0 !important; font-weight: bold;}
-    /* Results & Invoice Printing */
-    #results { margin-top: 0; border: none; padding: 0; background-color: white; color: black; width: 100%; }
-    .invoice { border: 1px solid #ccc; box-shadow: none !important; padding: 0.5em; max-width: 100% !important; background: white !important; color: black !important; margin: 0 !important; width: 100% !important; }
-    .invoice-header { border-bottom: 1px solid #ccc; text-align: center; padding-bottom: 0.5em; margin-bottom: 0.5em;}
-    .invoice-header img.invoice-logo { display: none !important; }
-    .invoice-header h1 { font-size: 14pt !important; }
-    .invoice-header p { font-size: 9pt !important; }
-    .invoice h2 { color: black !important; text-align: left; font-size: 12pt; margin-bottom: 0.5em;}
-    .summary-table { border-spacing: 0 2px; margin-bottom: 0.5em;}
-    .summary-table tr, .details-table tr { background: none !important; box-shadow: none !important; page-break-inside: avoid;}
-    .summary-table td, .details-table td { border-bottom: 1px solid #eee !important; color: black !important; padding: 2px 4px !important; font-size: 10pt; } /* Tighter print padding */
-    .summary-table .table-label, .details-table th { color: #333 !important; font-weight: bold;}
-    .summary-table .total-row td { color: black !important; border-top: 2px solid #aaa; font-weight: bold; font-size: 11pt;}
-    .summary-table tfoot { border-top: none;} /* Use total-row border only */
-    .estimate-footer { color: #555 !important; font-size: 8pt !important; margin-top: 1em;}
-    .invoice-error { border: 1px solid black; color: black; background: #eee;}
+    /* Hide everything by default */
+    body * {
+        visibility: hidden;
+    }
+    /* Make only the invoice container and its children visible */
+    #results, #results .invoice, #results .invoice * {
+        visibility: visible;
+    }
+
+    /* Basic page setup */
+    @page {
+      size: A4; /* Or letter */
+      margin: 1cm;
+    }
+    body {
+        background: white !important;
+        color: black !important;
+        margin: 0 !important; /* Remove body margin for print */
+        padding: 0 !important;
+        font-family: Arial, sans-serif !important; /* Common print font */
+        font-size: 10pt !important;
+        line-height: 1.3;
+         -webkit-print-color-adjust: exact !important; /* Try to force background/color printing */
+         print-color-adjust: exact !important;
+    }
+
+    /* Reset wizard/steps */
+    #wizard, .wizard-step {
+        display: none !important; /* Should be hidden by body *, but belt and braces */
+    }
+    #results {
+        margin: 0;
+        padding: 0;
+        border: none;
+        width: 100%;
+        display: block !important; /* Ensure results container is block */
+    }
+
+    /* Invoice container styling */
+    .invoice {
+        position: absolute; /* Take out of flow */
+        left: 0;
+        top: 0;
+        width: 100%; /* Use full page width */
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0.5cm !important; /* Add padding inside invoice */
+        border: 1px solid #666 !important;
+        box-shadow: none !important;
+        background: white !important;
+        color: black !important;
+        border-radius: 0 !important;
+        font-size: 10pt !important; /* Base font size for invoice */
+    }
+
+    /* Invoice Header */
+    .invoice-header {
+        text-align: center;
+        border-bottom: 2px solid black !important;
+        padding-bottom: 0.8em !important;
+        margin-bottom: 1.5em !important;
+    }
+    .invoice-header img.invoice-logo { display: block !important; max-height: 60px; margin: 0 auto 0.5em auto;} /* Show logo if needed */
+    .invoice-header h1 {
+        font-size: 16pt !important;
+        font-weight: bold !important;
+        color: black !important;
+        margin-bottom: 0.1em !important;
+    }
+     .invoice-header p {
+         font-size: 9pt !important;
+         color: #333 !important;
+         margin: 0.2em 0 !important;
+     }
+
+    /* Section Titles inside Invoice */
+    .invoice h3 {
+        font-size: 12pt !important;
+        font-weight: bold !important;
+        color: black !important;
+        margin-top: 1.2em !important;
+        margin-bottom: 0.6em !important;
+        border-bottom: 1px solid #ccc !important;
+        padding-bottom: 0.2em !important;
+        text-align: left !important;
+        page-break-after: avoid !important; /* Prevent breaking after heading */
+    }
+    .invoice h3:first-of-type { margin-top: 0 !important; } /* Remove top margin for first H3 */
+
+    /* Table Styling */
+    .invoice table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        margin-bottom: 1.5em !important;
+        font-size: 9pt !important; /* Smaller font for tables */
+        border-spacing: 0 !important;
+        page-break-inside: auto; /* Allow tables to break across pages */
+    }
+    .invoice th, .invoice td {
+        border: 1px solid #ccc !important;
+        padding: 5px 8px !important; /* Tighter padding */
+        text-align: left !important;
+        vertical-align: top !important;
+        color: black !important;
+        background: none !important;
+        box-shadow: none !important;
+    }
+    .invoice thead th {
+        background-color: #eee !important;
+        font-weight: bold !important;
+        border-bottom: 1px solid #999 !important;
+        page-break-inside: avoid !important; /* Keep header with first row */
+    }
+     .invoice tbody tr {
+         page-break-inside: avoid !important; /* Try to keep rows together */
+     }
+     /* .invoice tbody tr:nth-child(even) td { */
+         /* background-color: #f8f8f8 !important; */ /* Optional alternating row color */
+     /* } */
+    .invoice .details-table td:nth-child(1), /* Section # */
+    .invoice .details-table td:nth-child(5), /* HxW */
+    .invoice .details-table td:nth-child(6) { /* Area */
+        text-align: center !important;
+    }
+    .invoice .details-table td:nth-child(7), /* Cost */
+    .invoice .summary-table .table-value {
+        text-align: right !important;
+        font-weight: normal !important;
+    }
+    .invoice .summary-table .table-label {
+        font-weight: bold !important;
+        width: 70%; /* Give label more space */
+    }
+
+    /* Totals Row Styling */
+    .invoice tfoot { border-top: none !important; } /* Remove default footer border */
+    .invoice .summary-table tfoot tr { page-break-inside: avoid !important; }
+    .invoice .total-row {
+        background-color: #eee !important;
+        border-top: 2px solid black !important;
+    }
+    .invoice .total-row td {
+        font-weight: bold !important;
+        font-size: 11pt !important; /* Larger total font */
+        border: 1px solid #ccc !important; /* Ensure border is visible */
+        padding: 6px 8px !important;
+    }
+    .invoice .total-row .table-label {
+        text-align: right !important; /* Align total label right */
+        width: auto !important; /* Reset width */
+    }
+    .invoice .total-row .table-value {
+        text-align: right !important;
+    }
+
+
+    /* Footer */
+    .estimate-footer {
+        text-align: center !important;
+        margin-top: 2em !important;
+        padding-top: 1em !important;
+        border-top: 1px solid #ccc !important;
+        font-size: 8pt !important;
+        color: #555 !important;
+        page-break-before: auto; /* Allow break before footer if needed */
+    }
+
+    /* Hide elements specifically NOT for print */
+    header, #wizard .step-navigation, #wizard .step-indicator, #exampleImageContainer, #addSectionBtn, #calculateBtn, .remove-button, #formActions, #printButtonContainer, #startOverBtn, #themeToggleBtn /* Hide new theme toggle */ {
+        display: none !important;
+    }
+    small { display: none !important; } /* Hide small text hints */
 }

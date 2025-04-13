@@ -1,4 +1,4 @@
-// --- FILE: server.js ---
+// --- FILE: server.js (Updated Path) ---
 
 const express = require('express');
 const path = require('path');
@@ -9,13 +9,13 @@ const app = express();
 const PORT = process.env.PORT || 3001; // Use Render's port or 3001 for local dev
 
 // --- Load Pricing Data ---
-// Construct the absolute path to the pricing data file
-const pricingPath = path.join(__dirname, 'data', 'pricingData.json');
+// *** Construct the CORRECTED absolute path to the pricing data file ***
+const pricingPath = path.join(__dirname, 'public', 'data', 'pricingData.json'); // Changed path here!
 let pricingData;
 try {
     const rawData = fs.readFileSync(pricingPath, 'utf8');
     pricingData = JSON.parse(rawData);
-    console.log("[Server] Pricing data loaded successfully.");
+    console.log("[Server] Pricing data loaded successfully from public/data."); // Updated log
     // Basic validation of loaded data
     if (!pricingData || !pricingData.doorPricingGroups || !pricingData.hingeCosts || !pricingData.customPaint || !pricingData.lazySusan) {
          throw new Error("Pricing data is missing required sections (doorPricingGroups, hingeCosts, customPaint, lazySusan).");
@@ -26,10 +26,10 @@ try {
     process.exit(1);
 }
 
-
 // --- Middleware ---
 app.use(express.json()); // Parse JSON request bodies
-app.use(express.static(path.join(__dirname, 'public'))); // Serve static files (HTML, CSS, JS, Assets) from 'public' folder
+// Serve static files (HTML, CSS, JS, Assets, AND NOW DATA) from 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // --- API Routes ---
 app.post('/api/calculate', (req, res) => {
@@ -47,19 +47,17 @@ app.post('/api/calculate', (req, res) => {
 });
 
 // --- Base Route (Serve index.html) ---
-// Optional: Explicitly serve index.html for the root path,
-// though express.static usually handles this. Good for clarity.
+// This is technically handled by express.static, but can leave it for clarity
+// or remove if you prefer less code.
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // --- Generic Error Handler (Place after all routes) ---
-// Catches errors not handled in specific routes
 app.use((err, req, res, next) => {
   console.error("[Server] Unhandled Error:", err.stack);
   res.status(500).json({ error: 'Internal Server Error', message: 'An unexpected error occurred.' });
 });
-
 
 // --- Start Server ---
 app.listen(PORT, () => {

@@ -8,7 +8,38 @@ let currentStep = 1;
 let sectionCounter = 0; // Keep track of added sections
 
 // --- DOM Element References ---
-let wizard, steps, sectionsContainer, addSectionBtn, calculateBtn, resultsDiv, startOverBtn, printBtn, toggleExampleBtn, exampleImageDiv, printButtonContainer, toggleDetailsBtn, internalDetailsDiv;
+let wizard, steps, sectionsContainer, addSectionBtn, calculateBtn, resultsDiv, startOverBtn, printBtn, toggleExampleBtn, exampleImageDiv, printButtonContainer, themeToggleBtn; // Removed toggleDetailsBtn, internalDetailsDiv
+
+// --- Theme Handling ---
+const K_THEME = 'nuDoorsEstimatorTheme'; // Key for localStorage
+
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        document.body.dataset.theme = 'dark';
+        if(themeToggleBtn) themeToggleBtn.textContent = '🌙'; // Moon icon
+        localStorage.setItem(K_THEME, 'dark');
+    } else {
+        // Default to light
+        document.body.removeAttribute('data-theme');
+        if(themeToggleBtn) themeToggleBtn.textContent = '☀️'; // Sun icon
+        localStorage.setItem(K_THEME, 'light');
+    }
+    console.log(`[Client] Theme applied: ${theme}`);
+}
+
+function handleThemeToggle() {
+    const currentTheme = document.body.dataset.theme;
+    applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+}
+
+function loadInitialTheme() {
+    const savedTheme = localStorage.getItem(K_THEME) || 'light'; // Default to light
+    // Ensure themeToggleBtn exists before trying to set its textContent
+    themeToggleBtn = themeToggleBtn || document.getElementById('themeToggleBtn');
+    applyTheme(savedTheme);
+}
+// --- End Theme Handling ---
+
 
 /** Build style list and optionally a map from pricingData.doorPricingGroups */
 function processPricingData(data) {
@@ -173,7 +204,8 @@ function updateSectionNumbers() {
          // Update IDs and fors within the section to maintain uniqueness
          section.querySelectorAll('[id^="section-"]').forEach(el => {
              const oldId = el.id;
-             const namePart = oldId.substring(oldId.indexOf('-') + 1 + oldId.split('-')[1].length + 1); // Get name after section-N-
+             // Find the base name part (e.g., 'doorStyle', 'height')
+             const namePart = oldId.substring(oldId.lastIndexOf('-') + 1);
              const newId = `section-${index}-${namePart}`;
              el.id = newId;
              // Update corresponding label 'for' attribute
@@ -467,7 +499,7 @@ function displayResults(data) {
         overallTotal = 0,
         doorCostTotal = 0,
         hingeCost = 0,
-        hingeCount = 0,
+        hingeCount = 0, // Get hinge count
         lazySusanCost = 0, // Get LS cost from results
         specialFeatures = {},
         sections = [],
@@ -477,43 +509,18 @@ function displayResults(data) {
 
     const customPaintCost = specialFeatures?.customPaintCost || 0;
 
-    // --- Summary Table ---
-    let summaryHtml = `
-        <table class="summary-table">
-            <tbody>
-                <tr><td class="table-label">Door & Drawer Section Cost</td><td class="table-value">${formatCurrency(doorCostTotal)}</td></tr>
-                <tr><td class="table-label">Hinge Boring (${hingeCount} hinges)</td><td class="table-value">${formatCurrency(hingeCost)}</td></tr>
-    `;
-    // Only show rows for costs > 0
-    if (lazySusanCost > 0) {
-        summaryHtml += `<tr><td class="table-label">Lazy Susans (${part2.lazySusanQty || 0})</td><td class="table-value">${formatCurrency(lazySusanCost)}</td></tr>`;
-    }
-    if (customPaintCost > 0) {
-        summaryHtml += `<tr><td class="table-label">Custom Paint Fee</td><td class="table-value">${formatCurrency(customPaintCost)}</td></tr>`;
-    }
-    summaryHtml += `
-            </tbody>
-            <tfoot>
-                <tr class="total-row"><td class="table-label">Estimated Total</td><td class="table-value">${formatCurrency(overallTotal)}</td></tr>
-            </tfoot>
-        </table>
-    `;
-
-    // --- Detailed Breakdown (Initially Hidden) ---
-    let detailsHtml = '<div id="internalDetails" style="display: none;" class="details-section">'; // Initially hidden
-
-    // Section Details Table
-    detailsHtml += `<h3>Section Breakdown</h3>`;
+    // --- Section Breakdown Table ---
+    let sectionsHtml = `<h3>Section Breakdown</h3>`;
     if (sections.length > 0) {
-        detailsHtml += `<table class="details-table">
+        sectionsHtml += `<table class="details-table">
             <thead><tr><th>#</th><th>Door Style</th><th>Drawer Style</th><th>Finish</th><th>HxW (in)</th><th>Area (sqft)</th><th>Cost</th></tr></thead>
             <tbody>`;
         sections.forEach((s, i) => {
-            detailsHtml += `
+            sectionsHtml += `
                 <tr>
                     <td>${i + 1}</td>
                     <td>${s.doorStyle || 'N/A'}</td>
-                    <td>${(s.drawerStyle && s.drawerStyle !== s.doorStyle) ? s.drawerStyle : '-'}</td> <!-- Show '-' if same as door -->
+                    <td>${(s.drawerStyle && s.drawerStyle !== s.doorStyle) ? s.drawerStyle : '-'}</td>
                     <td>${s.finish || 'N/A'}</td>
                     <td>${s.height || 0}" x ${s.width || 0}"</td>
                     <td>${s.area?.toFixed(2) || 'N/A'}</td>
@@ -521,41 +528,63 @@ function displayResults(data) {
                 </tr>
             `;
         });
-        detailsHtml += `</tbody></table>`;
+        sectionsHtml += `</tbody></table>`;
     } else {
-        detailsHtml += `<p style="text-align: center; color: #666;">No sections were entered.</p>`;
+        sectionsHtml += `<p style="text-align: center; color: #666;">No sections were entered.</p>`;
     }
 
-
-    // Other Inputs Summary Table
-    detailsHtml += `<h3 style="margin-top: 1.5em;">Counts & Features Summary</h3>`;
-    detailsHtml += `<table class="details-table"><tbody>
+    // --- Counts & Features Summary Table ---
+    let countsHtml = `<h3 style="margin-top: 1.5em;">Counts & Features Summary</h3>`;
+    countsHtml += `<table class="details-table"><tbody>
         <tr><td>Doors 0-36" Qty</td><td>${part2.doors_0_36 || 0}</td></tr>
         <tr><td>Doors 36-60" Qty</td><td>${part2.doors_36_60 || 0}</td></tr>
         <tr><td>Doors 60-82" Qty</td><td>${part2.doors_60_82 || 0}</td></tr>
         <tr><td>Total Drawers</td><td>${part2.numDrawers || 0}</td></tr>
         <tr><td>Lazy Susans</td><td>${part2.lazySusanQty || 0}</td></tr>
         <tr><td>Custom Paint Colors</td><td>${part3.customPaintQty || 0}</td></tr>
+        <tr><td><b>Total Hinges Needed</b></td><td><b>${hingeCount}</b></td></tr> <!-- Added Hinge Count -->
     </tbody></table>`;
 
-    detailsHtml += '</div>'; // End #internalDetails
+
+    // --- Cost Summary Table ---
+    let costSummaryHtml = `<h3 style="margin-top: 1.5em;">Cost Summary</h3>`;
+    costSummaryHtml += `
+        <table class="summary-table">
+            <tbody>
+                <tr><td class="table-label">Door & Drawer Section Cost</td><td class="table-value">${formatCurrency(doorCostTotal)}</td></tr>
+                <tr><td class="table-label">Hinge Boring Cost</td><td class="table-value">${formatCurrency(hingeCost)}</td></tr>
+    `;
+    // Only show rows for costs > 0
+    if (lazySusanCost > 0) {
+        costSummaryHtml += `<tr><td class="table-label">Lazy Susan Cost</td><td class="table-value">${formatCurrency(lazySusanCost)}</td></tr>`;
+    }
+    if (customPaintCost > 0) {
+        costSummaryHtml += `<tr><td class="table-label">Custom Paint Fee</td><td class="table-value">${formatCurrency(customPaintCost)}</td></tr>`;
+    }
+    costSummaryHtml += `
+            </tbody>
+            <tfoot>
+                <tr class="total-row"><td class="table-label">Estimated Total</td><td class="table-value">${formatCurrency(overallTotal)}</td></tr>
+            </tfoot>
+        </table>
+    `;
 
     // --- Construct Final Invoice HTML ---
     resultsDiv.innerHTML = `
       <div class="invoice">
           <div class="invoice-header">
-              <!-- Optional: <img src="/assets/logo.png" alt="nuDoors Logo" class="invoice-logo" style="height: 50px; margin-bottom: 1em;"> -->
+               <!-- Optional: Add logo for invoice -->
+               <!-- <img src="/assets/logo.png" alt="nuDoors Logo" class="invoice-logo" style="display: block; max-height: 60px; margin: 0 auto 1em auto;"> -->
               <h1>Estimate Summary</h1>
               <p>Thank you for using the nuDoors Estimator!</p>
-          </div>
-          <h2>Summary</h2>
-          ${summaryHtml}
-
-          <div style="text-align: center; margin-bottom: 1.5em;">
-             <button type="button" id="toggleDetailsBtn" style="display: none;">Show Details</button> <!-- Hidden until needed -->
+              <p>Estimate ID: ${Date.now()}</p> <!-- Add a simple timestamp ID -->
           </div>
 
-          ${detailsHtml}
+          ${sectionsHtml}  <!-- Add Section Breakdown Table -->
+          ${countsHtml}    <!-- Add Counts Table -->
+          ${costSummaryHtml} <!-- Add Cost Summary Table -->
+
+          <!-- REMOVED TOGGLE BUTTON DIV -->
 
           <div class="estimate-footer">
               <p>This is an estimate only. Final price may vary based on final measurements, selections, and confirmation. Tax not included.</p>
@@ -563,36 +592,10 @@ function displayResults(data) {
       </div>
     `;
 
-    // Add event listener for the details button *after* it's added to the DOM
-    toggleDetailsBtn = document.getElementById('toggleDetailsBtn');
-    internalDetailsDiv = document.getElementById('internalDetails');
-    if (toggleDetailsBtn && internalDetailsDiv) {
-         toggleDetailsBtn.style.display = 'inline-block'; // Make button visible now
-         // Reset button text
-         toggleDetailsBtn.textContent = 'Show Details';
-         // Ensure details are hidden initially (redundant maybe, but safe)
-         internalDetailsDiv.style.display = 'none';
-         internalDetailsDiv.classList.remove('print-section'); // Remove print class initially
-
-         toggleDetailsBtn.addEventListener('click', handleToggleDetails);
-    } else {
-         console.warn('[Client] Could not find toggle details button or details div after rendering results.');
-    }
-
     // Show Print button container
     if (printButtonContainer) printButtonContainer.style.display = 'block';
 }
 
-/** Toggle visibility of the detailed breakdown section */
-function handleToggleDetails() {
-    if (!internalDetailsDiv || !toggleDetailsBtn) return;
-
-    const isHidden = internalDetailsDiv.style.display === 'none';
-    internalDetailsDiv.style.display = isHidden ? 'block' : 'none';
-    toggleDetailsBtn.textContent = isHidden ? 'Hide Details' : 'Show Details';
-    // Add/remove class for printing only when details are shown
-    internalDetailsDiv.classList.toggle('print-section', isHidden);
-}
 
 /** Toggle visibility of the example image */
 function handleToggleExample() {
@@ -625,7 +628,6 @@ function handleStartOver() {
     // 3. Clear results area
     resultsDiv.innerHTML = '';
     if(printButtonContainer) printButtonContainer.style.display = 'none'; // Hide print btn
-    if(toggleDetailsBtn) toggleDetailsBtn.style.display = 'none'; // Hide details btn
 
     // 4. Reset wizard to step 1 visually
     const currentActive = wizard.querySelector('.wizard-step.active');
@@ -705,7 +707,7 @@ function main() {
 
     // Get references to major elements
     wizard = document.getElementById('wizard');
-    steps = wizard?.querySelectorAll('.wizard-step'); // Use optional chaining
+    steps = wizard?.querySelectorAll('.wizard-step');
     sectionsContainer = document.getElementById('sectionsContainer');
     addSectionBtn = document.getElementById('addSectionBtn');
     calculateBtn = document.getElementById('calculateBtn');
@@ -715,14 +717,24 @@ function main() {
     printButtonContainer = document.getElementById('printButtonContainer');
     toggleExampleBtn = document.getElementById('toggleExampleBtn');
     exampleImageDiv = document.getElementById('exampleImage');
-    // toggleDetailsBtn and internalDetailsDiv are assigned dynamically
+    themeToggleBtn = document.getElementById('themeToggleBtn'); // Get theme button reference
 
     // Check if essential elements exist before proceeding
-    if (!wizard || !steps || steps.length === 0 || !sectionsContainer || !addSectionBtn || !calculateBtn || !resultsDiv || !startOverBtn || !printBtn || !toggleExampleBtn || !exampleImageDiv) {
-         console.error("[Client] Critical UI elements missing from the DOM. Aborting initialization.");
-         document.body.innerHTML = '<p style="color: red; font-weight: bold; padding: 2em;">Error: UI is incomplete. Cannot start the estimator. Check element IDs.</p>';
-         return; // Stop execution
+    const criticalElements = [wizard, steps, sectionsContainer, addSectionBtn, calculateBtn, resultsDiv, startOverBtn, printBtn, toggleExampleBtn, exampleImageDiv, themeToggleBtn];
+    if (!steps || steps.length === 0 || criticalElements.some(el => !el)) {
+        console.error("[Client] Critical UI elements missing from the DOM. Aborting initialization.", {
+            wizard: !!wizard, steps: steps?.length, sectionsContainer: !!sectionsContainer, addSectionBtn: !!addSectionBtn, calculateBtn: !!calculateBtn, resultsDiv: !!resultsDiv, startOverBtn: !!startOverBtn, printBtn: !!printBtn, toggleExampleBtn: !!toggleExampleBtn, exampleImageDiv: !!exampleImageDiv, themeToggleBtn: !!themeToggleBtn
+        });
+        document.body.innerHTML = '<p style="color: red; font-weight: bold; padding: 2em;">Error: UI is incomplete. Cannot start the estimator. Check element IDs.</p>';
+        return; // Stop execution
     }
+
+
+    // --- Add Theme Listener ---
+    themeToggleBtn.addEventListener('click', handleThemeToggle);
+
+    // --- Load initial theme ---
+    loadInitialTheme(); // Load theme before fetching data
 
     // Start the process by fetching data, which then initializes UI
     initPricingData();
