@@ -1,0 +1,51 @@
+{
+  "doorPricingGroups": [
+    {
+      "styles": ["Shaker", "Slab"],
+      "Painted": 49.05,
+      "Primed": 30.45,
+      "Unfinished": 16.5
+    },
+    {
+      "styles": ["Chamfer", "Savannah"],
+      "Painted": 49.74,
+      "Primed": 31.29,
+      "Unfinished": 17.14
+    },
+    {
+      "styles": ["Beaded", "Dorothy", "Maisie", "Mavis", "Ruth", "Stepped"],
+      "Painted": 51.09,
+      "Primed": 32.92,
+      "Unfinished": 18.79
+    },
+    {
+      "styles": ["Amelia", "Jean", "Millie", "Nora", "Raised Panel", "Split Shaker"],
+      "Painted": 51.99,
+      "Primed": 34.01,
+      "Unfinished": 19.2
+    },
+    {
+      "styles": ["Alice", "Frances", "Glass"],
+      "Painted": 73.58,
+      "Primed": 45.68,
+      "Unfinished": 24.75
+    },
+    {
+      "styles": ["Bessie", "Eleanor", "Georgia", "Mabel", "Winona"],
+      "Painted": 52.89,
+      "Primed": 35.09,
+      "Unfinished": 20.02
+    }
+  ],
+  "hingeCosts": {
+    "0-36": 13,
+    "36.01-60": 16.5,
+    "60.01-82": 20
+  },
+  "lazySusan": {
+    "price": 50
+  },
+  "customPaint": {
+    "price": 200
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "nudoors-estimator",
+  "version": "1.0.0",
+  "description": "Web application for calculating nuDoors estimates.",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "node api/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "serverless-http": "^3.2.0"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "author": "Dan (Your Name/Company)",
+  "license": "UNLICENSED"
+}
