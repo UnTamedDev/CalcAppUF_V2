@@ -68,6 +68,7 @@ header {
     flex-wrap: wrap;
     box-sizing: border-box;
     gap: 1em; /* Add gap between items */
+    transition: border-color 0.3s ease;
 }
 header h1 {
     font-weight: 900;
@@ -76,6 +77,7 @@ header h1 {
     letter-spacing: 0.5px;
     margin: 0;
     margin-right: auto; /* Push toggle button to the right */
+    transition: color 0.3s ease;
 }
 header img {
     height: 45px; /* Adjusted size */
@@ -101,6 +103,7 @@ header img {
     align-items: center; /* Center icon */
     justify-content: center; /* Center icon */
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 0; /* Ensure no extra top margin */
 }
 
 /* Wizard Container */
@@ -463,20 +466,14 @@ body[data-theme="dark"] .part h2 {
      color: var(--text-color-style6-dark); /* Keep existing text color */
      box-shadow: var(--shadow-inset-dark); /* Keep existing shadow */
      border: 1px solid #555; /* Keep existing border */
-
-     /* --- ADD THESE LINES --- */
      background-image: none; /* Remove the custom arrow SVG */
      padding-right: 20px; /* Reset padding to match number inputs */
-     /* --- END ADDITION --- */
  }
  body[data-theme="dark"] input[type="number"]:focus,
  body[data-theme="dark"] select:focus {
      box-shadow: var(--shadow-inset-dark), 0 0 0 2px rgba(54, 215, 237, 0.4); /* Adjust focus ring color */
  }
-  body[data-theme="dark"] select {
-      /* Update dropdown arrow color for dark mode */
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='' width='16' height='16' fill='%23bbb' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-  }
+  /* Removed dark mode select arrow override as background-image: none handles it */
   body[data-theme="dark"] button {
        background: var(--primary-color-style6-dark);
        box-shadow: var(--shadow-convex-outer-dark);
@@ -551,6 +548,22 @@ body[data-theme="dark"] .part h2 {
      body[data-theme="dark"] .invoice-error { background-color: #582a2e; color: #f5c6cb; border-color: #a04a4e; }
      body[data-theme="dark"] .invoice-loading { color: var(--text-color-light-style6-dark); }
 
+/* Responsive Table Wrapper */
+.table-responsive-wrapper {
+    width: 100%; /* Take full width of its container */
+    overflow-x: auto; /* Enable horizontal scrolling ONLY when content overflows */
+    -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
+    margin-bottom: 1em; /* Add some space below the scrolling area */
+}
+
+/* Optional: Minor adjustments to table within wrapper if needed */
+.table-responsive-wrapper .details-table {
+    min-width: 600px; /* Example: Set a minimum width for the table itself */
+                      /* This forces the wrapper to scroll sooner on small screens */
+                      /* Adjust this value based on your content */
+    margin-bottom: 0; /* Remove bottom margin from table if wrapper has it */
+}
+
 
 /* Responsive */
 @media (max-width: 1200px) { /* Add breakpoint for wider screens */
@@ -603,17 +616,6 @@ body[data-theme="dark"] .part h2 {
 }
 
 /* Print Styles */
-/* --- FILE: public/style.css --- */
-
-/* ... (all your normal styles above) ... */
-
-/* --- TEMPORARY SIMPLE PRINT STYLES --- */
-
-/* --- FILE: public/style.css --- */
-
-/* ... (all your normal styles above) ... */
-
-/* --- TEMPORARY SIMPLE PRINT STYLES (v2 - With Parent Overrides) --- */
 /* --- FILE: public/style.css (FINAL @media print section) --- */
 
 @media print {
@@ -774,6 +776,17 @@ body[data-theme="dark"] .part h2 {
      .invoice tbody tr {
          page-break-inside: avoid !important;
      }
+    /* Responsive Table Wrapper styling for print (should be hidden by default, but ensures no weird display) */
+    .table-responsive-wrapper {
+       overflow-x: visible !important; /* Do NOT scroll horizontally in print */
+       width: 100% !important;
+       margin-bottom: 1em !important; /* Keep margin */
+    }
+    .invoice .table-responsive-wrapper .details-table {
+       min-width: 0 !important; /* Allow table to shrink naturally in print */
+       width: 100% !important; /* Ensure it takes full width */
+    }
+
     .invoice .details-table td:nth-child(1), /* Section # */
     .invoice .details-table td:nth-child(5), /* HxW */
     .invoice .details-table td:nth-child(6) { /* Area */
