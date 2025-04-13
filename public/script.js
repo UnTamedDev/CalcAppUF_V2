@@ -1,70 +1,77 @@
-// --- FILE: public/script.js (FULL VERSION - USE THIS) ---
+// --- FILE: public/script.js ---
 
-let pricingData = null;
-let styleMap = {};
-let allStyles = [];
+// Global variables
+let pricingData = null; // Will store fetched pricing data (primarily for styles/defaults now)
+let styleMap = {};      // Map for client-side price lookup if needed (less critical now)
+let allStyles = [];     // List of available style names
 let currentStep = 1;
 let sectionCounter = 0; // Keep track of added sections
 
-// --- DOM Element References --- (Good practice to get them once)
+// --- DOM Element References ---
 let wizard, steps, sectionsContainer, addSectionBtn, calculateBtn, resultsDiv, startOverBtn, printBtn, toggleExampleBtn, exampleImageDiv, printButtonContainer, toggleDetailsBtn, internalDetailsDiv;
 
-/** Build styleMap from pricingData.doorPricingGroups */
-function buildStyleMapAndList(groups) {
-    const map = {};
+/** Build style list and optionally a map from pricingData.doorPricingGroups */
+function processPricingData(data) {
     const list = [];
-    if (!groups || !Array.isArray(groups)) {
-        console.error("[Client] Invalid doorPricingGroups data:", groups);
+    const map = {}; // Keep map for potential future client-side checks if needed
+    if (!data || !Array.isArray(data.doorPricingGroups)) {
+        console.error("[Client] Invalid pricing data received:", data);
         return { map: {}, list: [] };
     }
-    for (const group of groups) {
-        if (!group.styles || !Array.isArray(group.styles)) continue; // Skip invalid groups
+    for (const group of data.doorPricingGroups) {
+        if (!group || !Array.isArray(group.styles)) continue;
         for (const style of group.styles) {
-            map[style] = {
-                Painted: group.Painted,
-                Primed: group.Primed,
-                Unfinished: group.Unfinished
-            };
-            list.push(style);
+             if (typeof style === 'string' && !list.includes(style)) { // Avoid duplicates
+                list.push(style);
+                // Populate map as well (though server does primary calc)
+                map[style] = {
+                    Painted: group.Painted,
+                    Primed: group.Primed,
+                    Unfinished: group.Unfinished
+                };
+            }
         }
     }
-    return { map, list: list.sort() };
+    return { map, list: list.sort() }; // Sort styles alphabetically
 }
 
-/** Populate dropdowns once pricing data is loaded */
+/** Populate style dropdowns in a given section container */
 function populateStyleDropdowns(container) {
     const doorSelect = container.querySelector('select[name="sectionDoorStyle"]');
     const drawerSelect = container.querySelector('select[name="sectionDrawerStyle"]');
-    if (!doorSelect || !drawerSelect) return;
+    if (!doorSelect || !drawerSelect) {
+        console.warn("[Client] Could not find style select elements in container:", container);
+        return;
+    }
 
-    // Preserve selected value if already set (useful for re-renders if needed)
-    const currentDoorVal = doorSelect.value;
-    const currentDrawerVal = drawerSelect.value;
+    if (allStyles.length === 0) {
+         console.warn("[Client] Cannot populate dropdowns, no styles available.");
+         // Optionally disable the selects or show a message
+         doorSelect.innerHTML = '<option value="">Error loading styles</option>';
+         drawerSelect.innerHTML = '<option value="">Error loading styles</option>';
+         return;
+    }
 
     const optionsHtml = allStyles.map(style => `<option value="${style}">${style}</option>`).join('');
     doorSelect.innerHTML = optionsHtml;
     drawerSelect.innerHTML = optionsHtml;
 
-    // Restore selection
-    if (currentDoorVal && allStyles.includes(currentDoorVal)) {
-        doorSelect.value = currentDoorVal;
-    }
-    if (currentDrawerVal && allStyles.includes(currentDrawerVal)) {
-        drawerSelect.value = currentDrawerVal;
-    }
-     // Set a default if nothing was selected or available
-     if (!doorSelect.value && allStyles.length > 0) doorSelect.value = allStyles[0];
-     if (!drawerSelect.value && allStyles.length > 0) drawerSelect.value = allStyles[0];
+     // Set a default selection (e.g., the first style)
+     if (allStyles.length > 0) {
+        doorSelect.value = allStyles[0];
+        drawerSelect.value = allStyles[0];
+     }
 }
 
-/** Fetch pricing data */
+/** Fetch pricing data (primarily for style list) */
 async function initPricingData() {
     try {
-        console.log('[Client] Fetching pricing data...');
-        // Ensure the path matches where the file is served (root if in public/)
-        const res = await fetch('/optimized-pricingData.json');
+        console.log('[Client] Fetching pricing data for styles...');
+        // Fetch from the correct path where server.js might expose it, or directly if static
+        // Serving it directly from /data/ is simpler if it's not sensitive
+        const res = await fetch('/data/pricingData.json'); // Path relative to public root
         if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
+            throw new Error(`HTTP error! status: ${res.status} while fetching pricing data.`);
         }
         pricingData = await res.json();
 
@@ -72,65 +79,79 @@ async function initPricingData() {
              throw new Error('Fetched pricing data is invalid or missing doorPricingGroups.');
         }
 
-        const { map, list } = buildStyleMapAndList(pricingData.doorPricingGroups);
-        styleMap = map;
+        const { map, list } = processPricingData(pricingData);
+        styleMap = map; // Store map just in case
         allStyles = list;
-        console.log('[Client] Pricing data loaded and processed. Styles:', allStyles);
+        console.log('[Client] Pricing data loaded and processed. Styles available:', allStyles.length);
 
-        initializeSections(); // Initialize the first section now that styles are ready
-        initializeWizard(); // Setup navigation etc. AFTER data load
+        // Now that styles are loaded, initialize the first section
+        initializeSections();
+        // Initialize wizard functionality (nav buttons etc.)
+        initializeWizard();
 
     } catch (e) {
         console.error('[Client] Failed to load or process pricing data:', e);
-        // Display error to user?
-        resultsDiv.innerHTML = `<div class="invoice-error"><p><strong>Error:</strong> Could not load essential pricing data. Please try refreshing the page. If the problem persists, contact support.</p><p><small>${e.message}</small></p></div>`;
-        // Disable calculation button?
-        if(calculateBtn) calculateBtn.disabled = true;
+        displayError("Could not load essential configuration data. Please try refreshing the page.");
+        // Disable calculation button as a safety measure
+        if (calculateBtn) calculateBtn.disabled = true;
     }
 }
 
-/** Create HTML for a single section */
+/** Create HTML structure for a single section */
 function createRoughEstimateSection(index) {
     const sectionDiv = document.createElement('div');
     sectionDiv.className = 'section';
     sectionDiv.dataset.index = index; // Use index for data tracking
+    // Use unique IDs for labels/inputs within the section
+    const sectionIdPrefix = `section-${index}-`;
     sectionDiv.innerHTML = `
       <div class="section-header">
         <span class="section-id">Section ${index + 1}</span>
         <button type="button" class="remove-button" data-remove-index="${index}" title="Remove Section ${index + 1}">×</button>
       </div>
-      <label>Door Style:</label><select name="sectionDoorStyle" required></select>
-      <label>Drawer Style:</label><select name="sectionDrawerStyle" required></select>
-      <label>Finish:</label>
-      <select name="sectionFinish" required>
-        <option value="Painted">Painted</option>
+      <label for="${sectionIdPrefix}doorStyle">Door Style:</label>
+      <select name="sectionDoorStyle" id="${sectionIdPrefix}doorStyle" required></select>
+
+      <label for="${sectionIdPrefix}drawerStyle">Drawer Style:</label>
+      <select name="sectionDrawerStyle" id="${sectionIdPrefix}drawerStyle" required></select>
+
+      <label for="${sectionIdPrefix}finish">Finish:</label>
+      <select name="sectionFinish" id="${sectionIdPrefix}finish" required>
+        <option value="Painted" selected>Painted</option> <!-- Default selection -->
         <option value="Primed">Primed</option>
         <option value="Unfinished">Unfinished</option>
       </select>
+
       <div class="dimension-inputs">
-        <label>Height (in):</label><input type="number" name="sectionHeight" value="12" min="1" step="0.01" required />
-        <label>Width (in):</label><input type="number" name="sectionWidth" value="12" min="1" step="0.01" required />
+        <label for="${sectionIdPrefix}height">Height (in):</label>
+        <input type="number" name="sectionHeight" id="${sectionIdPrefix}height" value="12" min="1" step="0.01" required inputmode="decimal" />
+
+        <label for="${sectionIdPrefix}width">Width (in):</label>
+        <input type="number" name="sectionWidth" id="${sectionIdPrefix}width" value="12" min="1" step="0.01" required inputmode="decimal" />
       </div>
     `;
-    populateStyleDropdowns(sectionDiv); // Populate styles for this new section
+    // Populate the dropdowns for this newly created section
+    populateStyleDropdowns(sectionDiv);
     return sectionDiv;
 }
 
-/** Add a new section */
+/** Add a new section to the container */
 function handleAddSection() {
-    console.log('[Client] Adding section');
+    console.log(`[Client] Adding section ${sectionCounter + 1}`);
     const newSection = createRoughEstimateSection(sectionCounter);
     sectionsContainer.appendChild(newSection);
     sectionCounter++;
-    updateSectionNumbers(); // Renumber sections visually
+    updateSectionNumbers(); // Renumber sections visually if needed (e.g., after removal)
 }
 
-/** Remove a section */
+/** Remove a section based on button click */
 function handleRemoveSection(event) {
-    if (event.target.classList.contains('remove-button')) {
-        const indexToRemove = event.target.dataset.removeIndex;
-        const sectionToRemove = sectionsContainer.querySelector(`.section[data-index="${indexToRemove}"]`);
+    // Use closest to find the button and section, handles clicks inside the button
+    const removeButton = event.target.closest('.remove-button');
+    if (removeButton) {
+        const sectionToRemove = removeButton.closest('.section');
         if (sectionToRemove) {
+            const indexToRemove = sectionToRemove.dataset.index;
             console.log(`[Client] Removing section with index ${indexToRemove}`);
             sectionToRemove.remove();
             updateSectionNumbers(); // Renumber remaining sections
@@ -138,57 +159,172 @@ function handleRemoveSection(event) {
     }
 }
 
-/** Update the visual numbering of sections after add/remove */
+/** Update the visual numbering and data attributes of sections */
 function updateSectionNumbers() {
      const remainingSections = sectionsContainer.querySelectorAll('.section');
      remainingSections.forEach((section, i) => {
          const idSpan = section.querySelector('.section-id');
          const removeBtn = section.querySelector('.remove-button');
-         if (idSpan) idSpan.textContent = `Section ${i + 1}`;
-         section.dataset.index = i; // Update data index
+         const index = i; // Current index in the live NodeList
+
+         if (idSpan) idSpan.textContent = `Section ${index + 1}`;
+         section.dataset.index = index; // Update data index
+
+         // Update IDs and fors within the section to maintain uniqueness
+         section.querySelectorAll('[id^="section-"]').forEach(el => {
+             const oldId = el.id;
+             const namePart = oldId.substring(oldId.indexOf('-') + 1 + oldId.split('-')[1].length + 1); // Get name after section-N-
+             const newId = `section-${index}-${namePart}`;
+             el.id = newId;
+             // Update corresponding label 'for' attribute
+             const label = section.querySelector(`label[for="${oldId}"]`);
+             if(label) label.setAttribute('for', newId);
+         });
+
+
          if (removeBtn) {
-             removeBtn.dataset.removeIndex = i; // Update button data index
-             removeBtn.title = `Remove Section ${i + 1}`;
+             removeBtn.dataset.removeIndex = index; // Update button data index
+             removeBtn.title = `Remove Section ${index + 1}`;
          }
      });
-     // Update the main counter to reflect the current number of sections
+     // Update the main counter AFTER re-indexing
      sectionCounter = remainingSections.length;
      console.log('[Client] Section count updated to:', sectionCounter);
+     // Disable remove button if only one section left? (Optional)
+     const removeButtons = sectionsContainer.querySelectorAll('.remove-button');
+     removeButtons.forEach(btn => btn.disabled = (remainingSections.length <= 1));
+
 }
 
 
-/** Navigate Wizard */
+/** Wizard Navigation Logic */
 function navigateWizard(direction) {
     const currentStepElement = wizard.querySelector(`.wizard-step.active`);
-    const nextStep = direction === 'next' ? currentStep + 1 : currentStep - 1;
+    if (!currentStepElement) {
+        console.error('[Client] Cannot navigate, active step not found.');
+        return;
+    }
 
-    if (nextStep < 1 || nextStep > steps.length) {
+    const targetStepNum = direction === 'next' ? currentStep + 1 : currentStep - 1;
+
+    // --- Validation before moving NEXT from Step 1 ---
+    if (direction === 'next' && currentStep === 1) {
+        if (!validateStep1()) {
+            // alert("Please ensure all sections have valid dimensions (Height and Width > 0).");
+            // Instead of alert, highlight invalid fields
+            return; // Stop navigation
+        }
+    }
+     // --- Validation before moving NEXT from Step 2 ---
+     if (direction === 'next' && currentStep === 2) {
+         if (!validateStep2()) {
+             // alert("Please ensure all piece counts are zero or positive numbers.");
+             return; // Stop navigation
+         }
+     }
+     // --- Validation before moving NEXT from Step 3 (Trigger Calculate) ---
+     // Note: Step 3's "next" button is disabled, Calculate is used instead.
+     // If enabling Step 3 Next button, add validation here.
+
+
+    if (targetStepNum < 1 || targetStepNum > steps.length) {
         console.warn('[Client] Navigation attempt out of bounds.');
         return; // Boundary check
     }
 
-    const nextStepElement = wizard.querySelector(`#step-${nextStep}`);
+    const targetStepElement = wizard.querySelector(`#step-${targetStepNum}`);
 
-    if (currentStepElement && nextStepElement) {
-        // Add hiding class for transition out
+    if (targetStepElement) {
+        // Transition out current step
         currentStepElement.classList.add('hiding');
         currentStepElement.classList.remove('active');
 
-        // After the transition duration, remove hiding and set inactive
+        // Set timeout to remove 'hiding' after transition (match CSS duration)
+        // This is mainly visual cleanup, doesn't affect functionality
         setTimeout(() => {
             currentStepElement.classList.remove('hiding');
-        }, 400); // Match transition duration in CSS
+        }, 400); // Should match --transition-duration in CSS
 
-        // Activate the next step
-        nextStepElement.classList.add('active');
-        currentStep = nextStep;
+        // Transition in target step
+        targetStepElement.classList.add('active');
+        currentStep = targetStepNum;
         console.log(`[Client] Navigated to step ${currentStep}`);
+
+        // Scroll to top of wizard if needed
+         wizard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
     } else {
-         console.error(`[Client] Wizard step element not found for current (${currentStep}) or next (${nextStep})`);
+         console.error(`[Client] Wizard step element not found for target step ${targetStepNum}`);
     }
 }
 
-/** Gather data from all form parts */
+// --- Input Validation Functions ---
+function validateStep1() {
+    let isValid = true;
+    const sectionElements = sectionsContainer.querySelectorAll('.section');
+    if (sectionElements.length === 0) {
+        alert("Please add at least one section."); // Or better UI feedback
+        isValid = false;
+        return isValid; // Early exit if no sections
+    }
+    sectionElements.forEach((sectionEl) => {
+        const heightInput = sectionEl.querySelector('[name="sectionHeight"]');
+        const widthInput = sectionEl.querySelector('[name="sectionWidth"]');
+        const height = parseFloat(heightInput.value);
+        const width = parseFloat(widthInput.value);
+
+        // Reset styles first
+        heightInput.style.border = '';
+        widthInput.style.border = '';
+
+        if (isNaN(height) || height <= 0) {
+            heightInput.style.border = '2px solid red';
+            isValid = false;
+        }
+        if (isNaN(width) || width <= 0) {
+            widthInput.style.border = '2px solid red';
+            isValid = false;
+        }
+    });
+    if (!isValid) {
+        alert("Please ensure all section dimensions (Height and Width) are numbers greater than 0.");
+    }
+    return isValid;
+}
+
+function validateStep2() {
+     let isValid = true;
+     const step2Inputs = document.querySelectorAll('#step-2 input[type="number"]');
+     step2Inputs.forEach(input => {
+         const value = parseInt(input.value, 10); // Use parseInt for whole numbers
+         input.style.border = ''; // Reset border
+         if (isNaN(value) || value < 0) {
+             input.style.border = '2px solid red';
+             isValid = false;
+         }
+     });
+     if (!isValid) {
+         alert("Please ensure all piece counts are whole numbers (0 or greater).");
+     }
+     return isValid;
+}
+
+function validateStep3() {
+     let isValid = true;
+     const customPaintInput = document.querySelector('#step-3 input[name="customPaintQty"]');
+     const value = parseInt(customPaintInput.value, 10);
+     customPaintInput.style.border = ''; // Reset border
+     if (isNaN(value) || value < 0) {
+          customPaintInput.style.border = '2px solid red';
+          isValid = false;
+          alert("Please ensure Custom Paint Quantity is a whole number (0 or greater).");
+     }
+     return isValid;
+}
+// --- End Validation ---
+
+
+/** Gather data from all relevant input fields */
 function gatherFormData() {
     const formData = {
         sections: [],
@@ -200,7 +336,7 @@ function gatherFormData() {
     const sectionElements = sectionsContainer.querySelectorAll('.section');
     sectionElements.forEach((sectionEl, index) => {
         const sectionData = {
-            id: index + 1, // Add an ID for easier reference
+            // id: index + 1, // ID can be inferred from array index, less critical now
             doorStyle: sectionEl.querySelector('[name="sectionDoorStyle"]').value,
             drawerStyle: sectionEl.querySelector('[name="sectionDrawerStyle"]').value,
             finish: sectionEl.querySelector('[name="sectionFinish"]').value,
@@ -210,40 +346,55 @@ function gatherFormData() {
         formData.sections.push(sectionData);
     });
 
-    // Step 2: Piece Count
-    const step2Form = document.getElementById('calcFormStep2');
-    if (step2Form) {
-         formData.part2.numDrawers = step2Form.querySelector('[name="numDrawers"]').value;
-         formData.part2.doors_0_36 = step2Form.querySelector('[name="doors_0_36"]').value;
-         formData.part2.doors_36_60 = step2Form.querySelector('[name="doors_36_60"]').value;
-         formData.part2.doors_60_82 = step2Form.querySelector('[name="doors_60_82"]').value;
-         formData.part2.lazySusanQty = step2Form.querySelector('[name="lazySusanQty"]').value;
+    // Step 2: Piece Count (Use IDs set in HTML)
+    const step2Container = document.getElementById('step-2');
+    if (step2Container) {
+         formData.part2.numDrawers = step2Container.querySelector('#numDrawers')?.value ?? '0';
+         formData.part2.doors_0_36 = step2Container.querySelector('#doors_0_36')?.value ?? '0';
+         formData.part2.doors_36_60 = step2Container.querySelector('#doors_36_60')?.value ?? '0';
+         formData.part2.doors_60_82 = step2Container.querySelector('#doors_60_82')?.value ?? '0';
+         formData.part2.lazySusanQty = step2Container.querySelector('#lazySusanQty')?.value ?? '0';
+    } else {
+        console.warn("[Client] Step 2 container not found during form data gathering.");
     }
-
 
     // Step 3: Special Features
-     const step3Form = document.getElementById('calcFormStep3');
-    if (step3Form) {
-         formData.part3.customPaintQty = step3Form.querySelector('[name="customPaintQty"]').value;
+     const step3Container = document.getElementById('step-3');
+    if (step3Container) {
+         formData.part3.customPaintQty = step3Container.querySelector('#customPaintQty')?.value ?? '0';
+    } else {
+         console.warn("[Client] Step 3 container not found during form data gathering.");
     }
-
 
     return formData;
 }
 
-/** Handle calculation submission */
+/** Handle the calculation request */
 async function handleCalculate() {
     console.log('[Client] Calculate button clicked.');
+
+    // --- Validation before sending ---
+    if (!validateStep1() || !validateStep2() || !validateStep3()) {
+        alert("Please correct the errors in the form before calculating.");
+        // Ensure the user is on the step with the error? Or navigate back?
+        // For simplicity, we just alert and stop.
+        return;
+    }
+
     calculateBtn.disabled = true;
     calculateBtn.textContent = 'Calculating...';
-    resultsDiv.innerHTML = '<p style="text-align:center; padding: 2em;">Generating estimate...</p>'; // Loading indicator
+    // Show loading state in results area
+    resultsDiv.innerHTML = '<div class="invoice-loading"><p>Generating estimate...</p></div>';
+    // Immediately navigate to results step to show loading indicator
+    navigateWizard('next');
+
 
     const payload = gatherFormData();
-    console.log('[Client] Sending payload:', JSON.stringify(payload));
+    console.log('[Client] Sending payload:', JSON.stringify(payload, null, 2)); // Pretty print JSON
 
     try {
-        // *** ENSURE THIS IS POINTING TO THE VERCEL API ENDPOINT ***
-        const response = await fetch('/api/index.js', {
+        // *** Use the API endpoint defined in server.js ***
+        const response = await fetch('/api/calculate', { // Updated endpoint
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -251,73 +402,95 @@ async function handleCalculate() {
             body: JSON.stringify(payload),
         });
 
+        const responseData = await response.json(); // Try parsing JSON regardless of status
+
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response.' }));
-            throw new Error(`API Error (${response.status}): ${errorData.error || response.statusText}`);
+            // Use error message from server response if available
+            const errorMessage = responseData?.message || responseData?.error || `API Error (${response.status})`;
+            throw new Error(errorMessage);
         }
 
-        const resultsData = await response.json();
-        console.log('[Client] Received calculation results:', resultsData);
-        displayResults(resultsData);
-        navigateWizard('next'); // Move to results step (Step 4)
+        console.log('[Client] Received calculation results:', responseData);
+        displayResults(responseData); // Display results uses the server's response
+        // Navigation to step 4 already happened before fetch
 
     } catch (error) {
         console.error('[Client] Error during calculation request:', error);
-        resultsDiv.innerHTML = `<div class="invoice-error"><p><strong>Calculation Error:</strong> ${error.message}</p><p>Please check your inputs or try again later.</p></div>`;
-        // Optionally navigate back or stay on the current step
-        // navigateWizard('prev'); // Example: Go back if calc fails
+        displayError(`Calculation Failed: ${error.message}`);
+        // Optionally navigate back to the last input step (Step 3)
+         if (currentStep === 4) navigateWizard('prev');
     } finally {
         calculateBtn.disabled = false;
         calculateBtn.textContent = 'Calculate Estimate';
     }
 }
 
-/** Format currency */
+/** Format currency helper */
 const formatCurrency = (value) => {
-    const number = Number(value) || 0;
+    const number = Number(value); // Allow potential string numbers
+    if (isNaN(number)) {
+        console.warn(`[Client] Invalid value passed to formatCurrency: ${value}`);
+        return '$0.00'; // Or some other indicator
+    }
     return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 };
 
+/** Display error message in the results area */
+function displayError(message) {
+    resultsDiv.innerHTML = `<div class="invoice-error"><p><strong>Error:</strong> ${message}</p></div>`;
+    // Ensure results step is active if error happens after navigation
+    if (currentStep !== 4) {
+        // Force navigation to step 4 to show the error
+         const currentActive = wizard.querySelector('.wizard-step.active');
+         const resultsStep = wizard.querySelector('#step-4');
+         if (currentActive && resultsStep && currentActive !== resultsStep) {
+             currentActive.classList.remove('active', 'hiding');
+             resultsStep.classList.add('active');
+             currentStep = 4;
+         }
+    }
+     if(printButtonContainer) printButtonContainer.style.display = 'none'; // Hide print on error
+}
 
-/** Display results in the results div */
+
+/** Display calculation results in the results div */
 function displayResults(data) {
+    console.log("[Client] Displaying results:", data);
     if (!data || typeof data !== 'object') {
-        resultsDiv.innerHTML = '<div class="invoice-error"><p>Received invalid results data.</p></div>';
+        console.error("[Client] Invalid results data received:", data);
+        displayError('Received invalid results data from the server.');
         return;
     }
 
+    // Destructure results, providing defaults
     const {
         overallTotal = 0,
         doorCostTotal = 0,
         hingeCost = 0,
         hingeCount = 0,
+        lazySusanCost = 0, // Get LS cost from results
         specialFeatures = {},
         sections = [],
-        part2 = {}, // Include part2 and part3 if you want to display inputs
-        part3 = {}
+        part2 = {}, // Use part2 from results for display consistency
+        part3 = {}  // Use part3 from results
     } = data;
+
+    const customPaintCost = specialFeatures?.customPaintCost || 0;
 
     // --- Summary Table ---
     let summaryHtml = `
         <table class="summary-table">
             <tbody>
-                <tr><td class="table-label">Total Section Cost (Doors/Drawers)</td><td class="table-value">${formatCurrency(doorCostTotal)}</td></tr>
-                <tr><td class="table-label">Hinge Boring Cost (${hingeCount} hinges)</td><td class="table-value">${formatCurrency(hingeCost)}</td></tr>
+                <tr><td class="table-label">Door & Drawer Section Cost</td><td class="table-value">${formatCurrency(doorCostTotal)}</td></tr>
+                <tr><td class="table-label">Hinge Boring (${hingeCount} hinges)</td><td class="table-value">${formatCurrency(hingeCost)}</td></tr>
     `;
-    if (specialFeatures.customPaintCost > 0) {
-        summaryHtml += `<tr><td class="table-label">Custom Paint Fee</td><td class="table-value">${formatCurrency(specialFeatures.customPaintCost)}</td></tr>`;
+    // Only show rows for costs > 0
+    if (lazySusanCost > 0) {
+        summaryHtml += `<tr><td class="table-label">Lazy Susans (${part2.lazySusanQty || 0})</td><td class="table-value">${formatCurrency(lazySusanCost)}</td></tr>`;
     }
-    // Add Lazy Susan cost if applicable (assuming it's bundled elsewhere or needs adding here)
-     const lazySusanPrice = pricingData?.lazySusan?.price || 0; // Get price from loaded data
-     const lazySusanTotal = (Number(part2.lazySusanQty) || 0) * lazySusanPrice;
-     if (lazySusanTotal > 0) {
-         summaryHtml += `<tr><td class="table-label">Lazy Susans (${part2.lazySusanQty || 0})</td><td class="table-value">${formatCurrency(lazySusanTotal)}</td></tr>`;
-         // !!! IMPORTANT: The overallTotal from the backend currently DOES NOT include Lazy Susan cost
-         // You might need to adjust the backend calculation OR add it here on the frontend for display
-         // overallTotal += lazySusanTotal; // Example if adding on frontend
-     }
-
-
+    if (customPaintCost > 0) {
+        summaryHtml += `<tr><td class="table-label">Custom Paint Fee</td><td class="table-value">${formatCurrency(customPaintCost)}</td></tr>`;
+    }
     summaryHtml += `
             </tbody>
             <tfoot>
@@ -327,28 +500,35 @@ function displayResults(data) {
     `;
 
     // --- Detailed Breakdown (Initially Hidden) ---
-    let detailsHtml = '<div id="internalDetails" style="display: none;" class="details-section">';
-    detailsHtml += `<h3>Detailed Section Breakdown</h3>`;
-    detailsHtml += `<table class="details-table">
-        <thead><tr><th>Section</th><th>Door</th><th>Drawer</th><th>Finish</th><th>HxW (in)</th><th>Area (sqft)</th><th>Cost</th></tr></thead>
-        <tbody>`;
-    sections.forEach((s, i) => {
-        detailsHtml += `
-            <tr>
-                <td>${i + 1}</td>
-                <td>${s.doorStyle || 'N/A'}</td>
-                <td>${s.drawerStyle || 'N/A'}</td>
-                <td>${s.finish || 'N/A'}</td>
-                <td>${s.height || 0}" x ${s.width || 0}"</td>
-                <td>${s.area?.toFixed(2) || 'N/A'}</td>
-                <td>${formatCurrency(s.totalSectionCost)}</td>
-            </tr>
-        `;
-    });
-    detailsHtml += `</tbody></table>`;
+    let detailsHtml = '<div id="internalDetails" style="display: none;" class="details-section">'; // Initially hidden
 
-    // Add hinge details if needed
-    detailsHtml += `<h3>Hinge & Other Counts</h3>`;
+    // Section Details Table
+    detailsHtml += `<h3>Section Breakdown</h3>`;
+    if (sections.length > 0) {
+        detailsHtml += `<table class="details-table">
+            <thead><tr><th>#</th><th>Door Style</th><th>Drawer Style</th><th>Finish</th><th>HxW (in)</th><th>Area (sqft)</th><th>Cost</th></tr></thead>
+            <tbody>`;
+        sections.forEach((s, i) => {
+            detailsHtml += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${s.doorStyle || 'N/A'}</td>
+                    <td>${(s.drawerStyle && s.drawerStyle !== s.doorStyle) ? s.drawerStyle : '-'}</td> <!-- Show '-' if same as door -->
+                    <td>${s.finish || 'N/A'}</td>
+                    <td>${s.height || 0}" x ${s.width || 0}"</td>
+                    <td>${s.area?.toFixed(2) || 'N/A'}</td>
+                    <td>${formatCurrency(s.totalSectionCost)}</td>
+                </tr>
+            `;
+        });
+        detailsHtml += `</tbody></table>`;
+    } else {
+        detailsHtml += `<p style="text-align: center; color: #666;">No sections were entered.</p>`;
+    }
+
+
+    // Other Inputs Summary Table
+    detailsHtml += `<h3 style="margin-top: 1.5em;">Counts & Features Summary</h3>`;
     detailsHtml += `<table class="details-table"><tbody>
         <tr><td>Doors 0-36" Qty</td><td>${part2.doors_0_36 || 0}</td></tr>
         <tr><td>Doors 36-60" Qty</td><td>${part2.doors_36_60 || 0}</td></tr>
@@ -360,11 +540,11 @@ function displayResults(data) {
 
     detailsHtml += '</div>'; // End #internalDetails
 
-    // --- Invoice Structure ---
+    // --- Construct Final Invoice HTML ---
     resultsDiv.innerHTML = `
       <div class="invoice">
           <div class="invoice-header">
-              <!-- You might want to add the logo here too -->
+              <!-- Optional: <img src="/assets/logo.png" alt="nuDoors Logo" class="invoice-logo" style="height: 50px; margin-bottom: 1em;"> -->
               <h1>Estimate Summary</h1>
               <p>Thank you for using the nuDoors Estimator!</p>
           </div>
@@ -372,46 +552,49 @@ function displayResults(data) {
           ${summaryHtml}
 
           <div style="text-align: center; margin-bottom: 1.5em;">
-             <button type="button" id="toggleDetailsBtn">Show Details</button>
+             <button type="button" id="toggleDetailsBtn" style="display: none;">Show Details</button> <!-- Hidden until needed -->
           </div>
 
           ${detailsHtml}
 
           <div class="estimate-footer">
-              <p>This is an estimate only. Final price may vary based on final measurements and selections. Tax not included.</p>
+              <p>This is an estimate only. Final price may vary based on final measurements, selections, and confirmation. Tax not included.</p>
           </div>
       </div>
     `;
 
-    // Add event listener for the new details button
+    // Add event listener for the details button *after* it's added to the DOM
     toggleDetailsBtn = document.getElementById('toggleDetailsBtn');
     internalDetailsDiv = document.getElementById('internalDetails');
     if (toggleDetailsBtn && internalDetailsDiv) {
+         toggleDetailsBtn.style.display = 'inline-block'; // Make button visible now
+         // Reset button text
+         toggleDetailsBtn.textContent = 'Show Details';
+         // Ensure details are hidden initially (redundant maybe, but safe)
+         internalDetailsDiv.style.display = 'none';
+         internalDetailsDiv.classList.remove('print-section'); // Remove print class initially
+
          toggleDetailsBtn.addEventListener('click', handleToggleDetails);
-         toggleDetailsBtn.style.display = 'inline-block'; // Make sure it's visible
     } else {
          console.warn('[Client] Could not find toggle details button or details div after rendering results.');
     }
 
-
-    // Show Print and Start Over buttons
-    if(printButtonContainer) printButtonContainer.style.display = 'block';
-    if(startOverBtn) startOverBtn.style.display = 'inline-block'; // Ensure start over is visible on results page
+    // Show Print button container
+    if (printButtonContainer) printButtonContainer.style.display = 'block';
 }
 
-/** Toggle visibility of the detailed breakdown */
+/** Toggle visibility of the detailed breakdown section */
 function handleToggleDetails() {
     if (!internalDetailsDiv || !toggleDetailsBtn) return;
 
     const isHidden = internalDetailsDiv.style.display === 'none';
     internalDetailsDiv.style.display = isHidden ? 'block' : 'none';
     toggleDetailsBtn.textContent = isHidden ? 'Hide Details' : 'Show Details';
-    // Add class for printing if shown
+    // Add/remove class for printing only when details are shown
     internalDetailsDiv.classList.toggle('print-section', isHidden);
 }
 
-
-/** Toggle example image */
+/** Toggle visibility of the example image */
 function handleToggleExample() {
     if (!exampleImageDiv || !toggleExampleBtn) return;
     const isHidden = exampleImageDiv.style.display === 'none';
@@ -419,35 +602,51 @@ function handleToggleExample() {
     toggleExampleBtn.textContent = isHidden ? 'Hide Example Image' : 'Show Example Image';
 }
 
-/** Reset the form and go back to step 1 */
+/** Reset the entire form and state, return to step 1 */
 function handleStartOver() {
     console.log('[Client] Starting over.');
-    // Reset forms (can be more specific if needed)
-    document.getElementById('calcFormStep1').reset();
-    document.getElementById('calcFormStep2').reset();
-    document.getElementById('calcFormStep3').reset();
 
-    // Clear dynamic sections
+    // 1. Reset input fields in all relevant steps
+    document.querySelectorAll('#step-1 input, #step-1 select, #step-2 input, #step-3 input').forEach(input => {
+        // Reset specific types differently
+        if (input.type === 'number') {
+            input.value = input.name === 'sectionHeight' || input.name === 'sectionWidth' ? '12' : '0'; // Reset numbers to 0 or default 12
+        } else if (input.tagName === 'SELECT') {
+            input.selectedIndex = 0; // Reset selects to the first option
+        }
+        input.style.border = ''; // Clear validation borders
+    });
+
+    // 2. Clear dynamic sections and re-initialize
     sectionsContainer.innerHTML = '';
     sectionCounter = 0;
-    initializeSections(); // Add back the first section
+    initializeSections(); // Add back the first section (and potentially repopulate styles if needed)
 
-    // Clear results
+    // 3. Clear results area
     resultsDiv.innerHTML = '';
-    if(printButtonContainer) printButtonContainer.style.display = 'none';
-     if(toggleDetailsBtn) toggleDetailsBtn.style.display = 'none'; // Hide toggle button
+    if(printButtonContainer) printButtonContainer.style.display = 'none'; // Hide print btn
+    if(toggleDetailsBtn) toggleDetailsBtn.style.display = 'none'; // Hide details btn
 
-    // Reset to step 1
+    // 4. Reset wizard to step 1 visually
     const currentActive = wizard.querySelector('.wizard-step.active');
     const firstStep = wizard.querySelector('#step-1');
     if (currentActive && firstStep && currentActive !== firstStep) {
-        currentActive.classList.remove('active');
+        currentActive.classList.remove('active', 'hiding');
         firstStep.classList.add('active');
     }
     currentStep = 1;
+
+    // 5. Reset calculate button state
+    if (calculateBtn) {
+        calculateBtn.disabled = false;
+        calculateBtn.textContent = 'Calculate Estimate';
+    }
+
+     // Scroll to top
+     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/** Add the first section */
+/** Initialize the sections area (add first section) */
 function initializeSections() {
      // Clear any existing sections first (important for start over)
      sectionsContainer.innerHTML = '';
@@ -457,20 +656,25 @@ function initializeSections() {
          handleAddSection(); // Add the first section
      } else {
          console.warn('[Client] Cannot initialize sections, styles not loaded yet.');
-         // Maybe display a message in the sections container?
-         sectionsContainer.innerHTML = '<p style="text-align: center; color: #888;">Loading styles...</p>';
+         // Display a message in the sections container
+         sectionsContainer.innerHTML = '<p class="invoice-loading">Loading styles...</p>';
      }
+     updateSectionNumbers(); // Ensure remove button state is correct even for one section
 }
 
-/** Set up wizard navigation and button listeners */
+/** Set up wizard navigation and general button listeners */
 function initializeWizard() {
-    console.log('[Client] Initializing wizard UI...');
-    // Navigation Buttons
-    wizard.querySelectorAll('.wizard-nav-btn.next').forEach(btn => {
-        btn.addEventListener('click', () => navigateWizard('next'));
-    });
-    wizard.querySelectorAll('.wizard-nav-btn.prev').forEach(btn => {
-        btn.addEventListener('click', () => navigateWizard('prev'));
+    console.log('[Client] Initializing wizard UI listeners...');
+
+    // Navigation Buttons (using event delegation on the wizard container)
+    wizard.addEventListener('click', (event) => {
+        if (event.target.matches('.wizard-nav-btn.next')) {
+            // Prevent Step 3 'Next' button from navigating (handled by Calculate)
+            if(currentStep === 3) return;
+            navigateWizard('next');
+        } else if (event.target.matches('.wizard-nav-btn.prev')) {
+            navigateWizard('prev');
+        }
     });
 
     // Specific Action Buttons
@@ -483,28 +687,25 @@ function initializeWizard() {
     // Listener for removing sections (using event delegation on the container)
     if(sectionsContainer) sectionsContainer.addEventListener('click', handleRemoveSection);
 
-    // Set initial state
+    // Set initial visual state (redundant if HTML is correct, but safe)
     steps.forEach((step, index) => {
         step.classList.remove('active', 'hiding');
-        if (index === 0) {
+        if (index === currentStep - 1) { // Use currentStep variable
             step.classList.add('active');
         }
     });
-    currentStep = 1;
     if(printButtonContainer) printButtonContainer.style.display = 'none'; // Hide print initially
-    if(startOverBtn) startOverBtn.style.display = 'inline-block'; // Ensure start over is visible but perhaps move logic elsewhere if needed on first step
 
-     console.log('[Client] Wizard UI Initialized.');
+    console.log('[Client] Wizard UI Initialized.');
 }
 
-
-/** Start app */
-document.addEventListener('DOMContentLoaded', () => {
+/** Initial setup when DOM is ready */
+function main() {
     console.log('[Client] DOM Loaded. App initializing...');
 
     // Get references to major elements
     wizard = document.getElementById('wizard');
-    steps = wizard.querySelectorAll('.wizard-step');
+    steps = wizard?.querySelectorAll('.wizard-step'); // Use optional chaining
     sectionsContainer = document.getElementById('sectionsContainer');
     addSectionBtn = document.getElementById('addSectionBtn');
     calculateBtn = document.getElementById('calculateBtn');
@@ -514,15 +715,19 @@ document.addEventListener('DOMContentLoaded', () => {
     printButtonContainer = document.getElementById('printButtonContainer');
     toggleExampleBtn = document.getElementById('toggleExampleBtn');
     exampleImageDiv = document.getElementById('exampleImage');
-    // toggleDetailsBtn and internalDetailsDiv are assigned dynamically after results are rendered
+    // toggleDetailsBtn and internalDetailsDiv are assigned dynamically
 
-    // Check if essential elements exist
-    if (!wizard || !steps.length || !sectionsContainer || !addSectionBtn || !calculateBtn || !resultsDiv || !startOverBtn || !printBtn || !toggleExampleBtn || !exampleImageDiv) {
+    // Check if essential elements exist before proceeding
+    if (!wizard || !steps || steps.length === 0 || !sectionsContainer || !addSectionBtn || !calculateBtn || !resultsDiv || !startOverBtn || !printBtn || !toggleExampleBtn || !exampleImageDiv) {
          console.error("[Client] Critical UI elements missing from the DOM. Aborting initialization.");
-         document.body.innerHTML = '<p style="color: red; font-weight: bold; padding: 2em;">Error: UI is incomplete. Cannot start the estimator.</p>';
-         return;
+         document.body.innerHTML = '<p style="color: red; font-weight: bold; padding: 2em;">Error: UI is incomplete. Cannot start the estimator. Check element IDs.</p>';
+         return; // Stop execution
     }
 
+    // Start the process by fetching data, which then initializes UI
+    initPricingData();
+}
 
-    initPricingData(); // Load data first, which then calls initializeSections and initializeWizard
-});
+// --- Run the main setup function ---
+// Use DOMContentLoaded for standard behavior
+document.addEventListener('DOMContentLoaded', main);

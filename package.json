@@ -1,19 +1,19 @@
+
 {
-  "name": "nudoors-estimator",
+  "name": "nudoors-estimator-uf",
   "version": "1.0.0",
-  "description": "Web application for calculating nuDoors estimates.",
-  "main": "api/index.js",
+  "description": "Web application for calculating nuDoors estimates (User Facing).",
+  "main": "server.js",
   "scripts": {
-    "start": "node api/index.js",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "express": "^4.19.2",
-    "serverless-http": "^3.2.0"
+    "express": "^4.19.2" 
   },
   "engines": {
-    "node": "22.x"
+    "node": "22.x" 
   },
-  "author": "Dan (Your Name/Company)",
+  "author": "nuDoors", 
   "license": "UNLICENSED"
 }
