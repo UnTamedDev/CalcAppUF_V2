@@ -299,25 +299,6 @@ button.remove-button:active:not(:disabled) { filter: brightness(0.9); box-shadow
     display: inline-block; /* Allow side-by-side */
 }
 
-/* Optional: Slightly different style for Save button */
-#saveEstimatePdf {
-    background: #b0bec5; /* Use secondary button color */
-    box-shadow: 6px 6px 6px #a0acb1, -6px -6px 6px #c0ced3;
-    color: #546e7a;
-}
-#saveEstimatePdf:hover:not(:disabled) {
-    box-shadow: none; filter: brightness(1.05);
-}
-#saveEstimatePdf:active:not(:disabled) {
-    filter: brightness(0.95); box-shadow: var(--shadow-inset);
-}
-
-/* Dark theme for save button */
-body[data-theme="dark"] #saveEstimatePdf {
-    background: #5a6a72;
-    box-shadow: 6px 6px 6px #49565c, -6px -6px 6px #6b7e88;
-    color: #ddd;
-}
 
 /* Print instructions text */
 .print-instructions {

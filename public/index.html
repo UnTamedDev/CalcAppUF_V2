@@ -16,6 +16,7 @@
     <header>
         <img src="assets/logo.png" alt="nuDoors Logo">
         <h1>DIY Door Estimator</h1>
+		<button onclick="window.print()" style="margin: 2em; padding: 1em; background: red; color: white;">Test Print Directly</button>
         <button type="button" id="themeToggleBtn" title="Toggle Theme">☀️</button>
     </header>
 
@@ -98,9 +99,7 @@
             </div>
             <!-- Print/Save button container -->
             <div id="printButtonContainer" style="display: none;">
-                <button type="button" id="printEstimate">Print Estimate</button>
-                <button type="button" id="saveEstimatePdf">Save as PDF</button> <!-- Added Save Button -->
-                <p class="print-instructions"><small>Tip: To save as PDF, choose "Save as PDF" as the Destination/Printer in the print dialog.</small></p>
+                <button type="button" id="printEstimate">Print/Save Estimate</button>
             </div>
             <!-- Start Over button -->
             <div class="step-navigation" style="justify-content: center;">

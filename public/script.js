@@ -8,7 +8,7 @@ let currentStep = 1;
 let sectionCounter = 0;
 
 // --- DOM Element References ---
-let wizard, steps, sectionsContainer, addSectionBtn, calculateBtn, resultsDiv, startOverBtn, toggleExampleBtn, exampleImageDiv, printButtonContainer, themeToggleBtn;
+let wizard, steps, sectionsContainer, addSectionBtn, calculateBtn, resultsDiv, startOverBtn,  toggleExampleBtn, exampleImageDiv, printButtonContainer, themeToggleBtn;
 
 // --- Theme Handling ---
 const K_THEME = 'nuDoorsEstimatorTheme';
