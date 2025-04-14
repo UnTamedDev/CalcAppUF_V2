@@ -487,22 +487,7 @@ function displayError(message) {
 
 /** Display calculation results in the results div */
 function displayResults(data) {
-    // --- DEBUG ---
-    console.log("[Client] displayResults starting. Target element should be:", resultsDiv);
-    if (!resultsDiv) {
-        console.error("[Client] CRITICAL: resultsDiv element is null or undefined inside displayResults!");
-        // Attempt to re-acquire it? Might indicate a bigger problem if needed.
-        resultsDiv = document.getElementById('results');
-         console.log("[Client] Re-acquired resultsDiv:", resultsDiv);
-         if (!resultsDiv) {
-            alert("Internal Error: Cannot find results display area. Contact support.");
-            return; // Stop if we can't find it
-         }
-    }
-    console.log("[Client] displayResults received data:", data);
-    // --- END DEBUG ---
-
-
+    console.log("[Client] Displaying results:", data);
     if (!data || typeof data !== 'object') {
         console.error("[Client] Invalid results data received:", data);
         displayError('Received invalid results data from the server.');
@@ -527,35 +512,54 @@ function displayResults(data) {
     // --- Section Breakdown Table ---
     let sectionsHtml = `<h3>Section Breakdown</h3>`;
     if (sections.length > 0) {
-        // --- WRAP the table in a div for scrolling ---
-        sectionsHtml += `<div class="table-responsive-wrapper">`;
+        // Add classes to header cells for potential mobile hiding if needed later
         sectionsHtml += `<table class="details-table">
-            <thead><tr><th>#</th><th>Door Style</th><th>Drawer Style</th><th>Finish</th><th>HxW (in)</th><th>Area (sqft)</th><th>Cost</th></tr></thead>
+            <thead>
+                <tr>
+                    <th class="col-section-num">#</th>
+                    <th class="col-door-style">Door Style</th>
+                    <th class="col-drawer-style">Drawer Style</th>
+                    <th class="col-finish desktop-only-col">Finish</th>
+                    <th class="col-hxw desktop-only-col">HxW (in)</th>
+                    <th class="col-area desktop-only-col">Area (sqft)</th>
+                    <th class="col-cost">Cost</th>
+                </tr>
+            </thead>
             <tbody>`;
         sections.forEach((s, i) => {
+            // --- Primary Row ---
             sectionsHtml += `
-                <tr>
-                    <td>${i + 1}</td>
-                    <td>${s.doorStyle || 'N/A'}</td>
-                    <td>${(s.drawerStyle && s.drawerStyle !== s.doorStyle) ? s.drawerStyle : '-'}</td>
-                    <td>${s.finish || 'N/A'}</td>
-                    <td>${s.height || 0}" x ${s.width || 0}"</td>
-                    <td>${s.area?.toFixed(2) || 'N/A'}</td>
-                    <td>${formatCurrency(s.totalSectionCost)}</td>
+                <tr class="primary-info-row">
+                    <td data-label="#">${i + 1}</td>
+                    <td data-label="Door Style">${s.doorStyle || 'N/A'}</td>
+                    <td data-label="Drawer Style">${(s.drawerStyle && s.drawerStyle !== s.doorStyle) ? s.drawerStyle : '-'}</td>
+                    <td data-label="Finish" class="desktop-only-cell">${s.finish || 'N/A'}</td>
+                    <td data-label="HxW" class="desktop-only-cell">${s.height || 0}" x ${s.width || 0}"</td>
+                    <td data-label="Area" class="desktop-only-cell">${s.area?.toFixed(2) || 'N/A'}</td>
+                    <td data-label="Cost" class="cost-cell">${formatCurrency(s.totalSectionCost)}</td>
+                </tr>`;
+            // --- Secondary Row (for Mobile) ---
+            sectionsHtml += `
+                 <tr class="secondary-info-row mobile-only-row">
+                    <td colspan="7"> <!-- Use full colspan for structure -->
+                        <div class="secondary-details">
+                            <span class="info-item">HxW: ${s.height || 0}" x ${s.width || 0}"</span>
+                            <span class="info-divider">|</span>
+                            <span class="info-item">Finish: ${s.finish || 'N/A'}</span>
+                            <span class="info-divider">|</span>
+                            <span class="info-item">${s.area?.toFixed(2) || 'N/A'} sqft</span>
+                        </div>
+                    </td>
                 </tr>
             `;
         });
         sectionsHtml += `</tbody></table>`;
-        // --- CLOSE the wrapper div ---
-        sectionsHtml += `</div>`; // Close table-responsive-wrapper
     } else {
         sectionsHtml += `<p style="text-align: center; color: #666;">No sections were entered.</p>`;
     }
 
-
-    // --- Counts & Features Summary Table ---
+    // --- Counts & Features Summary Table --- (No change needed here)
     let countsHtml = `<h3 style="margin-top: 1.5em;">Counts & Features Summary</h3>`;
-    // --- Counts table DOES NOT need the wrapper usually ---
     countsHtml += `<table class="details-table"><tbody>
         <tr><td>Doors 0-36" Qty</td><td>${part2.doors_0_36 || 0}</td></tr>
         <tr><td>Doors 36-60" Qty</td><td>${part2.doors_36_60 || 0}</td></tr>
@@ -567,12 +571,11 @@ function displayResults(data) {
     </tbody></table>`;
 
 
-    // --- Cost Summary Table ---
+    // --- Cost Summary Table --- (No change needed here)
     let costSummaryHtml = `<h3 style="margin-top: 1.5em;">Cost Summary</h3>`;
-    // --- Cost Summary table DOES NOT need the wrapper ---
     costSummaryHtml += `
         <table class="summary-table">
-             <tbody>
+            <tbody>
                 <tr><td class="table-label">Door & Drawer Section Cost</td><td class="table-value">${formatCurrency(doorCostTotal)}</td></tr>
                 <tr><td class="table-label">Hinge Boring Cost</td><td class="table-value">${formatCurrency(hingeCost)}</td></tr>
     `;
@@ -590,38 +593,23 @@ function displayResults(data) {
         </table>
     `;
 
-    // --- Construct Final Invoice HTML ---
-     const finalHtml = `
+    // --- Construct Final Invoice HTML --- (No change needed here)
+    resultsDiv.innerHTML = `
       <div class="invoice">
           <div class="invoice-header">
-               <!-- Optional: Add logo for invoice -->
-               <!-- <img src="/assets/logo.png" alt="nuDoors Logo" class="invoice-logo" style="display: block; max-height: 60px; margin: 0 auto 1em auto;"> -->
+               <!-- Optional logo -->
               <h1>Estimate Summary</h1>
               <p>Thank you for using the nuDoors Estimator!</p>
               <p>Estimate ID: ${Date.now()}</p>
           </div>
-
-          ${sectionsHtml}  <!-- Section Breakdown Table (now wrapped) -->
-          ${countsHtml}    <!-- Add Counts Table -->
-          ${costSummaryHtml} <!-- Add Cost Summary Table -->
-
+          ${sectionsHtml}
+          ${countsHtml}
+          ${costSummaryHtml}
           <div class="estimate-footer">
-              <p>This is an estimate only. Final price may vary based on final measurements, selections, and confirmation. Tax not included.</p>
+              <p>This is an estimate only... Tax not included.</p>
           </div>
       </div>
     `;
-
-    // --- DEBUG ---
-    console.log("[Client] About to set innerHTML for resultsDiv.");
-    // --- END DEBUG ---
-
-    resultsDiv.innerHTML = finalHtml; // Assign the generated HTML
-
-    // --- DEBUG ---
-    console.log("[Client] Finished setting innerHTML. resultsDiv parent:", resultsDiv.parentElement);
-    // Check if the element is still in the main document after setting innerHTML
-    console.log("[Client] Is resultsDiv still connected to document?", document.body.contains(resultsDiv));
-    // --- END DEBUG ---
 
     // Show Print button container
     if (printButtonContainer) printButtonContainer.style.display = 'block';
