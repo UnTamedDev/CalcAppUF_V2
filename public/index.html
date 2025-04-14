@@ -38,21 +38,23 @@
 				Tip: Start from the top left, and 
 				working your wait to the bottom right!
             </p>
-            <div id="exampleImageContainer">
-                <button type="button" id="toggleExampleBtn">Show Example Image</button>
-                 <!-- Update image path -->
-                <div id="exampleImage" style="display: none;"> <img src="assets/examplebreakdown.png" alt="Example Breakdown"> </div>
-            </div>
-            <!-- Removed form tag here - will gather data directly from divs -->
-            <div id="roughEstimateContainer">
-                <!-- Sections will be dynamically added here by script.js -->
-                <div id="sectionsContainer"></div>
-                <button type="button" id="addSectionBtn">+ Add Section</button>
-            </div>
-            <div class="step-navigation">
-                <button type="button" class="wizard-nav-btn prev" disabled>Previous</button>
-                <button type="button" class="wizard-nav-btn next">Next: Piece Count</button>
-            </div>
+            <!-- Step 1 Navigation -->
+			<div class="step-navigation">
+				<button type="button" class="wizard-nav-btn prev" disabled>Previous</button>
+				<button type="button" class="wizard-nav-btn next">Next</button> <!-- Simplified -->
+			</div>
+
+			<!-- Step 2 Navigation -->
+			<div class="step-navigation">
+				<button type="button" class="wizard-nav-btn prev">Previous</button> <!-- Simplified -->
+				<button type="button" class="wizard-nav-btn next">Next</button> <!-- Simplified -->
+			</div>
+
+			<!-- Step 3 Navigation -->
+			<div class="step-navigation">
+				<button type="button" class="wizard-nav-btn prev">Previous</button> <!-- Simplified -->
+				<button type="button" class="wizard-nav-btn next" disabled>Next</button> <!-- Keep Next disabled -->
+			</div>
         </div>
 
         <!-- Step 2: Piece Count -->

@@ -569,55 +569,175 @@ body[data-theme="dark"] .part h2 {
 
 /* Responsive */
 @media (max-width: 768px) { /* Smaller tablet / large phone */
-    /* ... (Keep other 768px styles like body padding, header changes, etc.) ... */
+    body {
+        padding: 1em; /* Keep padding */
+        min-width: 320px; /* Prevent excessive squeezing */
+    }
+    header {
+        flex-direction: row; /* Keep row layout */
+        gap: 0.5em;
+        text-align: left;
+        align-items: center;
+        padding-bottom: 0.5em; /* Reduce padding */
+        margin-bottom: 1.5em; /* Reduce margin */
+    }
+    header h1 {
+        font-size: 1.2em;
+        margin-right: auto;
+    }
+    header img {
+        height: 35px;
+        max-height: 35px;
+    }
+    #themeToggleBtn {
+        width: 40px;
+        height: 30px;
+        font-size: 1em;
+    }
+    #wizard {
+        padding: 15px; /* Reduce wizard padding */
+        max-width: 100%; /* Allow full width */
+        min-height: auto; /* Allow natural height */
+        margin-bottom: 1.5em; /* Reduce margin */
+    }
+    .wizard-step {
+         padding: 20px 25px; /* Adjust step padding */
+    }
 
-    /* --- Add overrides for the Section Breakdown table --- */
-    .invoice .table-responsive-wrapper .details-table {
-        font-size: 0.85em; /* Slightly smaller font */
-        white-space: nowrap; /* Prevent text wrapping within ALL cells initially */
+    .section {
+         flex-basis: 100%; /* Already stacking */
+         max-width: 100%;
+         min-width: 0;
+         margin-bottom: 15px; /* Slightly reduce margin between sections */
+         padding: 15px; /* Reduce section padding */
     }
-    .invoice .table-responsive-wrapper .details-table th,
-    .invoice .table-responsive-wrapper .details-table td {
-        padding: 0.5em 0.5em; /* Reduced padding (top/bottom and left/right) */
+    #addSectionBtn {
+         width: auto; /* Don't force full width */
+         padding: 0 25px;
+         max-width: 250px; /* Keep max width */
+         margin-left: auto;
+         margin-right: auto;
+         display: block;
     }
-     /* Example: Allow specific columns to wrap if needed */
-     /*
-     .invoice .table-responsive-wrapper .details-table th:nth-child(2),
-     .invoice .table-responsive-wrapper .details-table td:nth-child(2) {
-          white-space: normal;
+    /* Center navigation buttons in their container */
+    .step-navigation {
+        flex-direction: column;
+        gap: 0.8em;
+        align-items: center;
+        margin-top: 1.5em; /* Reduce space above nav */
+        padding-top: 1em; /* Reduce padding */
+    }
+    .wizard-nav-btn {
+        width: 100%; /* Make buttons full width */
+        max-width: 280px; /* Set a max-width */
+        font-size: 0.9em; /* Slightly smaller font */
+    }
+    /* Center example/start over/print buttons */
+     #toggleExampleBtn, #startOverBtn, #printEstimate {
+         width: 100%;
+         max-width: 280px; /* Match nav buttons */
+         margin-left: auto;
+         margin-right: auto;
+         display: block;
      }
-     */
-     /* Example: Ensure Cost column doesn't get too small */
-     .invoice .table-responsive-wrapper .details-table th:nth-child(7),
-     .invoice .table-responsive-wrapper .details-table td:nth-child(7) {
-         min-width: 55px; /* Smallest width for cost */
-         text-align: right; /* Ensure right alignment */
+     button.remove-button {
+         width: 28px;
+         height: 28px;
+         font-size: 1em;
+         line-height: 26px;
      }
-      .invoice .table-responsive-wrapper .details-table th:nth-child(1), /* # Col */
-     .invoice .table-responsive-wrapper .details-table td:nth-child(1) {
-         min-width: 25px; /* Smallest width for # */
-         text-align: center;
+    .invoice {
+        max-width: 100%; /* Allow full width */
+        padding: 1em; /* Reduce invoice padding */
+    }
+    .summary-table td, .details-table td, .details-table th {
+        padding: 0.5em 0.6em; /* Reduce table cell padding */
+        font-size: 0.9em; /* Ensure font size isn't too large */
+        word-break: break-word; /* Allow long words (like styles) to break */
+    }
+    .invoice h3 {
+         font-size: 1.1em; /* Reduce heading size */
+    }
+     label {
+         padding-left: 5px; /* Reduce label padding */
+         margin-bottom: 4px; /* Reduce space below label */
+     }
+     input[type="number"], select {
+        height: 45px;
+        padding: 8px 15px;
+        font-size: 14px; /* Ensure font size isn't too small */
+     }
+     /* Adjust select padding if arrow was removed */
+     body[data-theme="dark"] select {
+          padding-right: 15px;
+     }
+     select {
+         padding-right: 35px; /* Slightly reduce padding for arrow */
+         background-position: right 10px center; /* Move arrow closer */
      }
 
 }
 
 @media (max-width: 480px) { /* Small phone */
-     /* ... (Keep other 480px styles like body padding, header changes, etc.) ... */
-
-    /* --- Further reduce font/padding for smallest screens --- */
-     .invoice .table-responsive-wrapper .details-table {
-        font-size: 0.8em; /* Even smaller font */
-    }
-    .invoice .table-responsive-wrapper .details-table th,
-    .invoice .table-responsive-wrapper .details-table td {
-        padding: 0.4em 0.4em; /* Further reduced padding */
-    }
-    /* Minimum widths might not need further adjustment, but can be added if needed */
-     .invoice .table-responsive-wrapper .details-table th:nth-child(7),
-     .invoice .table-responsive-wrapper .details-table td:nth-child(7) {
-         min-width: 50px; /* Slightly smaller min-width if needed */
+     body {
+         padding: 0.5em; /* Further reduce body padding */
      }
-
+     header h1 {
+         font-size: 1.1em; /* Further reduce h1 */
+     }
+     #wizard {
+         padding: 10px; /* Further reduce wizard padding */
+     }
+     .wizard-step {
+         padding: 15px; /* Further reduce step padding */
+     }
+     .step-title {
+         font-size: 1.3rem; /* Reduce title size */
+     }
+     .section {
+          padding: 12px; /* Reduce section padding */
+     }
+     input[type="number"], select {
+         height: 42px; /* Slightly shorter inputs */
+         padding: 8px 12px; /* Adjust input padding */
+         font-size: 13px;
+     }
+     /* Adjust select padding if arrow was removed */
+     body[data-theme="dark"] select {
+          padding-right: 12px;
+     }
+     select {
+         padding-right: 30px; /* Further reduce padding for arrow */
+         background-position: right 8px center;
+     }
+     button {
+         height: 40px;
+         font-size: 0.85em; /* Reduce base button font size */
+     }
+     .wizard-nav-btn, #toggleExampleBtn, #startOverBtn, #printEstimate, #addSectionBtn {
+         max-width: 100%; /* Allow full width if needed */
+         padding-left: 15px; /* Reduce button padding */
+         padding-right: 15px;
+     }
+     label {
+         font-size: 0.8em; /* Smaller labels */
+     }
+     small {
+         font-size: 0.75em; /* Smaller small text */
+     }
+     .invoice {
+         padding: 0.8em; /* Further reduce invoice padding */
+     }
+     .summary-table td, .details-table td, .details-table th {
+         padding: 0.4em 0.5em; /* Further reduce cell padding */
+         font-size: 0.85em; /* Further reduce table font size */
+     }
+     .invoice h3 {
+          font-size: 1em; /* Reduce heading size */
+     }
+     .summary-table .total-row td {
+         font-size: 1em; /* Reduce total font size */
+     }
 }
 
 /* Print Styles */
