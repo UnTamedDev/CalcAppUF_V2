@@ -371,8 +371,8 @@ button.remove-button:active:not(:disabled) { filter: brightness(0.9); box-shadow
 .invoice-header h1 { color: var(--primary-color-style6); margin-bottom: 0.2em; font-size: 1.8em; font-weight: 900; transition: color 0.3s ease; }
 .invoice-header p { font-size: 0.9em; color: #777; transition: color 0.3s ease; }
 .invoice h3 { font-size: 1.3em; color: var(--primary-color-style6); margin-bottom: 1em; border-bottom: 1px solid #ccc; padding-bottom: 0.3em; font-weight: 900; text-align: left; transition: color 0.3s ease, border-color 0.3s ease; } /* Changed to left align, added border */
-.summary-table, .details-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5em; margin-bottom: 1.5em; table-layout: fixed; /* Ensure columns respect widths more */ } /* ADDED table-layout */
-.summary-table td, .details-table td, .details-table th { padding: 0.8em 1em; border-bottom: none; vertical-align: middle; transition: color 0.3s ease; word-wrap: break-word; /* Allow long words to break */ } /* Added th, word-wrap */
+.summary-table, .details-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5em; margin-bottom: 1.5em; }
+.summary-table td, .details-table td, .details-table th { padding: 0.8em 1em; border-bottom: none; vertical-align: middle; transition: color 0.3s ease; } /* Added th */
 .summary-table tr, .details-table tr { background: #f8f8f8; border-radius: var(--border-radius-input); box-shadow: var(--shadow-inset); transition: background-color 0.3s ease, box-shadow 0.3s ease;}
 .summary-table .table-label, .details-table th { /* Use th for details header */
     text-align: left; padding-right: 1em; color: #555; font-weight: 600;
@@ -382,12 +382,8 @@ button.remove-button:active:not(:disabled) { filter: brightness(0.9); box-shadow
 }
 .details-table thead { background: none; box-shadow: none; } /* Style thead separately */
 .details-table thead th { background: #e0e0e0; color: #333; padding: 0.6em 1em; font-size: 0.9em; border-radius: 5px 5px 0 0; transition: background-color 0.3s ease, color 0.3s ease;}
-.details-table td:first-child, .details-table th:first-child { text-align: center; font-weight: normal; width: 8%; } /* Center section number/header, make narrow */
-.details-table td:nth-child(2), .details-table th:nth-child(2) { text-align: left; width: 22%;} /* Door Style */
-.details-table td:nth-child(3), .details-table th:nth-child(3) { text-align: left; width: 22%;} /* Drawer Style */
-.details-table td:last-child, .details-table th:last-child { text-align: right; font-weight: 700; color: #333; transition: color 0.3s ease; width: 15%; } /* Cost */
-/* Adjust remaining columns to fit */
-.details-table th.desktop-only-col, .details-table td.desktop-only-cell { width: 11%; text-align: center;} /* Finish, HxW, Area */
+.details-table td:first-child { text-align: center; font-weight: normal;} /* Center section number */
+.details-table td:last-child { font-weight: 700; color: #333; transition: color 0.3s ease;} /* Bold cost */
 
 
 .summary-table tfoot { border-top: 2px solid #ccc; margin-top: 1em; transition: border-color 0.3s ease;}
@@ -405,44 +401,6 @@ small { display: block; font-size: 0.85em; color: #888; margin-top: 5px; margin-
 .invoice-error { padding: 1em; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; margin: 1em auto; max-width: 95%; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;} /* Use % width */
 .invoice-error p { margin: 0.2em 0; }
 .invoice-loading { text-align:center; padding: 2em; color: var(--text-color-light-style6); font-style: italic; transition: color 0.3s ease; }
-
-
-/* --- Base Styles (Desktop First) for Secondary Row --- */
-.details-table .mobile-only-row {
-    display: none; /* Hidden on desktop */
-}
-.details-table .secondary-details {
-    display: flex;
-    justify-content: space-between; /* Pushes outer items apart */
-    align-items: center;
-    flex-wrap: nowrap;
-    gap: 0.5em;
-    padding: 0.4em 0;
-    width: 100%;
-    white-space: nowrap;
-}
-.details-table .secondary-details .info-item {
-    /* No specific base styles needed now */
-    flex-grow: 1; /* Allow items to grow */
-    flex-basis: 0; /* Start from zero basis */
-    text-align: center; /* Center text within items */
-    white-space: normal; /* Allow wrapping */
-}
-.details-table .secondary-details .info-item:first-child {
-    text-align: left; /* Align first item left */
-}
-.details-table .secondary-details .info-item:last-child {
-    text-align: right; /* Align last item right */
-}
-
-.details-table .secondary-details .info-divider {
-    color: #ccc;
-    font-weight: 300;
-    flex-grow: 0; /* Don't allow divider to grow */
-    flex-shrink: 0;
-    margin: 0 0.5em; /* Add margin around divider */
-}
-
 
 /* --- Dark Theme Application --- */
 body[data-theme="dark"] {
@@ -590,10 +548,23 @@ body[data-theme="dark"] .part h2 {
      body[data-theme="dark"] .invoice-error { background-color: #582a2e; color: #f5c6cb; border-color: #a04a4e; }
      body[data-theme="dark"] .invoice-loading { color: var(--text-color-light-style6-dark); }
 
-
-
 /* Responsive Table Wrapper */
-/* We don't need a wrapper for this approach */
+.table-responsive-wrapper .details-table {
+    /* min-width: 600px; */ /* REMOVE OR COMMENT OUT THIS LINE */
+    margin-bottom: 0; /* Remove bottom margin from table if wrapper has it */
+    width: 100%; /* Ensure it tries to take full width initially */
+}
+    -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
+    margin-bottom: 1em; /* Add some space below the scrolling area */
+}
+
+/* Optional: Minor adjustments to table within wrapper if needed */
+.table-responsive-wrapper .details-table {
+    min-width: 600px; /* Example: Set a minimum width for the table itself */
+                      /* This forces the wrapper to scroll sooner on small screens */
+                      /* Adjust this value based on your content */
+    margin-bottom: 0; /* Remove bottom margin from table if wrapper has it */
+}
 
 
 /* Responsive */
@@ -610,10 +581,10 @@ body[data-theme="dark"] .part h2 {
          max-width: calc(50% - 0.75em);
      }
      .invoice { max-width: 90%; }
-     .details-table { table-layout: auto; } /* Allow table to adjust more freely */
 }
 
-/* --- Mobile Table and Layout Adjustments --- */
+/* --- FILE: public/style.css (Partial Changes - Responsive Sections) --- */
+
 @media (max-width: 768px) { /* Smaller tablet / large phone */
     body {
         padding: 1em; /* Keep padding */
@@ -647,7 +618,7 @@ body[data-theme="dark"] .part h2 {
         margin-bottom: 1.5em; /* Reduce margin */
     }
     .wizard-step {
-         padding: 20px 15px; /* Adjust step padding - reduced horizontal */
+         padding: 20px 25px; /* Adjust step padding */
     }
 
     .section {
@@ -722,162 +693,7 @@ body[data-theme="dark"] .part h2 {
          background-position: right 10px center; /* Move arrow closer */
      }
 
-    /* --- MOBILE TABLE STYLES --- */
-     .details-table {
-         display: block; /* Change table to block for mobile layout */
-         border-spacing: 0; /* Reset spacing */
-         box-shadow: none; /* Remove shadow */
-         border-radius: 0; /* Remove radius */
-         background: none; /* Remove background */
-     }
-     .details-table thead {
-         display: none; /* Hide the original header */
-     }
-     .details-table tbody, .details-table tr, .details-table td {
-         display: block; /* Make rows and cells block elements */
-         width: 100% !important; /* Force full width */
-         text-align: left !important; /* Default to left align */
-         border: none; /* Remove cell borders */
-         padding: 0; /* Reset padding */
-         background: none; /* Reset background */
-         box-shadow: none; /* Reset shadow */
-         border-radius: 0; /* Reset radius */
-     }
-      .details-table tr.primary-info-row {
-          padding: 0.6em 0.8em; /* Add padding back to the row */
-          margin-bottom: 0.5em; /* Space between sections */
-          border-radius: var(--border-radius-input);
-          background: #f8f8f8; /* Restore background */
-          box-shadow: var(--shadow-inset); /* Restore shadow */
-          display: grid; /* Use grid for primary row layout */
-          grid-template-columns: 1fr 2fr 1fr; /* # | Door/Drawer | Cost */
-          gap: 0.5em;
-          align-items: center;
-      }
-     .details-table td {
-         /* Remove hiding of desktop cells - handled by grid now */
-         /* display: none; */
-         border-bottom: 1px solid #eee; /* Add subtle separator */
-         padding: 0.4em 0.2em; /* Minimal padding */
-         font-size: 0.9em;
-         font-weight: normal;
-     }
-     .details-table td:before { /* Add labels using ::before pseudo-element */
-        content: attr(data-label); /* Get label from data attribute */
-        font-weight: bold;
-        display: inline-block;
-        width: 90px; /* Fixed width for labels */
-        margin-right: 10px;
-        color: #333;
-     }
-     /* --- HIDE Original Desktop Cells (now done differently) --- */
-     .details-table .primary-info-row .desktop-only-cell {
-         display: none !important; /* Hide these completely now */
-     }
-     /* --- SHOW Specific cells needed for Grid --- */
-      .details-table tr.primary-info-row td:nth-child(1), /* # */
-      .details-table tr.primary-info-row td:nth-child(2), /* Door Style */
-      .details-table tr.primary-info-row td:nth-child(3), /* Drawer Style */
-      .details-table tr.primary-info-row td:nth-child(7) { /* Cost */
-          display: block; /* Make these visible */
-          padding: 0; /* Reset padding */
-          border: none; /* Remove individual borders */
-      }
-      /* Style grid cells */
-      .details-table tr.primary-info-row td:nth-child(1) { /* # */
-           text-align: center;
-           font-weight: bold;
-           grid-column: 1 / 2;
-      }
-       .details-table tr.primary-info-row td:nth-child(2) { /* Door Style */
-           text-align: left;
-           grid-column: 2 / 3;
-           font-weight: 600;
-           /* Add label for Door */
-       }
-        .details-table tr.primary-info-row td:nth-child(3) { /* Drawer Style */
-            text-align: left;
-            grid-column: 2 / 3; /* Combine with Door */
-            font-size: 0.9em;
-            color: #666;
-             padding-left: 1em; /* Indent Drawer Style slightly */
-            /* Add label for Drawer */
-        }
-         .details-table tr.primary-info-row td:nth-child(7) { /* Cost */
-            text-align: right;
-            font-weight: bold;
-            grid-column: 3 / 4;
-         }
-
-
-    /* --- Secondary Row (No changes needed to display: none/table-row) --- */
-    .details-table .mobile-only-row {
-        display: block; /* Show the row */
-        padding: 0.5em 0.8em; /* Add padding like primary row */
-        margin-bottom: 0.5em; /* Match primary row spacing */
-        border-radius: var(--border-radius-input);
-        background: #f0f0f0; /* Slightly different background */
-        box-shadow: var(--shadow-inset);
-        border-top: none; /* Remove the dashed line */
-    }
-     .details-table .secondary-info-row td {
-         display: block;
-         width: 100%;
-         padding: 0;
-         border: none;
-         background: none;
-         box-shadow: none;
-         color: #555;
-     }
-     .details-table .secondary-details {
-         display: flex;
-         justify-content: space-between; /* Use space-between for wider spacing */
-         align-items: center;
-         width: 100%;
-         padding: 0.2em 0; /* Reduced vertical padding */
-         gap: 0.5em; /* Keep some gap */
-         font-size: 0.85em;
-         font-weight: normal;
-         white-space: nowrap; /* Prevent wrapping */
-     }
-     .details-table .secondary-details .info-item {
-         text-align: center;
-         flex-basis: 30%; /* Give some basis */
-         white-space: normal; /* Allow internal wrapping */
-     }
-     .details-table .secondary-details .info-item:first-child { text-align: left; }
-     .details-table .secondary-details .info-item:last-child { text-align: right; }
-
-     .details-table .secondary-details .info-divider {
-         color: var(--text-color-light-style6);
-         margin: 0 0.4em; /* Adjust margin */
-         flex-grow: 0;
-         flex-shrink: 0;
-     }
-
-
-     /* --- DARK THEME MOBILE TABLE --- */
-    body[data-theme="dark"] .details-table tr.primary-info-row {
-         background: #3f3f43;
-         box-shadow: var(--shadow-inset-dark);
-    }
-     body[data-theme="dark"] .details-table tr.primary-info-row td:nth-child(3) { /* Drawer style text */
-        color: #bbb;
-     }
-     body[data-theme="dark"] .details-table .mobile-only-row {
-          background-color: #38383c;
-          box-shadow: var(--shadow-inset-dark);
-     }
-     body[data-theme="dark"] .details-table .secondary-info-row td {
-          color: #ccc;
-     }
-     body[data-theme="dark"] .details-table .secondary-details .info-divider {
-        color: var(--text-color-light-style6-dark);
-    }
-
-
-} /* End @media (max-width: 768px) */
-
+}
 
 @media (max-width: 480px) { /* Small phone */
      body {
@@ -939,255 +755,273 @@ body[data-theme="dark"] .part h2 {
      .summary-table .total-row td {
          font-size: 1em; /* Reduce total font size */
      }
+}
+
+/* Print Styles */
+/* --- FILE: public/style.css (FINAL @media print section) --- */
+
+@media (max-width: 1200px) { /* ... */ }
+@media (max-width: 992px) { /* ... */ }
+
+/* --- Mobile Table and Layout Adjustments --- */
+@media (max-width: 768px) { /* Smaller tablet / large phone */
+    /* ... (Keep body, header, wizard, section, button, input, etc. mobile styles) ... */
+    body { padding: 1em; min-width: 320px; }
+    header { flex-direction: row; gap: 0.5em; text-align: left; align-items: center; padding-bottom: 0.5em; margin-bottom: 1.5em; }
+    header h1 { font-size: 1.2em; margin-right: auto; }
+    header img { height: 35px; max-height: 35px; }
+    #themeToggleBtn { width: 40px; height: 30px; font-size: 1em; }
+    #wizard { padding: 15px; max-width: 100%; min-height: auto; margin-bottom: 1.5em; }
+    .wizard-step { padding: 20px 15px; }
+    .section { flex-basis: 100%; max-width: 100%; min-width: 0; margin-bottom: 15px; padding: 15px; }
+    #addSectionBtn { width: auto; padding: 0 25px; max-width: 250px; margin-left: auto; margin-right: auto; display: block; }
+    .step-navigation { flex-direction: column; gap: 0.8em; align-items: center; margin-top: 1.5em; padding-top: 1em; }
+    .wizard-nav-btn { width: 100%; max-width: 280px; font-size: 0.9em; }
+    #toggleExampleBtn, #startOverBtn, #printEstimate { width: 100%; max-width: 280px; margin-left: auto; margin-right: auto; display: block; }
+    button.remove-button { width: 28px; height: 28px; font-size: 1em; line-height: 26px; }
+    .invoice { max-width: 100%; padding: 1em; }
+    /* Apply mobile stacking to BOTH details and summary tables if needed */
+    .details-table, .summary-table:not(.total-row td) { /* Exclude total row from summary stacking */
+        border: none; /* Remove table border */
+        box-shadow: none;
+        border-radius: 0;
+        background: none;
+        border-collapse: separate; /* Needed for spacing */
+        border-spacing: 0 0.8em; /* Vertical space between 'rows' */
+        display: block; /* Ensure table itself is block */
+        width: 100%;
+        padding: 0; /* Remove padding from table */
+        margin-bottom: 1em; /* Consistent margin */
+    }
+    .details-table thead, .summary-table thead { /* Hiding summary thead if it exists */
+        display: none; /* Hide the header */
+    }
+    .details-table tbody, .summary-table tbody {
+        display: block; /* Make body block */
+        width: 100%;
+    }
+     .details-table tr, .summary-table tbody tr { /* Target tbody tr for summary */
+       display: block; /* Make rows stack */
+       width: 100% !important;
+       margin-bottom: 0; /* Remove margin from TR, use border-spacing */
+       border-radius: var(--border-radius-input); /* Apply styles to the row */
+       background: #f8f8f8;
+       box-shadow: var(--shadow-inset);
+       padding: 0.8em 1em; /* Padding inside the 'card' */
+       border: none;
+       transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Add theme transition */
+    }
+     .details-table td, .summary-table tbody td { /* Target tbody td for summary */
+       display: block; /* Stack cells */
+       width: 100% !important; /* Full width */
+       text-align: right !important; /* Align cell content right */
+       padding-left: 50%; /* Push content over to make room for label */
+       padding-top: 0.3em;
+       padding-bottom: 0.3em;
+       position: relative; /* Needed for absolute positioning of pseudo-element */
+       border: none; /* Remove cell borders */
+       font-size: 0.9em; /* Adjust font size */
+       word-wrap: break-word;
+       min-height: 1.4em; /* Ensure minimum height for short content */
+    }
+     .details-table td:before, .summary-table .table-label:before { /* Use .table-label for summary table */
+       content: attr(data-label); /* Display the label from data-label */
+       position: absolute;
+       left: 10px; /* Position label on the left */
+       width: calc(50% - 20px); /* Calculate label width */
+       padding-right: 10px; /* Space between label and value */
+       font-weight: bold;
+       text-align: left !important; /* Align label text left */
+       white-space: nowrap; /* Prevent label wrapping */
+       color: #333; /* Darker label color */
+       transition: color 0.3s ease;
+    }
+     /* --- Specific Alignment/Styling for certain cells --- */
+    .details-table td[data-label="#"] { /* Section Number */
+        font-size: 1.1em;
+        font-weight: bold;
+        text-align: center !important; /* Center the number */
+        padding-left: 0; /* Remove padding override */
+        margin-bottom: 0.5em; /* Add space below # */
+        border-bottom: 1px dashed #ccc; /* Separator line */
+        padding-bottom: 0.5em;
+        transition: border-color 0.3s ease;
+    }
+     .details-table td[data-label="#"]:before {
+         display: none; /* Hide label for # */
+     }
+     .details-table td[data-label="Cost"], .summary-table .table-value {
+         font-weight: bold; /* Make cost/value bold */
+         margin-top: 0.3em;
+     }
+     /* --- Style summary table label cell --- */
+      .summary-table .table-label {
+          display: block;
+          width: 100% !important;
+          text-align: right !important;
+          padding-left: 50%;
+          padding-top: 0.3em;
+          padding-bottom: 0.3em;
+          position: relative;
+          border: none;
+          font-size: 0.9em;
+          min-height: 1.4em;
+          font-weight: normal; /* Reset weight */
+      }
+      .summary-table .table-label:before {
+          content: normal; /* Use text content as label */
+          position: absolute;
+          left: 10px;
+          width: calc(50% - 20px);
+          padding-right: 10px;
+          font-weight: bold;
+          text-align: left !important;
+          white-space: nowrap;
+          color: #333;
+          /* Extract label text from element content if data-label not present */
+          content: ''; /* Clear default */
+      }
+       /* --- Remove pseudo-element styling from value cell in summary --- */
+       .summary-table .table-value {
+           padding-left: 0; /* No label pushing needed */
+       }
+       .summary-table .table-value:before {
+           display: none; /* Hide pseudo-label for value */
+       }
+       /* --- Keep Total Row as standard table layout --- */
+       .summary-table tfoot tr.total-row { display: table-row; background: none; box-shadow: none; padding: 0; }
+       .summary-table tfoot tr.total-row td { display: table-cell; width: auto !important; text-align: right !important; position: static; padding-left: 1em; padding-right: 1em; padding-top: 1em; border: none; border-top: 2px solid #ccc; font-size: 1.2em; font-weight: 900; color: var(--primary-color-style6); }
+       .summary-table tfoot tr.total-row td:before { display: none; } /* Hide label for total */
+       .summary-table tfoot tr.total-row .table-label { text-align: right !important; }
+
+
+     /* --- DARK THEME MOBILE TABLE --- */
+    body[data-theme="dark"] .details-table tr, body[data-theme="dark"] .summary-table tbody tr {
+         background: #3f3f43;
+         box-shadow: var(--shadow-inset-dark);
+    }
+    body[data-theme="dark"] .details-table td:before, body[data-theme="dark"] .summary-table .table-label:before {
+         color: #ddd; /* Lighter label color */
+    }
+     body[data-theme="dark"] .details-table td[data-label="#"] {
+         border-bottom-color: #555;
+     }
+     body[data-theme="dark"] .summary-table .table-label:before {
+         color: #ddd;
+     }
+      body[data-theme="dark"] .summary-table tfoot tr.total-row td { border-top-color: #666; color: var(--primary-color-style6-dark); }
+
+
+} /* End @media (max-width: 768px) */
+
+
+@media (max-width: 480px) { /* Small phone */
+     /* ... (Keep body, header, wizard, section, etc. mobile styles) ... */
+     body { padding: 0.5em; }
+     header h1 { font-size: 1.1em; }
+     #wizard { padding: 10px; }
+     .wizard-step { padding: 15px; }
+     .step-title { font-size: 1.3rem; }
+     .section { padding: 12px; }
+     input[type="number"], select { height: 42px; padding: 8px 12px; font-size: 13px; }
+     body[data-theme="dark"] select { padding-right: 12px; }
+     select { padding-right: 30px; background-position: right 8px center; }
+     button { height: 40px; font-size: 0.85em; }
+     .wizard-nav-btn, #toggleExampleBtn, #startOverBtn, #printEstimate, #addSectionBtn { max-width: 100%; padding-left: 15px; padding-right: 15px; }
+     label { font-size: 0.8em; }
+     small { font-size: 0.75em; }
+     .invoice { padding: 0.8em; }
+     .summary-table td, .details-table td { padding-top: 0.2em; padding-bottom: 0.2em; font-size: 0.85em; } /* Reduce cell padding */
+     .invoice h3 { font-size: 1em; }
+     .summary-table .total-row td { font-size: 1em; }
 
      /* Further refine mobile table */
-      .details-table tr.primary-info-row {
-          padding: 0.5em 0.6em;
-          gap: 0.3em;
-          grid-template-columns: auto 1fr auto; /* Make # and Cost auto width */
+     .details-table, .summary-table {
+         border-spacing: 0 0.6em; /* Reduce space between rows */
+     }
+     .details-table tr, .summary-table tbody tr {
+         padding: 0.6em 0.8em; /* Adjust padding */
+     }
+     .details-table td, .summary-table tbody td {
+         font-size: 0.85em; /* Adjust font size */
+         padding-left: 45%; /* Adjust content position */
+     }
+     .details-table td:before, .summary-table .table-label:before {
+         width: calc(45% - 15px); /* Adjust label width */
+         left: 8px; /* Adjust label position */
+     }
+     .details-table td[data-label="#"] {
+          padding-bottom: 0.4em;
+          margin-bottom: 0.4em;
+     }
+      .summary-table .table-label {
+          padding-left: 45%;
       }
-     .details-table .mobile-only-row {
-         padding: 0.4em 0.6em;
-     }
-     .details-table .secondary-details {
-         font-size: 0.8em; /* Smaller secondary details */
-     }
-     .details-table .secondary-details .info-divider {
-         margin: 0 0.3em;
-     }
 
 }
 
 /* Print Styles */
-/* --- FINAL @media print section --- */
-
+/* --- PASTE YOUR WORKING PRINT STYLES HERE --- */
+/* --- Ensure they start with @media print { and end with } --- */
 @media print {
     /* Basic page setup */
-    @page {
-      size: A4; /* Or letter */
-      margin: 1cm;
-    }
-    body {
-        background: white !important;
-        color: black !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        font-family: Arial, sans-serif !important;
-        font-size: 10pt !important;
-        line-height: 1.3;
-         -webkit-print-color-adjust: exact !important;
-         print-color-adjust: exact !important;
-         height: auto !important;
-         width: auto !important;
-         overflow: visible !important; /* Ensure body doesn't clip */
-    }
-
-    /* --- Hide unwanted elements explicitly --- */
-    header, #wizard .step-navigation, #wizard .step-indicator, #exampleImageContainer, #addSectionBtn, #calculateBtn, .remove-button, #formActions, #printButtonContainer, #startOverBtn, #themeToggleBtn, small {
-        display: none !important;
-        visibility: hidden !important;
-    }
-    /* --- Override Wizard container styles FOR PRINT --- */
-    #wizard {
-        display: block !important;
-        visibility: visible !important;
-        overflow: visible !important; /* Allow content to overflow */
-        position: static !important;
-        box-shadow: none !important;
-        border: none !important;
-        background: none !important;
-        min-height: auto !important;
-        height: auto !important;
-        width: auto !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-    /* --- Hide all wizard steps first --- */
-     .wizard-step {
-       display: none !important;
-       visibility: hidden !important;
-     }
-    /* --- Override Step-4 container styles FOR PRINT --- */
-    #step-4 {
-        display: block !important;
-        visibility: visible !important;
-        overflow: visible !important; /* Allow content to overflow */
-        position: static !important;
-        opacity: 1 !important;
-        transform: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        background: none !important;
-        width: auto !important;
-        height: auto !important;
-    }
-
-    /* Ensure the results container itself is visible */
-    #results {
-        display: block !important;
-        visibility: visible !important;
-        margin: 0;
-        padding: 0;
-        border: none;
-        width: 100%;
-        overflow: visible !important;
-    }
-
-    /* Invoice container styling - Plain look */
-    .invoice {
-        visibility: visible !important;
-        display: block !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important; /* No extra padding on invoice wrapper */
-        border: none !important; /* Use internal borders instead */
-        box-shadow: none !important;
-        background: white !important;
-        color: black !important;
-        border-radius: 0 !important;
-        font-size: 10pt !important;
-        position: static !important; /* Ensure static positioning */
-        overflow: visible !important; /* Ensure visible overflow */
-    }
-
-    /* Ensure all direct children of the invoice are visible */
-    .invoice > * {
-        visibility: visible !important;
-    }
-
+    @page { size: A4; margin: 1cm; }
+    body { background: white !important; color: black !important; margin: 0 !important; padding: 0 !important; font-family: Arial, sans-serif !important; font-size: 10pt !important; line-height: 1.3; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; height: auto !important; width: auto !important; overflow: visible !important; }
+    /* Hide unwanted */
+    header, #wizard .step-navigation, #wizard .step-indicator, #exampleImageContainer, #addSectionBtn, #calculateBtn, .remove-button, #formActions, #printButtonContainer, #startOverBtn, #themeToggleBtn, small { display: none !important; visibility: hidden !important; }
+    /* Override Wizard */
+    #wizard { display: block !important; visibility: visible !important; overflow: visible !important; position: static !important; box-shadow: none !important; border: none !important; background: none !important; min-height: auto !important; height: auto !important; width: auto !important; margin: 0 !important; padding: 0 !important; }
+    /* Hide steps */
+     .wizard-step { display: none !important; visibility: hidden !important; }
+    /* Override Step-4 */
+    #step-4 { display: block !important; visibility: visible !important; overflow: visible !important; position: static !important; opacity: 1 !important; transform: none !important; padding: 0 !important; margin: 0 !important; background: none !important; width: auto !important; height: auto !important; }
+    /* Results */
+    #results { display: block !important; visibility: visible !important; margin: 0; padding: 0; border: none; width: 100%; overflow: visible !important; }
+    /* Invoice container */
+    .invoice { visibility: visible !important; display: block !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; border: none !important; box-shadow: none !important; background: white !important; color: black !important; border-radius: 0 !important; font-size: 10pt !important; position: static !important; overflow: visible !important; }
+    .invoice > * { visibility: visible !important; }
     /* Invoice Header */
-    .invoice-header {
-        text-align: center;
-        border-bottom: 2px solid black !important;
-        padding-bottom: 0.8em !important;
-        margin-bottom: 1.5em !important;
-        color: black !important; /* Explicit color */
-    }
-    .invoice-header img.invoice-logo { display: block !important; max-height: 60px; margin: 0 auto 0.5em auto;} /* Show logo if needed */
-    .invoice-header h1 {
-        font-size: 16pt !important;
-        font-weight: bold !important;
-        color: black !important;
-        margin-bottom: 0.1em !important;
-    }
-     .invoice-header p {
-         font-size: 9pt !important;
-         color: black !important; /* Explicit color */
-         margin: 0.2em 0 !important;
-     }
-
-    /* Section Titles inside Invoice */
-    .invoice h3 {
-        font-size: 12pt !important;
-        font-weight: bold !important;
-        color: black !important; /* Explicit color */
-        margin-top: 1.2em !important;
-        margin-bottom: 0.6em !important;
-        border-bottom: 1px solid #666 !important; /* Subtler border */
-        padding-bottom: 0.2em !important;
-        text-align: left !important;
-        page-break-after: avoid !important;
-    }
+    .invoice-header { text-align: center; border-bottom: 2px solid black !important; padding-bottom: 0.8em !important; margin-bottom: 1.5em !important; color: black !important; }
+    .invoice-header img.invoice-logo { display: block !important; max-height: 60px; margin: 0 auto 0.5em auto;}
+    .invoice-header h1 { font-size: 16pt !important; font-weight: bold !important; color: black !important; margin-bottom: 0.1em !important; }
+    .invoice-header p { font-size: 9pt !important; color: black !important; margin: 0.2em 0 !important; }
+    /* Section Titles */
+    .invoice h3 { font-size: 12pt !important; font-weight: bold !important; color: black !important; margin-top: 1.2em !important; margin-bottom: 0.6em !important; border-bottom: 1px solid #666 !important; padding-bottom: 0.2em !important; text-align: left !important; page-break-after: avoid !important; }
     .invoice h3:first-of-type { margin-top: 0 !important; }
-
-    /* Table Styling */
-    .invoice table {
-        width: 100% !important;
-        border-collapse: collapse !important;
-        margin-bottom: 1.5em !important;
-        font-size: 9pt !important;
-        border-spacing: 0 !important;
-        page-break-inside: auto;
-        table-layout: fixed !important; /* Use fixed layout for print */
-    }
-    .invoice th, .invoice td {
-        border: 1px solid #ccc !important; /* Light grey borders */
-        padding: 5px 8px !important;
-        text-align: left !important;
-        vertical-align: top !important;
-        color: black !important; /* Explicit color */
-        background: white !important; /* Explicit background */
-        box-shadow: none !important;
-        word-wrap: break-word; /* Allow wrapping */
-    }
-    .invoice thead th {
-        background-color: #eee !important; /* Light grey header */
-        font-weight: bold !important;
-        border-bottom: 1px solid #999 !important;
-        color: black !important; /* Explicit color */
-        page-break-inside: avoid !important;
-    }
-     .invoice tbody tr {
-         page-break-inside: avoid !important;
-     }
-     /* --- HIDE MOBILE ROW IN PRINT --- */
-     .invoice .mobile-only-row {
-         display: none !important;
-     }
-     /* --- ENSURE DESKTOP CELLS ARE VISIBLE IN PRINT --- */
-     .invoice .desktop-only-cell, .invoice .desktop-only-col {
-         display: table-cell !important; /* Make sure desktop cells/cols show */
-     }
-     /* Assign widths for print columns */
-      .invoice .details-table th:nth-child(1), .invoice .details-table td:nth-child(1) { width: 6%; text-align: center !important;} /* # */
-      .invoice .details-table th:nth-child(2), .invoice .details-table td:nth-child(2) { width: 18%; } /* Door */
-      .invoice .details-table th:nth-child(3), .invoice .details-table td:nth-child(3) { width: 18%; } /* Drawer */
-      .invoice .details-table th:nth-child(4), .invoice .details-table td:nth-child(4) { width: 15%; text-align: center !important;} /* Finish */
-      .invoice .details-table th:nth-child(5), .invoice .details-table td:nth-child(5) { width: 15%; text-align: center !important;} /* HxW */
-      .invoice .details-table th:nth-child(6), .invoice .details-table td:nth-child(6) { width: 13%; text-align: center !important;} /* Area */
-      .invoice .details-table th:nth-child(7), .invoice .details-table td:nth-child(7) { width: 15%; text-align: right !important; font-weight: 600 !important;} /* Cost */
-
-
-    .invoice .summary-table .table-label {
-        font-weight: normal !important; /* Normal weight for labels */
-        width: 70%;
-        border-right: none !important; /* Remove border between label/value */
-    }
-     .invoice .summary-table .table-value {
-        border-left: none !important; /* Remove border between label/value */
-        text-align: right !important;
-        font-weight: normal !important;
-     }
-
-    /* Totals Row Styling */
-    .invoice tfoot { border-top: none !important; }
-    .invoice .summary-table tfoot tr { page-break-inside: avoid !important; }
-    .invoice .total-row {
-        background-color: white !important; /* White background */
-        border-top: 2px solid black !important; /* Bold top border */
-    }
-    .invoice .total-row td {
-        font-weight: bold !important;
-        font-size: 11pt !important;
-        border: none !important; /* Remove cell borders for total */
-        border-top: 2px solid black !important; /* Keep matching top border */
-        padding: 6px 8px !important;
-        color: black !important;
-    }
-    .invoice .total-row .table-label {
-        text-align: right !important;
-        width: auto !important;
-        padding-right: 1em;
-    }
-    .invoice .total-row .table-value {
-        text-align: right !important;
-    }
-
-
+    /* Table Styling (Must target original structure) */
+    .invoice table { display: table !important; width: 100% !important; border-collapse: collapse !important; margin-bottom: 1.5em !important; font-size: 9pt !important; border-spacing: 0 !important; page-break-inside: auto; table-layout: fixed !important; }
+    .invoice table thead { display: table-header-group !important; } /* Ensure thead displays */
+    .invoice table tbody { display: table-row-group !important; } /* Ensure tbody displays */
+    .invoice table tr { display: table-row !important; page-break-inside: avoid !important; } /* Ensure tr displays */
+    .invoice table th, .invoice table td { display: table-cell !important; visibility: visible !important; border: 1px solid #ccc !important; padding: 5px 8px !important; text-align: left !important; vertical-align: top !important; color: black !important; background: white !important; box-shadow: none !important; word-wrap: break-word; }
+    .invoice thead th { background-color: #eee !important; font-weight: bold !important; border-bottom: 1px solid #999 !important; color: black !important; page-break-inside: avoid !important; }
+    /* Assign widths for print columns - TARGET TD VIA data-label */
+      .invoice .details-table th:nth-child(1), .invoice .details-table td[data-label="#"] { width: 6%; text-align: center !important;} /* # */
+      .invoice .details-table th:nth-child(2), .invoice .details-table td[data-label="Door Style"] { width: 18%; } /* Door */
+      .invoice .details-table th:nth-child(3), .invoice .details-table td[data-label="Drawer Style"] { width: 18%; } /* Drawer */
+      .invoice .details-table th:nth-child(4), .invoice .details-table td[data-label="Finish"] { width: 15%; text-align: center !important;} /* Finish */
+      .invoice .details-table th:nth-child(5), .invoice .details-table td[data-label="HxW (in)"] { width: 15%; text-align: center !important;} /* HxW */
+      .invoice .details-table th:nth-child(6), .invoice .details-table td[data-label="Area (sqft)"] { width: 13%; text-align: center !important;} /* Area */
+      .invoice .details-table th:nth-child(7), .invoice .details-table td[data-label="Cost"] { width: 15%; text-align: right !important; font-weight: 600 !important;} /* Cost */
+    /* Summary Table */
+    .invoice .summary-table { display: table !important; }
+    .invoice .summary-table tbody { display: table-row-group !important; }
+    .invoice .summary-table tr { display: table-row !important; }
+    .invoice .summary-table td { display: table-cell !important; }
+    .invoice .summary-table .table-label { font-weight: normal !important; width: 70%; border-right: none !important; }
+    .invoice .summary-table .table-label:before { display: none !important; } /* Hide pseudo label for summary */
+    .invoice .summary-table .table-value { border-left: none !important; text-align: right !important; font-weight: normal !important; }
+    .invoice .summary-table .table-value:before { display: none !important; } /* Hide pseudo label for summary value */
+    /* Totals Row */
+    .invoice tfoot { border-top: none !important; display: table-footer-group !important;}
+    .invoice .summary-table tfoot tr { page-break-inside: avoid !important; display: table-row !important; }
+    .invoice .total-row { background-color: white !important; border-top: 2px solid black !important; }
+    .invoice .total-row td { font-weight: bold !important; font-size: 11pt !important; border: none !important; border-top: 2px solid black !important; padding: 6px 8px !important; color: black !important; display: table-cell !important; }
+    .invoice .total-row td:before { display: none !important; } /* Hide pseudo label for total row */
+    .invoice .total-row .table-label { text-align: right !important; width: auto !important; padding-right: 1em; }
+    .invoice .total-row .table-value { text-align: right !important; }
     /* Footer */
-    .estimate-footer {
-        text-align: center !important;
-        margin-top: 2em !important;
-        padding-top: 1em !important;
-        border-top: 1px solid #ccc !important;
-        font-size: 8pt !important;
-        color: #333 !important; /* Dark grey footer text */
-        page-break-before: auto;
-    }
-
-     /* Ensure invoice errors are not printed */
-     .invoice-error {
-        display: none !important;
-     }
+    .estimate-footer { text-align: center !important; margin-top: 2em !important; padding-top: 1em !important; border-top: 1px solid #ccc !important; font-size: 8pt !important; color: #333 !important; page-break-before: auto; }
+    /* Errors */
+     .invoice-error { display: none !important; }
 }

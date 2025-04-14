@@ -486,25 +486,16 @@ function displayError(message) {
 
 
 /** Display calculation results in the results div */
+// --- FILE: public/script.js (displayResults function ONLY - Revised Sections HTML) ---
+
+/** Display calculation results in the results div */
 function displayResults(data) {
-    console.log("[Client] Displaying results:", data);
-    if (!data || typeof data !== 'object') {
-        console.error("[Client] Invalid results data received:", data);
-        displayError('Received invalid results data from the server.');
-        return;
-    }
+    // ... (Keep console logs and initial checks) ...
 
     // Destructure results, providing defaults
     const {
-        overallTotal = 0,
-        doorCostTotal = 0,
-        hingeCost = 0,
-        hingeCount = 0, // Get hinge count
-        lazySusanCost = 0, // Get LS cost from results
-        specialFeatures = {},
-        sections = [],
-        part2 = {}, // Use part2 from results for display consistency
-        part3 = {}  // Use part3 from results
+        overallTotal = 0, doorCostTotal = 0, hingeCost = 0, hingeCount = 0,
+        lazySusanCost = 0, specialFeatures = {}, sections = [], part2 = {}, part3 = {}
     } = data;
 
     const customPaintCost = specialFeatures?.customPaintCost || 0;
@@ -512,55 +503,42 @@ function displayResults(data) {
     // --- Section Breakdown Table ---
     let sectionsHtml = `<h3>Section Breakdown</h3>`;
     if (sections.length > 0) {
-        // Add classes to header cells for potential mobile hiding if needed later
         sectionsHtml += `<table class="details-table">
             <thead>
                 <tr>
-                    <th class="col-section-num">#</th>
-                    <th class="col-door-style">Door Style</th>
-                    <th class="col-drawer-style">Drawer Style</th>
-                    <th class="col-finish desktop-only-col">Finish</th>
-                    <th class="col-hxw desktop-only-col">HxW (in)</th>
-                    <th class="col-area desktop-only-col">Area (sqft)</th>
-                    <th class="col-cost">Cost</th>
+                    <th>#</th>
+                    <th>Door Style</th>
+                    <th>Drawer Style</th>
+                    <th>Finish</th>
+                    <th>HxW (in)</th>
+                    <th>Area (sqft)</th>
+                    <th>Cost</th>
                 </tr>
             </thead>
             <tbody>`;
         sections.forEach((s, i) => {
-            // --- Primary Row ---
+            const drawerStyleText = (s.drawerStyle && s.drawerStyle !== s.doorStyle) ? s.drawerStyle : '-';
+            // --- Row with Data Labels for ALL cells ---
             sectionsHtml += `
                 <tr class="primary-info-row">
                     <td data-label="#">${i + 1}</td>
                     <td data-label="Door Style">${s.doorStyle || 'N/A'}</td>
-                    <td data-label="Drawer Style">${(s.drawerStyle && s.drawerStyle !== s.doorStyle) ? s.drawerStyle : '-'}</td>
-                    <td data-label="Finish" class="desktop-only-cell">${s.finish || 'N/A'}</td>
-                    <td data-label="HxW" class="desktop-only-cell">${s.height || 0}" x ${s.width || 0}"</td>
-                    <td data-label="Area" class="desktop-only-cell">${s.area?.toFixed(2) || 'N/A'}</td>
-                    <td data-label="Cost" class="cost-cell">${formatCurrency(s.totalSectionCost)}</td>
+                    <td data-label="Drawer Style">${drawerStyleText}</td>
+                    <td data-label="Finish">${s.finish || 'N/A'}</td>
+                    <td data-label="HxW (in)">${s.height || 0}" x ${s.width || 0}"</td>
+                    <td data-label="Area (sqft)">${s.area?.toFixed(2) || 'N/A'}</td>
+                    <td data-label="Cost">${formatCurrency(s.totalSectionCost)}</td>
                 </tr>`;
-            // --- Secondary Row (for Mobile) ---
-            sectionsHtml += `
-                 <tr class="secondary-info-row mobile-only-row">
-                    <td colspan="7"> <!-- Use full colspan for structure -->
-                        <div class="secondary-details">
-                            <span class="info-item">HxW: ${s.height || 0}" x ${s.width || 0}"</span>
-                            <span class="info-divider">|</span>
-                            <span class="info-item">Finish: ${s.finish || 'N/A'}</span>
-                            <span class="info-divider">|</span>
-                            <span class="info-item">${s.area?.toFixed(2) || 'N/A'} sqft</span>
-                        </div>
-                    </td>
-                </tr>
-            `;
+            // --- NO Secondary Row Needed ---
         });
         sectionsHtml += `</tbody></table>`;
     } else {
         sectionsHtml += `<p style="text-align: center; color: #666;">No sections were entered.</p>`;
     }
 
-    // --- Counts & Features Summary Table --- (No change needed here)
-    let countsHtml = `<h3 style="margin-top: 1.5em;">Counts & Features Summary</h3>`;
-    countsHtml += `<table class="details-table"><tbody>
+    // ... (Keep Counts & Cost Summary HTML generation) ...
+     let countsHtml = `<h3 style="margin-top: 1.5em;">Counts & Features Summary</h3>`; /* ... */
+     countsHtml += `<table class="details-table"><tbody>
         <tr><td>Doors 0-36" Qty</td><td>${part2.doors_0_36 || 0}</td></tr>
         <tr><td>Doors 36-60" Qty</td><td>${part2.doors_36_60 || 0}</td></tr>
         <tr><td>Doors 60-82" Qty</td><td>${part2.doors_60_82 || 0}</td></tr>
@@ -568,36 +546,21 @@ function displayResults(data) {
         <tr><td>Lazy Susans</td><td>${part2.lazySusanQty || 0}</td></tr>
         <tr><td>Custom Paint Colors</td><td>${part3.customPaintQty || 0}</td></tr>
         <tr><td><b>Total Hinges Needed</b></td><td><b>${hingeCount}</b></td></tr>
-    </tbody></table>`;
+    </tbody></table>`; // Note: Changed class to details-table for consistency if needed
 
-
-    // --- Cost Summary Table --- (No change needed here)
-    let costSummaryHtml = `<h3 style="margin-top: 1.5em;">Cost Summary</h3>`;
-    costSummaryHtml += `
-        <table class="summary-table">
-            <tbody>
+     let costSummaryHtml = `<h3 style="margin-top: 1.5em;">Cost Summary</h3>`; /* ... */
+      costSummaryHtml += `<table class="summary-table"><tbody>
                 <tr><td class="table-label">Door & Drawer Section Cost</td><td class="table-value">${formatCurrency(doorCostTotal)}</td></tr>
-                <tr><td class="table-label">Hinge Boring Cost</td><td class="table-value">${formatCurrency(hingeCost)}</td></tr>
-    `;
-    if (lazySusanCost > 0) {
-        costSummaryHtml += `<tr><td class="table-label">Lazy Susan Cost</td><td class="table-value">${formatCurrency(lazySusanCost)}</td></tr>`;
-    }
-    if (customPaintCost > 0) {
-        costSummaryHtml += `<tr><td class="table-label">Custom Paint Fee</td><td class="table-value">${formatCurrency(customPaintCost)}</td></tr>`;
-    }
-    costSummaryHtml += `
-            </tbody>
-            <tfoot>
-                <tr class="total-row"><td class="table-label">Estimated Total</td><td class="table-value">${formatCurrency(overallTotal)}</td></tr>
-            </tfoot>
-        </table>
-    `;
+                <tr><td class="table-label">Hinge Boring Cost</td><td class="table-value">${formatCurrency(hingeCost)}</td></tr>`;
+      if (lazySusanCost > 0) costSummaryHtml += `<tr><td class="table-label">Lazy Susan Cost</td><td class="table-value">${formatCurrency(lazySusanCost)}</td></tr>`;
+      if (customPaintCost > 0) costSummaryHtml += `<tr><td class="table-label">Custom Paint Fee</td><td class="table-value">${formatCurrency(customPaintCost)}</td></tr>`;
+      costSummaryHtml += `</tbody><tfoot><tr class="total-row"><td class="table-label">Estimated Total</td><td class="table-value">${formatCurrency(overallTotal)}</td></tr></tfoot></table>`;
+
 
     // --- Construct Final Invoice HTML --- (No change needed here)
     resultsDiv.innerHTML = `
       <div class="invoice">
           <div class="invoice-header">
-               <!-- Optional logo -->
               <h1>Estimate Summary</h1>
               <p>Thank you for using the nuDoors Estimator!</p>
               <p>Estimate ID: ${Date.now()}</p>
