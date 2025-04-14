@@ -583,38 +583,178 @@ body[data-theme="dark"] .part h2 {
      .invoice { max-width: 90%; }
 }
 
+/* --- FILE: public/style.css (Partial Changes - Responsive Sections) --- */
+
 @media (max-width: 768px) { /* Smaller tablet / large phone */
-    body { padding: 1em; }
-    header { flex-direction: row; gap: 0.5em; text-align: left; align-items: center;} /* Adjusted header for mobile */
-    header h1 { font-size: 1.2em; margin-right: auto; } /* Adjust H1 size */
-    header img { height: 35px; max-height: 35px;}
-    #themeToggleBtn { width: 40px; height: 30px; font-size: 1em; } /* Smaller theme button */
-    #wizard { padding: 20px; max-width: 95%; min-height: 450px; } /* Adjust height */
+    body {
+        padding: 1em; /* Keep padding */
+        min-width: 320px; /* Prevent excessive squeezing */
+    }
+    header {
+        flex-direction: row; /* Keep row layout */
+        gap: 0.5em;
+        text-align: left;
+        align-items: center;
+        padding-bottom: 0.5em; /* Reduce padding */
+        margin-bottom: 1.5em; /* Reduce margin */
+    }
+    header h1 {
+        font-size: 1.2em;
+        margin-right: auto;
+    }
+    header img {
+        height: 35px;
+        max-height: 35px;
+    }
+    #themeToggleBtn {
+        width: 40px;
+        height: 30px;
+        font-size: 1em;
+    }
+    #wizard {
+        padding: 15px; /* Reduce wizard padding */
+        max-width: 100%; /* Allow full width */
+        min-height: auto; /* Allow natural height */
+        margin-bottom: 1.5em; /* Reduce margin */
+    }
+    .wizard-step {
+         padding: 20px 25px; /* Adjust step padding */
+    }
+
     .section {
-         flex-basis: 100%; /* Stack sections */
+         flex-basis: 100%; /* Already stacking */
          max-width: 100%;
-         min-width: 0; /* Let it shrink */
+         min-width: 0;
+         margin-bottom: 15px; /* Slightly reduce margin between sections */
+         padding: 15px; /* Reduce section padding */
+    }
+    #addSectionBtn {
+         width: auto; /* Don't force full width */
+         padding: 0 25px;
+         max-width: 250px; /* Keep max width */
+         margin-left: auto;
+         margin-right: auto;
+         display: block;
+    }
+    /* Center navigation buttons in their container */
+    .step-navigation {
+        flex-direction: column;
+        gap: 0.8em;
+        align-items: center;
+        margin-top: 1.5em; /* Reduce space above nav */
+        padding-top: 1em; /* Reduce padding */
+    }
+    .wizard-nav-btn {
+        width: 100%; /* Make buttons full width */
+        max-width: 280px; /* Set a max-width */
+        font-size: 0.9em; /* Slightly smaller font */
+    }
+    /* Center example/start over/print buttons */
+     #toggleExampleBtn, #startOverBtn, #printEstimate {
+         width: 100%;
+         max-width: 280px; /* Match nav buttons */
+         margin-left: auto;
+         margin-right: auto;
+         display: block;
      }
-    .step-navigation { flex-direction: column; gap: 0.8em; align-items: center;}
-    .wizard-nav-btn { width: 100%; max-width: 250px; }
-     #addSectionBtn, #toggleExampleBtn, #startOverBtn, #printEstimate { width: 100%; max-width: 250px; margin-left: auto; margin-right: auto; display: block;} /* Center toggle buttons */
-     button.remove-button { width: 28px; height: 28px; font-size: 1em; line-height: 26px; } /* Slightly smaller remove */
-    .invoice { max-width: 95%; padding: 1.5em; }
-    .summary-table td, .details-table td, .details-table th { padding: 0.6em 0.8em; } /* Adjust padding */
+     button.remove-button {
+         width: 28px;
+         height: 28px;
+         font-size: 1em;
+         line-height: 26px;
+     }
+    .invoice {
+        max-width: 100%; /* Allow full width */
+        padding: 1em; /* Reduce invoice padding */
+    }
+    .summary-table td, .details-table td, .details-table th {
+        padding: 0.5em 0.6em; /* Reduce table cell padding */
+        font-size: 0.9em; /* Ensure font size isn't too large */
+        word-break: break-word; /* Allow long words (like styles) to break */
+    }
+    .invoice h3 {
+         font-size: 1.1em; /* Reduce heading size */
+    }
+     label {
+         padding-left: 5px; /* Reduce label padding */
+         margin-bottom: 4px; /* Reduce space below label */
+     }
+     input[type="number"], select {
+        height: 45px;
+        padding: 8px 15px;
+        font-size: 14px; /* Ensure font size isn't too small */
+     }
+     /* Adjust select padding if arrow was removed */
+     body[data-theme="dark"] select {
+          padding-right: 15px;
+     }
+     select {
+         padding-right: 35px; /* Slightly reduce padding for arrow */
+         background-position: right 10px center; /* Move arrow closer */
+     }
+
 }
 
 @media (max-width: 480px) { /* Small phone */
-     body { padding: 0.5em; }
-     header h1 { font-size: 1.1em; } /* Further reduce h1 */
-     .wizard-step { padding: 20px 15px; } /* Reduce horizontal padding */
-     .step-title { font-size: 1.4rem; }
-     input[type="number"], select { height: 45px; padding: 8px 15px; font-size: 13px; }
-     button { height: 40px; font-size: 0.9em;}
-     label { font-size: 0.85em;}
-     small { font-size: 0.8em;}
-     .invoice { padding: 1em; }
-     .summary-table td, .details-table td, .details-table th { padding: 0.5em; font-size: 0.9em; } /* Further adjust padding/size */
-     .summary-table .total-row td { font-size: 1.1em; }
+     body {
+         padding: 0.5em; /* Further reduce body padding */
+     }
+     header h1 {
+         font-size: 1.1em; /* Further reduce h1 */
+     }
+     #wizard {
+         padding: 10px; /* Further reduce wizard padding */
+     }
+     .wizard-step {
+         padding: 15px; /* Further reduce step padding */
+     }
+     .step-title {
+         font-size: 1.3rem; /* Reduce title size */
+     }
+     .section {
+          padding: 12px; /* Reduce section padding */
+     }
+     input[type="number"], select {
+         height: 42px; /* Slightly shorter inputs */
+         padding: 8px 12px; /* Adjust input padding */
+         font-size: 13px;
+     }
+     /* Adjust select padding if arrow was removed */
+     body[data-theme="dark"] select {
+          padding-right: 12px;
+     }
+     select {
+         padding-right: 30px; /* Further reduce padding for arrow */
+         background-position: right 8px center;
+     }
+     button {
+         height: 40px;
+         font-size: 0.85em; /* Reduce base button font size */
+     }
+     .wizard-nav-btn, #toggleExampleBtn, #startOverBtn, #printEstimate, #addSectionBtn {
+         max-width: 100%; /* Allow full width if needed */
+         padding-left: 15px; /* Reduce button padding */
+         padding-right: 15px;
+     }
+     label {
+         font-size: 0.8em; /* Smaller labels */
+     }
+     small {
+         font-size: 0.75em; /* Smaller small text */
+     }
+     .invoice {
+         padding: 0.8em; /* Further reduce invoice padding */
+     }
+     .summary-table td, .details-table td, .details-table th {
+         padding: 0.4em 0.5em; /* Further reduce cell padding */
+         font-size: 0.85em; /* Further reduce table font size */
+     }
+     .invoice h3 {
+          font-size: 1em; /* Reduce heading size */
+     }
+     .summary-table .total-row td {
+         font-size: 1em; /* Reduce total font size */
+     }
 }
 
 /* Print Styles */
