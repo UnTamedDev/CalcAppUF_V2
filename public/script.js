@@ -147,7 +147,7 @@ function createRoughEstimateSection(index) {
       <select name="sectionDrawerStyle" id="${sectionIdPrefix}drawerStyle" required></select>
 
       <label for="${sectionIdPrefix}finish">Finish:</label>
-      <select name="sectionFinish" id="${sectionIdPrefix}finish" required>
+      <select name="sectionFinish" id="${sectionIdPrefix}fin" required>
         <option value="Painted" selected>Painted</option> <!-- Default selection -->
         <option value="Primed">Primed</option>
         <option value="Unfinished">Unfinished</option>
@@ -486,9 +486,6 @@ function displayError(message) {
 
 
 /** Display calculation results in the results div */
-// --- FILE: public/script.js (displayResults function ONLY - Revised Sections HTML) ---
-
-/** Display calculation results in the results div */
 function displayResults(data) {
     // ... (Keep console logs and initial checks) ...
 
@@ -518,7 +515,7 @@ function displayResults(data) {
             <tbody>`;
         sections.forEach((s, i) => {
             const drawerStyleText = (s.drawerStyle && s.drawerStyle !== s.doorStyle) ? s.drawerStyle : '-';
-            // --- Row with Data Labels for ALL cells ---
+            // --- Primary Row with Data Labels ---
             sectionsHtml += `
                 <tr class="primary-info-row">
                     <td data-label="#">${i + 1}</td>
@@ -529,7 +526,7 @@ function displayResults(data) {
                     <td data-label="Area (sqft)">${s.area?.toFixed(2) || 'N/A'}</td>
                     <td data-label="Cost">${formatCurrency(s.totalSectionCost)}</td>
                 </tr>`;
-            // --- NO Secondary Row Needed ---
+            // --- REMOVED Secondary Row ---
         });
         sectionsHtml += `</tbody></table>`;
     } else {
@@ -546,7 +543,7 @@ function displayResults(data) {
         <tr><td>Lazy Susans</td><td>${part2.lazySusanQty || 0}</td></tr>
         <tr><td>Custom Paint Colors</td><td>${part3.customPaintQty || 0}</td></tr>
         <tr><td><b>Total Hinges Needed</b></td><td><b>${hingeCount}</b></td></tr>
-    </tbody></table>`; // Note: Changed class to details-table for consistency if needed
+    </tbody></table>`;
 
      let costSummaryHtml = `<h3 style="margin-top: 1.5em;">Cost Summary</h3>`; /* ... */
       costSummaryHtml += `<table class="summary-table"><tbody>

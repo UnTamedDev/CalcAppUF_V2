@@ -58,7 +58,6 @@ body {
 /* Header */
 header {
     display: flex;
-    /* justify-content: space-between; */ /* Removed for auto margin */
     align-items: center;
     width: 100%;
     max-width: 900px; /* Max width */
@@ -80,181 +79,104 @@ header h1 {
     transition: color 0.3s ease;
 }
 header img {
-    height: 45px; /* Adjusted size */
-    width: auto;
-    display: block;
-    max-height: 45px;
-    flex-shrink: 0; /* Prevent logo shrinking */
+    height: 45px; width: auto; display: block; max-height: 45px; flex-shrink: 0;
 }
 
-/* Theme Toggle Button Specific Style (already in HTML, added here for clarity) */
+/* Theme Toggle Button Specific Style */
 #themeToggleBtn {
-    margin-left: auto; /* Pushes it to the far right */
-    height: 35px;
-    width: 50px;
-    font-size: 1.2em;
-    padding: 0;
-    background: #d1d9e6; /* Light theme specific */
-    color: var(--text-color-light-style6); /* Light theme specific */
-    box-shadow: 3px 3px 6px #b8c1d1, -3px -3px 6px #ffffff; /* Light theme specific */
-    border-radius: var(--border-radius-button);
-    cursor: pointer;
-    display: flex; /* Center icon */
-    align-items: center; /* Center icon */
-    justify-content: center; /* Center icon */
+    margin-left: auto; height: 35px; width: 50px; font-size: 1.2em; padding: 0;
+    background: #d1d9e6; color: var(--text-color-light-style6);
+    box-shadow: 3px 3px 6px #b8c1d1, -3px -3px 6px #ffffff;
+    border-radius: var(--border-radius-button); cursor: pointer; display: flex;
+    align-items: center; justify-content: center;
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-    margin-top: 0; /* Ensure no extra top margin */
+    margin-top: 0;
 }
 
 /* Wizard Container */
 #wizard {
-    position: relative;
-    width: 100%;
-    max-width: 900px; /* Max width */
-    background-color: var(--bg-color-forms); /* Use form background */
+    position: relative; width: 100%; max-width: 900px;
+    background-color: var(--bg-color-forms);
     border-radius: var(--border-radius-container);
     box-shadow: var(--shadow-convex-outer);
-    overflow: hidden; /* Hide overflowing steps */
-    margin-bottom: 2em;
-    padding: 0; /* Remove padding here, add to steps */
-    box-sizing: border-box;
-    min-height: 500px; /* Adjust as needed - Moved from inline style */
+    overflow: hidden; margin-bottom: 2em; padding: 0; box-sizing: border-box;
+    min-height: 500px;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Wizard Step Styling & Transition */
 .wizard-step {
-   width: 100%;
-   position: absolute;
-   top: 0;
-   left: 0;
-   padding: 30px 40px; /* Padding inside step */
-   box-sizing: border-box;
-   background-color: var(--bg-color-forms); /* Match container */
-   opacity: 0;
-   visibility: hidden;
-   transform: translateX(30px); /* Start slightly off-screen right */
+   width: 100%; position: absolute; top: 0; left: 0; padding: 30px 40px;
+   box-sizing: border-box; background-color: var(--bg-color-forms);
+   opacity: 0; visibility: hidden; transform: translateX(30px);
    transition: opacity var(--transition-duration) ease-out,
                transform var(--transition-duration) ease-out,
                visibility 0s linear var(--transition-duration),
-               background-color 0.3s ease; /* Added theme transition */
+               background-color 0.3s ease;
 }
 .wizard-step.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
-    position: relative; /* Take space */
+    opacity: 1; visibility: visible; transform: translateX(0); position: relative;
     transition: opacity var(--transition-duration) ease-out,
                 transform var(--transition-duration) ease-out,
-                visibility 0s linear 0s,
-                background-color 0.3s ease;
+                visibility 0s linear 0s, background-color 0.3s ease;
 }
 .wizard-step.hiding {
-    opacity: 0;
-    visibility: visible; /* Keep visible during out transition */
-    transform: translateX(-30px); /* Slide out left */
-    position: absolute; /* Don't affect layout */
+    opacity: 0; visibility: visible; transform: translateX(-30px); position: absolute;
     transition: opacity var(--transition-duration) ease-out,
                 transform var(--transition-duration) ease-out,
-                visibility 0s linear var(--transition-duration),
-                background-color 0.3s ease;
+                visibility 0s linear var(--transition-duration), background-color 0.3s ease;
 }
-
-
 .step-title {
-    font-weight: 900; /* Bolder title */
-    margin-top: 0; /* Remove top margin */
-    margin-bottom: 1em;
-    color: var(--primary-color-style6);
-    font-size: 1.6rem;
-    letter-spacing: 0.5px;
-    text-align: center; /* Centered title */
+    font-weight: 900; margin-top: 0; margin-bottom: 1em;
+    color: var(--primary-color-style6); font-size: 1.6rem;
+    letter-spacing: 0.5px; text-align: center; transition: color 0.3s ease;
+}
+.step-instructions {
+    font-weight: 400; margin-bottom: 1.5em; color: var(--text-color-light-style6);
+    font-size: 1em; line-height: 1.5; text-align: center; transition: color 0.3s ease;
+}
+.step-navigation {
+    display: flex; justify-content: space-between; margin-top: 2.5em;
+    padding-top: 1.5em; border-top: 1px solid #ccc; transition: border-color 0.3s ease;
+}
+.step-indicator {
+    text-align: center; margin-bottom: 1.5em; font-weight: 600;
+    color: var(--primary-color-style6); opacity: 0.7; font-size: 0.9em;
     transition: color 0.3s ease;
 }
- .step-instructions {
-    font-weight: 400;
-    margin-bottom: 1.5em;
-    color: var(--text-color-light-style6);
-    font-size: 1em;
-    line-height: 1.5;
-    text-align: center;
-    transition: color 0.3s ease;
- }
- .step-navigation {
-     display: flex;
-     justify-content: space-between;
-     margin-top: 2.5em; /* More space above nav */
-     padding-top: 1.5em;
-     border-top: 1px solid #ccc; /* Slightly darker separator */
-     transition: border-color 0.3s ease;
- }
- .step-indicator {
-     text-align: center;
-     margin-bottom: 1.5em; /* More space */
-     font-weight: 600;
-     color: var(--primary-color-style6);
-     opacity: 0.7;
-     font-size: 0.9em;
-     transition: color 0.3s ease;
- }
 
 /* Example Image Toggle/Container */
 #exampleImageContainer { margin-bottom: 1.5em; text-align: center; }
 #toggleExampleBtn { margin-bottom: 1em; }
 #exampleImage { text-align: center; margin-top: 1em; display: none; }
-#exampleImage img { max-width: 90%; height: auto; border-radius: 10px; box-shadow: var(--shadow-convex-outer); transition: box-shadow 0.3s ease; } /* Outset shadow */
+#exampleImage img { max-width: 90%; height: auto; border-radius: 10px; box-shadow: var(--shadow-convex-outer); transition: box-shadow 0.3s ease; }
 
 /* Form Sections Styling */
 .part, .section {
-    background-color: #f8f8f8; /* Consistent background */
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: var(--border-radius-container);
-    box-shadow: var(--shadow-inset);
-    text-align: left;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #f8f8f8; padding: 20px; margin-bottom: 20px;
+    border-radius: var(--border-radius-container); box-shadow: var(--shadow-inset);
+    text-align: left; transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
-#roughEstimateContainer h2, .part h2 { /* Merged selectors */
-     font-size: 1.1rem;
-     font-weight: 600;
-     color: var(--primary-color-style6);
-     margin-bottom: 1em;
-     padding-bottom: 0.3em;
-     border-bottom: 1px solid #ddd;
-     text-align: left;
-     transition: color 0.3s ease, border-color 0.3s ease;
+#roughEstimateContainer h2, .part h2 {
+     font-size: 1.1rem; font-weight: 600; color: var(--primary-color-style6);
+     margin-bottom: 1em; padding-bottom: 0.3em; border-bottom: 1px solid #ddd;
+     text-align: left; transition: color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Sections Container & Individual Section */
-#sectionsContainer {
-    display: flex; flex-wrap: wrap; gap: 1.5em;
-    margin-bottom: 1.5em; justify-content: center; /* Changed from flex-row class to direct style */
-}
+#sectionsContainer { display: flex; flex-wrap: wrap; gap: 1.5em; margin-bottom: 1.5em; justify-content: center; }
 .section {
-    flex-grow: 0; flex-shrink: 1;
-    flex-basis: calc(25% - 1.15em); /* Adjusted basis for gap */
-    max-width: calc(25% - 1.15em); /* Adjusted max-width for gap */
-    min-width: 280px; /* Min width */
-    box-sizing: border-box;
-    padding: 15px;
+    flex-grow: 0; flex-shrink: 1; flex-basis: calc(25% - 1.15em);
+    max-width: calc(25% - 1.15em); min-width: 280px;
+    box-sizing: border-box; padding: 15px;
 }
- .section-header {
-     display: flex;
-     justify-content: space-between; /* Puts button on the right */
-     align-items: center;
-     margin-bottom: 1em;
- }
- .section-id {
-     font-weight: 600;
-     font-size: 0.9em;
-     color: #fff;
-     background-color: var(--primary-color-style6);
-     padding: 3px 8px;
-     border-radius: 5px;
-     margin-right: auto; /* Push button away */
-     transition: background-color 0.3s ease;
- }
- #addSectionBtn { margin-top: 0; display: block; margin-left: auto; margin-right: auto; width: auto; padding: 0 25px;} /* Center add button */
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1em; }
+.section-id {
+    font-weight: 600; font-size: 0.9em; color: #fff;
+    background-color: var(--primary-color-style6); padding: 3px 8px;
+    border-radius: 5px; margin-right: auto; transition: background-color 0.3s ease;
+}
+#addSectionBtn { margin-top: 0; display: block; margin-left: auto; margin-right: auto; width: auto; padding: 0 25px;}
 
 /* General Form Elements */
 label, input, button, select { display: block; width: 100%; padding: 0; border: none; outline: none; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -262,510 +184,176 @@ label { margin-bottom: 6px; font-size: 0.85em; font-weight: 600; color: #666; te
 label:not(:first-child) { margin-top: 15px; }
 input::placeholder { color: #aaa; }
 input[type="number"], select {
-    background: var(--bg-color-forms); /* Use form background for inputs */
-    padding: 10px 20px; /* Adjusted padding */
-    height: 50px;
-    font-size: 14px;
-    border-radius: var(--border-radius-input);
-    box-shadow: var(--shadow-inset);
-    color: var(--text-color-style6);
-    text-align: left;
-    margin-top: 0; /* Reset margin-top */
+    background: var(--bg-color-forms); padding: 10px 20px; height: 50px;
+    font-size: 14px; border-radius: var(--border-radius-input);
+    box-shadow: var(--shadow-inset); color: var(--text-color-style6);
+    text-align: left; margin-top: 0;
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    border: 1px solid transparent; /* Placeholder for dark mode border */
+    border: 1px solid transparent;
 }
- input[type="number"]:focus, select:focus {
-     box-shadow: var(--shadow-inset), 0 0 0 2px rgba(38, 198, 218, 0.3); /* Focus ring */
-     /* Keep transition for focus ring color if needed */
- }
- select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23777' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; background-size: 16px 12px; padding-right: 40px; cursor: pointer; transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-image 0.3s ease; } /* Added background-image transition */
+input[type="number"]:focus, select:focus { box-shadow: var(--shadow-inset), 0 0 0 2px rgba(38, 198, 218, 0.3); }
+select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23777' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; background-size: 16px 12px; padding-right: 40px; cursor: pointer; transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-image 0.3s ease; }
 
 /* Button Styles */
 button {
-    color: white;
-    margin-top: 20px;
-    background: var(--primary-color-style6);
-    height: 45px; /* Slightly taller */
-    border-radius: var(--border-radius-button);
-    cursor: pointer;
-    font-weight: 900; /* Bolder */
-    box-shadow: var(--shadow-convex-outer);
-    transition: 0.3s ease; /* Keep general transition */
-    font-size: 0.9em;
-    letter-spacing: 0.5px;
+    color: white; margin-top: 20px; background: var(--primary-color-style6);
+    height: 45px; border-radius: var(--border-radius-button); cursor: pointer;
+    font-weight: 900; box-shadow: var(--shadow-convex-outer); transition: 0.3s ease;
+    font-size: 0.9em; letter-spacing: 0.5px;
 }
-button:hover:not(:disabled) { /* Add :not(:disabled) */
-    box-shadow: none;
-    filter: brightness(1.1);
-}
-button:active:not(:disabled) { /* Add active state */
-    filter: brightness(0.95);
-    box-shadow: var(--shadow-inset); /* Press effect */
-}
-button:disabled {
-    background: #ccc !important;
-    box-shadow: var(--shadow-inset);
-    cursor: not-allowed;
-    color: #888 !important; /* Ensure text color changes */
-    filter: none !important; /* Remove any filters */
-    opacity: 0.7;
-}
+button:hover:not(:disabled) { box-shadow: none; filter: brightness(1.1); }
+button:active:not(:disabled) { filter: brightness(0.95); box-shadow: var(--shadow-inset); }
+button:disabled { background: #ccc !important; box-shadow: var(--shadow-inset); cursor: not-allowed; color: #888 !important; filter: none !important; opacity: 0.7; }
 
 /* Specific Buttons */
-#addSectionBtn, .wizard-nav-btn, #calculateBtn, #toggleExampleBtn, #startOverBtn, #printEstimate { width: auto; padding-left: 25px; padding-right: 25px; display: inline-block; } /* Removed #toggleDetailsBtn */
+#addSectionBtn, .wizard-nav-btn, #calculateBtn, #toggleExampleBtn, #startOverBtn, #printEstimate { width: auto; padding-left: 25px; padding-right: 25px; display: inline-block; }
 .wizard-nav-btn.prev, #startOverBtn { background: #b0bec5; box-shadow: 6px 6px 6px #a0acb1, -6px -6px 6px #c0ced3; color: #546e7a;}
 .wizard-nav-btn.prev:hover:not(:disabled), #startOverBtn:hover:not(:disabled) { box-shadow: none; filter: brightness(1.05); }
-#calculateBtn { font-size: 1.1em; display: block; margin: 0 auto;} /* Centered Calculate button */
-#formActions { margin-top: 2em; text-align: center; } /* Container for calc button */
-
-#toggleExampleBtn { /* Removed #toggleDetailsBtn */
-    margin-top: 0;
-    height: 35px;
-    font-size: 0.8em;
-    background: #d1d9e6;
+#calculateBtn { font-size: 1.1em; display: block; margin: 0 auto;}
+#formActions { margin-top: 2em; text-align: center; }
+#toggleExampleBtn {
+    margin-top: 0; height: 35px; font-size: 0.8em; background: #d1d9e6;
     color: var(--text-color-light-style6);
-    /* Corrected convex shadow for lighter bg */
-    box-shadow: 3px 3px 6px #b8c1d1, -3px -3px 6px #ffffff;
-    font-weight: 600;
+    box-shadow: 3px 3px 6px #b8c1d1, -3px -3px 6px #ffffff; font-weight: 600;
 }
-#toggleExampleBtn:hover:not(:disabled) { box-shadow: none; filter: brightness(1.05); } /* Removed #toggleDetailsBtn */
-#toggleExampleBtn:active:not(:disabled) { box-shadow: inset 2px 2px 4px #b8c1d1, inset -2px -2px 4px #ffffff; } /* Inset press effect - Removed #toggleDetailsBtn */
-
-
+#toggleExampleBtn:hover:not(:disabled) { box-shadow: none; filter: brightness(1.05); }
+#toggleExampleBtn:active:not(:disabled) { box-shadow: inset 2px 2px 4px #b8c1d1, inset -2px -2px 4px #ffffff; }
 button.remove-button {
-    background: var(--secondary-color-style6);
-    color: white;
-    height: 30px;
-    width: 30px; /* Make it square */
-    padding: 0; /* Remove padding */
-    font-size: 1.2em; /* Larger X */
-    line-height: 28px; /* Vertically center X */
-    font-weight: 600;
-    margin-top: 0; /* Align with section title */
-    margin-left: 10px; /* Space from title */
+    background: var(--secondary-color-style6); color: white; height: 30px; width: 30px;
+    padding: 0; font-size: 1.2em; line-height: 28px; font-weight: 600;
+    margin-top: 0; margin-left: 10px;
     box-shadow: 3px 3px 3px #d89997, -3px -3px 3px #ffadab;
-    border-radius: 50%; /* Make it round */
-    display: inline-block; /* Needed for alignment */
-    text-align: center;
+    border-radius: 50%; display: inline-block; text-align: center;
 }
 button.remove-button:hover:not(:disabled) { box-shadow: none; filter: brightness(1.1); }
 button.remove-button:active:not(:disabled) { filter: brightness(0.9); box-shadow: inset 1px 1px 2px #b43b39, inset -1px -1px 2px #ff6f6c;}
 
-
 /* Results & Invoice */
-#results { margin-top: 2em; background: transparent; border: none; padding: 0; overflow-x: visible; width: 100%; } /* Ensure results takes width */
+#results { margin-top: 2em; background: transparent; border: none; padding: 0; overflow-x: visible; width: 100%; }
 .invoice {
-    width: 100%; /* Make invoice take width of container */
-    max-width: 900px; /* Match wizard width */
-    min-width: 300px; /* Adjust min-width */
-    margin: 0 auto; /* Center invoice */
-    padding: 2em;
-    border-radius: var(--border-radius-container);
-    background: var(--bg-color-main); /* Match body bg */
-    box-shadow: var(--shadow-convex-outer);
-    color: var(--text-color-style6);
-    border: none;
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; max-width: 900px; min-width: 300px; margin: 0 auto; padding: 2em;
+    border-radius: var(--border-radius-container); background: var(--bg-color-main);
+    box-shadow: var(--shadow-convex-outer); color: var(--text-color-style6);
+    border: none; transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 .invoice-header { text-align: center; margin-bottom: 1.5em; padding-bottom: 1.5em; border-bottom: 1px solid #d1d9e6; transition: border-color 0.3s ease; }
 .invoice-header h1 { color: var(--primary-color-style6); margin-bottom: 0.2em; font-size: 1.8em; font-weight: 900; transition: color 0.3s ease; }
 .invoice-header p { font-size: 0.9em; color: #777; transition: color 0.3s ease; }
-.invoice h3 { font-size: 1.3em; color: var(--primary-color-style6); margin-bottom: 1em; border-bottom: 1px solid #ccc; padding-bottom: 0.3em; font-weight: 900; text-align: left; transition: color 0.3s ease, border-color 0.3s ease; } /* Changed to left align, added border */
-.summary-table, .details-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5em; margin-bottom: 1.5em; }
-.summary-table td, .details-table td, .details-table th { padding: 0.8em 1em; border-bottom: none; vertical-align: middle; transition: color 0.3s ease; } /* Added th */
-.summary-table tr, .details-table tr { background: #f8f8f8; border-radius: var(--border-radius-input); box-shadow: var(--shadow-inset); transition: background-color 0.3s ease, box-shadow 0.3s ease;}
-.summary-table .table-label, .details-table th { /* Use th for details header */
-    text-align: left; padding-right: 1em; color: #555; font-weight: 600;
-}
-.summary-table .table-value, .details-table td { /* Apply to all td in details */
-    text-align: right; font-weight: 600; color: #555; /* Normal weight for details */
-}
-.details-table thead { background: none; box-shadow: none; } /* Style thead separately */
-.details-table thead th { background: #e0e0e0; color: #333; padding: 0.6em 1em; font-size: 0.9em; border-radius: 5px 5px 0 0; transition: background-color 0.3s ease, color 0.3s ease;}
-.details-table td:first-child { text-align: center; font-weight: normal;} /* Center section number */
-.details-table td:last-child { font-weight: 700; color: #333; transition: color 0.3s ease;} /* Bold cost */
+.invoice h3 { font-size: 1.3em; color: var(--primary-color-style6); margin-bottom: 1em; border-bottom: 1px solid #ccc; padding-bottom: 0.3em; font-weight: 900; text-align: left; transition: color 0.3s ease, border-color 0.3s ease; }
 
+/* --- Base Table Styles (Desktop & Foundation) --- */
+.summary-table, .details-table {
+    width: 100%; border-collapse: separate; border-spacing: 0 0.5em;
+    margin-bottom: 1.5em; table-layout: fixed;
+}
+.summary-table td, .details-table td, .details-table th {
+    padding: 0.8em 1em; border-bottom: none; vertical-align: top;
+    transition: color 0.3s ease; word-wrap: break-word; text-align: left;
+}
+.summary-table tr, .details-table tr {
+    background: #f8f8f8; border-radius: var(--border-radius-input);
+    box-shadow: var(--shadow-inset);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.summary-table .table-label { padding-right: 1em; color: #555; font-weight: 600; width: 70%; }
+.summary-table .table-value { text-align: right; font-weight: 600; color: #555; }
 
+/* Details Table Specific Headers */
+.details-table thead { background: none; box-shadow: none; }
+.details-table thead th {
+    background: #e0e0e0; color: #333; padding: 0.6em 1em; font-size: 0.9em;
+    border-radius: 5px 5px 0 0; transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: bold; vertical-align: bottom;
+}
+/* Details Table Specific Cells & Alignment (Desktop) */
+.details-table td { padding: 0.6em 1em; font-size: 0.9em; vertical-align: top; }
+.details-table tbody tr { background: #fff; box-shadow: inset 2px 2px 3px #ddd, inset -2px -2px 3px #fff; }
+/* Define widths for desktop view consistent with print */
+.details-table th:nth-child(1), .details-table td:nth-child(1) { width: 6%; text-align: center !important;} /* # */
+.details-table th:nth-child(2), .details-table td:nth-child(2) { width: 18%; } /* Door */
+.details-table th:nth-child(3), .details-table td:nth-child(3) { width: 18%; } /* Drawer */
+.details-table th:nth-child(4), .details-table td:nth-child(4) { width: 15%; text-align: center !important;} /* Finish */
+.details-table th:nth-child(5), .details-table td:nth-child(5) { width: 15%; text-align: center !important;} /* HxW */
+.details-table th:nth-child(6), .details-table td:nth-child(6) { width: 13%; text-align: center !important;} /* Area */
+.details-table th:nth-child(7), .details-table td:nth-child(7) { width: 15%; text-align: right !important; font-weight: 700; color: #333; } /* Cost */
+
+/* Summary Footer */
 .summary-table tfoot { border-top: 2px solid #ccc; margin-top: 1em; transition: border-color 0.3s ease;}
-.summary-table tfoot tr { background: none; box-shadow: none; } /* Remove background from footer row */
+.summary-table tfoot tr { background: none; box-shadow: none; }
 .summary-table tfoot td { border-bottom: none; padding-top: 1em; }
 .summary-table .total-row td { font-size: 1.2em; font-weight: 900; color: var(--primary-color-style6); padding-top: 1em; background: none; box-shadow: none; transition: color 0.3s ease;}
-/* Removed .details-section styles as it's no longer separate */
-.details-table td { padding: 0.5em 0.8em; font-size: 0.9em; }
-.details-table tbody tr { border-radius: 0.6em; background: #fff; box-shadow: inset 2px 2px 3px #ddd, inset -2px -2px 3px #fff; transition: background-color 0.3s ease, box-shadow 0.3s ease;}
-/* Removed #toggleDetailsBtn styles */
+
+/* Footer & Other */
 .estimate-footer { text-align: center; margin-top: 2em; font-size: 0.85em; color: #777; transition: color 0.3s ease;}
-#printButtonContainer { margin-top: 1.5em; text-align: center; display: none; } /* Hidden by default */
+#printButtonContainer { margin-top: 1.5em; text-align: center; display: none; }
 #printEstimate { padding: 0.8em 1.5em; font-size: 1em; width: auto; }
 small { display: block; font-size: 0.85em; color: #888; margin-top: 5px; margin-left: 5px; line-height: 1.3; text-align: left; transition: color 0.3s ease;}
-.invoice-error { padding: 1em; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; margin: 1em auto; max-width: 95%; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;} /* Use % width */
+.invoice-error { padding: 1em; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; margin: 1em auto; max-width: 95%; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;}
 .invoice-error p { margin: 0.2em 0; }
 .invoice-loading { text-align:center; padding: 2em; color: var(--text-color-light-style6); font-style: italic; transition: color 0.3s ease; }
 
-/* --- Dark Theme Application --- */
+
+/* --- Dark Theme Application --- RESTORED FULL RULES */
 body[data-theme="dark"] {
-    /* Override base colors */
     --bg-color-main: var(--bg-color-main-dark);
     --bg-color-forms: var(--bg-color-forms-dark);
     --text-color-style6: var(--text-color-style6-dark);
     --text-color-light-style6: var(--text-color-light-style6-dark);
-    color: var(--text-color-style6-dark); /* Apply base text color */
-    background: var(--bg-color-main-dark); /* Apply base background */
-
-    /* Override shadows */
+    color: var(--text-color-style6-dark);
+    background: var(--bg-color-main-dark);
     --shadow-convex-outer: var(--shadow-convex-outer-dark);
     --shadow-inset: var(--shadow-inset-dark);
-
-    /* Optional: Override accent colors */
     --primary-color-style6: var(--primary-color-style6-dark);
     --secondary-color-style6: var(--secondary-color-style6-dark);
 }
-
-/* Specific element overrides for dark theme */
-body[data-theme="dark"] header {
-    border-bottom-color: #444; /* Darker border */
-}
-/* Style for the toggle button itself in dark mode */
-body[data-theme="dark"] #themeToggleBtn {
-    background: #4a5a6a;
-    color: #ddd;
-    box-shadow: var(--shadow-convex-outer-dark); /* Use dark theme shadow */
-}
-body[data-theme="dark"] #wizard {
-    background-color: var(--bg-color-forms-dark);
-    box-shadow: var(--shadow-convex-outer-dark);
-}
-body[data-theme="dark"] .wizard-step {
-     background-color: var(--bg-color-forms-dark);
-}
-body[data-theme="dark"] .step-title,
-body[data-theme="dark"] .step-indicator {
-    color: var(--primary-color-style6-dark);
-}
-body[data-theme="dark"] .step-instructions {
-    color: var(--text-color-light-style6-dark);
-}
-body[data-theme="dark"] .step-navigation {
-    border-top-color: #555;
-}
-body[data-theme="dark"] .part,
-body[data-theme="dark"] .section {
-    background-color: #333; /* Slightly darker form section */
-    box-shadow: var(--shadow-inset-dark);
-}
-body[data-theme="dark"] .part h2 {
-     color: var(--primary-color-style6-dark);
-     border-bottom-color: #555;
-}
- body[data-theme="dark"] label {
-     color: #bbb;
- }
- body[data-theme="dark"] input[type="number"],
- body[data-theme="dark"] select {
-     background: var(--bg-color-forms-dark); /* Keep existing background color */
-     color: var(--text-color-style6-dark); /* Keep existing text color */
-     box-shadow: var(--shadow-inset-dark); /* Keep existing shadow */
-     border: 1px solid #555; /* Keep existing border */
-     background-image: none; /* Remove the custom arrow SVG */
-     padding-right: 20px; /* Reset padding to match number inputs */
- }
- body[data-theme="dark"] input[type="number"]:focus,
- body[data-theme="dark"] select:focus {
-     box-shadow: var(--shadow-inset-dark), 0 0 0 2px rgba(54, 215, 237, 0.4); /* Adjust focus ring color */
- }
-  /* Removed dark mode select arrow override as background-image: none handles it */
-  body[data-theme="dark"] button {
-       background: var(--primary-color-style6-dark);
-       box-shadow: var(--shadow-convex-outer-dark);
-       color: #111; /* Darker text on lighter button */
-  }
-   body[data-theme="dark"] button:hover:not(:disabled) {
-       filter: brightness(1.1);
-       box-shadow: none;
-   }
-   body[data-theme="dark"] button:active:not(:disabled) { /* Dark theme active state */
-        filter: brightness(0.95);
-        box-shadow: var(--shadow-inset-dark); /* Press effect */
-    }
-   body[data-theme="dark"] button:disabled {
-       background: #555 !important;
-       color: #999 !important;
-       box-shadow: var(--shadow-inset-dark);
-   }
-   body[data-theme="dark"] button.remove-button {
-       background: var(--secondary-color-style6-dark);
-       /* Adjust shadow for dark theme remove button */
-       box-shadow: 3px 3px 3px #7e2c2a, -3px -3px 3px #a04c49;
-       color: #fff;
-   }
-    body[data-theme="dark"] button.remove-button:active:not(:disabled) {
-        filter: brightness(0.9);
-        box-shadow: inset 1px 1px 2px #6f2624, inset -1px -1px 2px #b35b58; /* Dark theme inset */
-    }
-   body[data-theme="dark"] button.wizard-nav-btn.prev,
-   body[data-theme="dark"] #startOverBtn {
-        background: #5a6a72;
-        box-shadow: 6px 6px 6px #49565c, -6px -6px 6px #6b7e88;
-        color: #ddd;
-   }
-    body[data-theme="dark"] #toggleExampleBtn {
-         background: #4a5a6a;
-         color: #ddd;
-         box-shadow: var(--shadow-convex-outer-dark);
-    }
-     body[data-theme="dark"] #toggleExampleBtn:active:not(:disabled) {
-         box-shadow: var(--shadow-inset-dark);
-     }
-    body[data-theme="dark"] .invoice {
-         background: var(--bg-color-main-dark);
-         box-shadow: var(--shadow-convex-outer-dark);
-         color: var(--text-color-style6-dark);
-    }
-    body[data-theme="dark"] .invoice-header { border-bottom-color: #555; }
-    body[data-theme="dark"] .invoice-header h1 { color: var(--primary-color-style6-dark); }
-    body[data-theme="dark"] .invoice-header p { color: #aaa; }
-    body[data-theme="dark"] .invoice h3 { color: var(--primary-color-style6-dark); border-bottom-color: #555; }
-    body[data-theme="dark"] .summary-table tr,
-    body[data-theme="dark"] .details-table tr {
-         background: #3f3f43; /* Darker table row */
-         box-shadow: var(--shadow-inset-dark);
-    }
-    body[data-theme="dark"] .summary-table .table-label,
-    body[data-theme="dark"] .details-table th {
-         color: #ccc;
-    }
-     body[data-theme="dark"] .summary-table .table-value,
-     body[data-theme="dark"] .details-table td {
-          color: #ddd;
-     }
-     body[data-theme="dark"] .details-table td:last-child { color: #eee; } /* Slightly brighter cost */
-     body[data-theme="dark"] .summary-table tfoot { border-top-color: #666; }
-     body[data-theme="dark"] .summary-table .total-row td { color: var(--primary-color-style6-dark); }
-     body[data-theme="dark"] .details-table thead th { background: #4f4f53; color: #fff; }
-     body[data-theme="dark"] .details-table tbody tr { background: #454549; box-shadow: inset 2px 2px 3px #333, inset -2px -2px 3px #555;}
-     body[data-theme="dark"] .estimate-footer { color: #aaa; }
-     body[data-theme="dark"] small { color: #999; }
-     body[data-theme="dark"] .invoice-error { background-color: #582a2e; color: #f5c6cb; border-color: #a04a4e; }
-     body[data-theme="dark"] .invoice-loading { color: var(--text-color-light-style6-dark); }
-
-/* Responsive Table Wrapper */
-.table-responsive-wrapper .details-table {
-    /* min-width: 600px; */ /* REMOVE OR COMMENT OUT THIS LINE */
-    margin-bottom: 0; /* Remove bottom margin from table if wrapper has it */
-    width: 100%; /* Ensure it tries to take full width initially */
-}
-    -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
-    margin-bottom: 1em; /* Add some space below the scrolling area */
-}
-
-/* Optional: Minor adjustments to table within wrapper if needed */
-.table-responsive-wrapper .details-table {
-    min-width: 600px; /* Example: Set a minimum width for the table itself */
-                      /* This forces the wrapper to scroll sooner on small screens */
-                      /* Adjust this value based on your content */
-    margin-bottom: 0; /* Remove bottom margin from table if wrapper has it */
-}
+body[data-theme="dark"] header { border-bottom-color: #444; }
+body[data-theme="dark"] #themeToggleBtn { background: #4a5a6a; color: #ddd; box-shadow: var(--shadow-convex-outer-dark); }
+body[data-theme="dark"] #wizard { background-color: var(--bg-color-forms-dark); box-shadow: var(--shadow-convex-outer-dark); }
+body[data-theme="dark"] .wizard-step { background-color: var(--bg-color-forms-dark); }
+body[data-theme="dark"] .step-title, body[data-theme="dark"] .step-indicator { color: var(--primary-color-style6-dark); }
+body[data-theme="dark"] .step-instructions { color: var(--text-color-light-style6-dark); }
+body[data-theme="dark"] .step-navigation { border-top-color: #555; }
+body[data-theme="dark"] .part, body[data-theme="dark"] .section { background-color: #333; box-shadow: var(--shadow-inset-dark); }
+body[data-theme="dark"] .part h2, body[data-theme="dark"] #roughEstimateContainer h2 { color: var(--primary-color-style6-dark); border-bottom-color: #555; }
+body[data-theme="dark"] label { color: #bbb; }
+body[data-theme="dark"] input[type="number"], body[data-theme="dark"] select { background: var(--bg-color-forms-dark); color: var(--text-color-style6-dark); box-shadow: var(--shadow-inset-dark); border: 1px solid #555; }
+body[data-theme="dark"] input[type="number"]:focus, body[data-theme="dark"] select:focus { box-shadow: var(--shadow-inset-dark), 0 0 0 2px rgba(54, 215, 237, 0.4); }
+body[data-theme="dark"] select { background-image: none; padding-right: 20px; } /* Hide arrow and fix padding */
+body[data-theme="dark"] button { background: var(--primary-color-style6-dark); box-shadow: var(--shadow-convex-outer-dark); color: #111; }
+body[data-theme="dark"] button:hover:not(:disabled) { filter: brightness(1.1); box-shadow: none; }
+body[data-theme="dark"] button:active:not(:disabled) { filter: brightness(0.95); box-shadow: var(--shadow-inset-dark); }
+body[data-theme="dark"] button:disabled { background: #555 !important; color: #999 !important; box-shadow: var(--shadow-inset-dark); }
+body[data-theme="dark"] button.remove-button { background: var(--secondary-color-style6-dark); box-shadow: 3px 3px 3px #7e2c2a, -3px -3px 3px #a04c49; color: #fff; }
+body[data-theme="dark"] button.remove-button:active:not(:disabled) { filter: brightness(0.9); box-shadow: inset 1px 1px 2px #6f2624, inset -1px -1px 2px #b35b58; }
+body[data-theme="dark"] button.wizard-nav-btn.prev, body[data-theme="dark"] #startOverBtn { background: #5a6a72; box-shadow: 6px 6px 6px #49565c, -6px -6px 6px #6b7e88; color: #ddd; }
+body[data-theme="dark"] #toggleExampleBtn { background: #4a5a6a; color: #ddd; box-shadow: var(--shadow-convex-outer-dark); }
+body[data-theme="dark"] #toggleExampleBtn:active:not(:disabled) { box-shadow: var(--shadow-inset-dark); }
+body[data-theme="dark"] .invoice { background: var(--bg-color-main-dark); box-shadow: var(--shadow-convex-outer-dark); color: var(--text-color-style6-dark); }
+body[data-theme="dark"] .invoice-header { border-bottom-color: #555; }
+body[data-theme="dark"] .invoice-header h1 { color: var(--primary-color-style6-dark); }
+body[data-theme="dark"] .invoice-header p { color: #aaa; }
+body[data-theme="dark"] .invoice h3 { color: var(--primary-color-style6-dark); border-bottom-color: #555; }
+body[data-theme="dark"] .summary-table tr, body[data-theme="dark"] .details-table tr { background: #3f3f43; box-shadow: var(--shadow-inset-dark); } /* Applies to non-mobile too */
+body[data-theme="dark"] .summary-table .table-label, body[data-theme="dark"] .details-table th { color: #ccc; }
+body[data-theme="dark"] .summary-table .table-value, body[data-theme="dark"] .details-table td { color: #ddd; }
+body[data-theme="dark"] .details-table td:last-child { color: #eee; } /* Brighter cost */
+body[data-theme="dark"] .summary-table tfoot { border-top-color: #666; }
+body[data-theme="dark"] .summary-table .total-row td { color: var(--primary-color-style6-dark); }
+body[data-theme="dark"] .details-table thead th { background: #4f4f53; color: #fff; }
+body[data-theme="dark"] .details-table tbody tr { background: #454549; box-shadow: inset 2px 2px 3px #333, inset -2px -2px 3px #555;}
+body[data-theme="dark"] .estimate-footer { color: #aaa; }
+body[data-theme="dark"] small { color: #999; }
+body[data-theme="dark"] .invoice-error { background-color: #582a2e; color: #f5c6cb; border-color: #a04a4e; }
+body[data-theme="dark"] .invoice-loading { color: var(--text-color-light-style6-dark); }
 
 
 /* Responsive */
-@media (max-width: 1200px) { /* Add breakpoint for wider screens */
-     .section {
-         flex-basis: calc(33.33% - 1em); /* 3 columns */
-         max-width: calc(33.33% - 1em);
-     }
-}
-
-@media (max-width: 992px) { /* Tablet */
-     .section {
-         flex-basis: calc(50% - 0.75em); /* 2 columns */
-         max-width: calc(50% - 0.75em);
-     }
-     .invoice { max-width: 90%; }
-}
-
-/* --- FILE: public/style.css (Partial Changes - Responsive Sections) --- */
-
-@media (max-width: 768px) { /* Smaller tablet / large phone */
-    body {
-        padding: 1em; /* Keep padding */
-        min-width: 320px; /* Prevent excessive squeezing */
-    }
-    header {
-        flex-direction: row; /* Keep row layout */
-        gap: 0.5em;
-        text-align: left;
-        align-items: center;
-        padding-bottom: 0.5em; /* Reduce padding */
-        margin-bottom: 1.5em; /* Reduce margin */
-    }
-    header h1 {
-        font-size: 1.2em;
-        margin-right: auto;
-    }
-    header img {
-        height: 35px;
-        max-height: 35px;
-    }
-    #themeToggleBtn {
-        width: 40px;
-        height: 30px;
-        font-size: 1em;
-    }
-    #wizard {
-        padding: 15px; /* Reduce wizard padding */
-        max-width: 100%; /* Allow full width */
-        min-height: auto; /* Allow natural height */
-        margin-bottom: 1.5em; /* Reduce margin */
-    }
-    .wizard-step {
-         padding: 20px 25px; /* Adjust step padding */
-    }
-
-    .section {
-         flex-basis: 100%; /* Already stacking */
-         max-width: 100%;
-         min-width: 0;
-         margin-bottom: 15px; /* Slightly reduce margin between sections */
-         padding: 15px; /* Reduce section padding */
-    }
-    #addSectionBtn {
-         width: auto; /* Don't force full width */
-         padding: 0 25px;
-         max-width: 250px; /* Keep max width */
-         margin-left: auto;
-         margin-right: auto;
-         display: block;
-    }
-    /* Center navigation buttons in their container */
-    .step-navigation {
-        flex-direction: column;
-        gap: 0.8em;
-        align-items: center;
-        margin-top: 1.5em; /* Reduce space above nav */
-        padding-top: 1em; /* Reduce padding */
-    }
-    .wizard-nav-btn {
-        width: 100%; /* Make buttons full width */
-        max-width: 280px; /* Set a max-width */
-        font-size: 0.9em; /* Slightly smaller font */
-    }
-    /* Center example/start over/print buttons */
-     #toggleExampleBtn, #startOverBtn, #printEstimate {
-         width: 100%;
-         max-width: 280px; /* Match nav buttons */
-         margin-left: auto;
-         margin-right: auto;
-         display: block;
-     }
-     button.remove-button {
-         width: 28px;
-         height: 28px;
-         font-size: 1em;
-         line-height: 26px;
-     }
-    .invoice {
-        max-width: 100%; /* Allow full width */
-        padding: 1em; /* Reduce invoice padding */
-    }
-    .summary-table td, .details-table td, .details-table th {
-        padding: 0.5em 0.6em; /* Reduce table cell padding */
-        font-size: 0.9em; /* Ensure font size isn't too large */
-        word-break: break-word; /* Allow long words (like styles) to break */
-    }
-    .invoice h3 {
-         font-size: 1.1em; /* Reduce heading size */
-    }
-     label {
-         padding-left: 5px; /* Reduce label padding */
-         margin-bottom: 4px; /* Reduce space below label */
-     }
-     input[type="number"], select {
-        height: 45px;
-        padding: 8px 15px;
-        font-size: 14px; /* Ensure font size isn't too small */
-     }
-     /* Adjust select padding if arrow was removed */
-     body[data-theme="dark"] select {
-          padding-right: 15px;
-     }
-     select {
-         padding-right: 35px; /* Slightly reduce padding for arrow */
-         background-position: right 10px center; /* Move arrow closer */
-     }
-
-}
-
-@media (max-width: 480px) { /* Small phone */
-     body {
-         padding: 0.5em; /* Further reduce body padding */
-     }
-     header h1 {
-         font-size: 1.1em; /* Further reduce h1 */
-     }
-     #wizard {
-         padding: 10px; /* Further reduce wizard padding */
-     }
-     .wizard-step {
-         padding: 15px; /* Further reduce step padding */
-     }
-     .step-title {
-         font-size: 1.3rem; /* Reduce title size */
-     }
-     .section {
-          padding: 12px; /* Reduce section padding */
-     }
-     input[type="number"], select {
-         height: 42px; /* Slightly shorter inputs */
-         padding: 8px 12px; /* Adjust input padding */
-         font-size: 13px;
-     }
-     /* Adjust select padding if arrow was removed */
-     body[data-theme="dark"] select {
-          padding-right: 12px;
-     }
-     select {
-         padding-right: 30px; /* Further reduce padding for arrow */
-         background-position: right 8px center;
-     }
-     button {
-         height: 40px;
-         font-size: 0.85em; /* Reduce base button font size */
-     }
-     .wizard-nav-btn, #toggleExampleBtn, #startOverBtn, #printEstimate, #addSectionBtn {
-         max-width: 100%; /* Allow full width if needed */
-         padding-left: 15px; /* Reduce button padding */
-         padding-right: 15px;
-     }
-     label {
-         font-size: 0.8em; /* Smaller labels */
-     }
-     small {
-         font-size: 0.75em; /* Smaller small text */
-     }
-     .invoice {
-         padding: 0.8em; /* Further reduce invoice padding */
-     }
-     .summary-table td, .details-table td, .details-table th {
-         padding: 0.4em 0.5em; /* Further reduce cell padding */
-         font-size: 0.85em; /* Further reduce table font size */
-     }
-     .invoice h3 {
-          font-size: 1em; /* Reduce heading size */
-     }
-     .summary-table .total-row td {
-         font-size: 1em; /* Reduce total font size */
-     }
-}
-
-/* Print Styles */
-/* --- FILE: public/style.css (FINAL @media print section) --- */
-
 @media (max-width: 1200px) { /* ... */ }
 @media (max-width: 992px) { /* ... */ }
 
 /* --- Mobile Table and Layout Adjustments --- */
-@media (max-width: 768px) { /* Smaller tablet / large phone */
-    /* ... (Keep body, header, wizard, section, button, input, etc. mobile styles) ... */
+@media (max-width: 768px) {
+    /* ... (Keep body, header, wizard, section, etc. mobile overrides) ... */
     body { padding: 1em; min-width: 320px; }
     header { flex-direction: row; gap: 0.5em; text-align: left; align-items: center; padding-bottom: 0.5em; margin-bottom: 1.5em; }
     header h1 { font-size: 1.2em; margin-right: auto; }
@@ -780,143 +368,67 @@ body[data-theme="dark"] .part h2 {
     #toggleExampleBtn, #startOverBtn, #printEstimate { width: 100%; max-width: 280px; margin-left: auto; margin-right: auto; display: block; }
     button.remove-button { width: 28px; height: 28px; font-size: 1em; line-height: 26px; }
     .invoice { max-width: 100%; padding: 1em; }
-    /* Apply mobile stacking to BOTH details and summary tables if needed */
-    .details-table, .summary-table:not(.total-row td) { /* Exclude total row from summary stacking */
-        border: none; /* Remove table border */
-        box-shadow: none;
-        border-radius: 0;
-        background: none;
-        border-collapse: separate; /* Needed for spacing */
-        border-spacing: 0 0.8em; /* Vertical space between 'rows' */
-        display: block; /* Ensure table itself is block */
-        width: 100%;
-        padding: 0; /* Remove padding from table */
-        margin-bottom: 1em; /* Consistent margin */
+    label { padding-left: 5px; margin-bottom: 4px; }
+    input[type="number"], select { height: 45px; padding: 8px 15px; font-size: 14px; }
+    body[data-theme="dark"] select { padding-right: 15px; } /* Dark mode select padding */
+    select { padding-right: 35px; background-position: right 10px center; }
+
+
+    /* --- RESPONSIVE TABLE STYLES (Stacking with Pseudo-elements) --- */
+     .details-table, .summary-table:not(.total-row td) { /* Exclude total row */
+        border: none; box-shadow: none; border-radius: 0; background: none;
+        border-collapse: separate; border-spacing: 0 0.8em; display: block; width: 100%;
+        padding: 0; margin-bottom: 1em; table-layout: auto !important;
+     }
+     .details-table thead, .summary-table thead { display: none; }
+     .details-table tbody, .summary-table tbody { display: block; width: 100%; }
+     .details-table tr, .summary-table tbody tr {
+       display: block; width: 100% !important; margin-bottom: 0;
+       border-radius: var(--border-radius-input); background: #f8f8f8;
+       box-shadow: var(--shadow-inset); padding: 0.8em 1em; border: none;
+       transition: background-color 0.3s ease, box-shadow 0.3s ease;
     }
-    .details-table thead, .summary-table thead { /* Hiding summary thead if it exists */
-        display: none; /* Hide the header */
+     .details-table td, .summary-table tbody td {
+       display: block; width: 100% !important; text-align: right !important;
+       padding-left: 50%; padding-top: 0.3em; padding-bottom: 0.3em; padding-right: 0;
+       position: relative; border: none; font-size: 0.9em; word-wrap: break-word; min-height: 1.4em;
+       background: none; box-shadow: none;
     }
-    .details-table tbody, .summary-table tbody {
-        display: block; /* Make body block */
-        width: 100%;
-    }
-     .details-table tr, .summary-table tbody tr { /* Target tbody tr for summary */
-       display: block; /* Make rows stack */
-       width: 100% !important;
-       margin-bottom: 0; /* Remove margin from TR, use border-spacing */
-       border-radius: var(--border-radius-input); /* Apply styles to the row */
-       background: #f8f8f8;
-       box-shadow: var(--shadow-inset);
-       padding: 0.8em 1em; /* Padding inside the 'card' */
-       border: none;
-       transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Add theme transition */
-    }
-     .details-table td, .summary-table tbody td { /* Target tbody td for summary */
-       display: block; /* Stack cells */
-       width: 100% !important; /* Full width */
-       text-align: right !important; /* Align cell content right */
-       padding-left: 50%; /* Push content over to make room for label */
-       padding-top: 0.3em;
-       padding-bottom: 0.3em;
-       position: relative; /* Needed for absolute positioning of pseudo-element */
-       border: none; /* Remove cell borders */
-       font-size: 0.9em; /* Adjust font size */
-       word-wrap: break-word;
-       min-height: 1.4em; /* Ensure minimum height for short content */
-    }
-     .details-table td:before, .summary-table .table-label:before { /* Use .table-label for summary table */
-       content: attr(data-label); /* Display the label from data-label */
-       position: absolute;
-       left: 10px; /* Position label on the left */
-       width: calc(50% - 20px); /* Calculate label width */
-       padding-right: 10px; /* Space between label and value */
-       font-weight: bold;
-       text-align: left !important; /* Align label text left */
-       white-space: nowrap; /* Prevent label wrapping */
-       color: #333; /* Darker label color */
+     .details-table td::before, .summary-table .table-label::before {
+       content: attr(data-label); position: absolute; top: 0.3em; left: 10px;
+       width: calc(50% - 20px); padding-right: 10px; font-weight: bold;
+       text-align: left !important; white-space: nowrap; color: #333;
        transition: color 0.3s ease;
     }
-     /* --- Specific Alignment/Styling for certain cells --- */
-    .details-table td[data-label="#"] { /* Section Number */
-        font-size: 1.1em;
-        font-weight: bold;
-        text-align: center !important; /* Center the number */
-        padding-left: 0; /* Remove padding override */
-        margin-bottom: 0.5em; /* Add space below # */
-        border-bottom: 1px dashed #ccc; /* Separator line */
-        padding-bottom: 0.5em;
-        transition: border-color 0.3s ease;
-    }
-     .details-table td[data-label="#"]:before {
-         display: none; /* Hide label for # */
+    .details-table td[data-label="#"] {
+         font-size: 1.1em; font-weight: bold; text-align: center !important;
+         padding-left: 0; margin-bottom: 0.5em; border-bottom: 1px dashed #ccc;
+         padding-bottom: 0.5em; transition: border-color 0.3s ease;
      }
-     .details-table td[data-label="Cost"], .summary-table .table-value {
-         font-weight: bold; /* Make cost/value bold */
-         margin-top: 0.3em;
-     }
-     /* --- Style summary table label cell --- */
-      .summary-table .table-label {
-          display: block;
-          width: 100% !important;
-          text-align: right !important;
-          padding-left: 50%;
-          padding-top: 0.3em;
-          padding-bottom: 0.3em;
-          position: relative;
-          border: none;
-          font-size: 0.9em;
-          min-height: 1.4em;
-          font-weight: normal; /* Reset weight */
-      }
-      .summary-table .table-label:before {
-          content: normal; /* Use text content as label */
-          position: absolute;
-          left: 10px;
-          width: calc(50% - 20px);
-          padding-right: 10px;
-          font-weight: bold;
-          text-align: left !important;
-          white-space: nowrap;
-          color: #333;
-          /* Extract label text from element content if data-label not present */
-          content: ''; /* Clear default */
-      }
-       /* --- Remove pseudo-element styling from value cell in summary --- */
-       .summary-table .table-value {
-           padding-left: 0; /* No label pushing needed */
-       }
-       .summary-table .table-value:before {
-           display: none; /* Hide pseudo-label for value */
-       }
-       /* --- Keep Total Row as standard table layout --- */
-       .summary-table tfoot tr.total-row { display: table-row; background: none; box-shadow: none; padding: 0; }
-       .summary-table tfoot tr.total-row td { display: table-cell; width: auto !important; text-align: right !important; position: static; padding-left: 1em; padding-right: 1em; padding-top: 1em; border: none; border-top: 2px solid #ccc; font-size: 1.2em; font-weight: 900; color: var(--primary-color-style6); }
-       .summary-table tfoot tr.total-row td:before { display: none; } /* Hide label for total */
-       .summary-table tfoot tr.total-row .table-label { text-align: right !important; }
+     .details-table td[data-label="#"]::before { display: none; }
+     .details-table td[data-label="Cost"], .summary-table .table-value { font-weight: bold; margin-top: 0.3em; }
+     .summary-table .table-label { font-weight: normal; } /* Label cell */
+     .summary-table .table-value { padding-left: 50%; } /* Value cell */
+     .summary-table .table-value::before { display: none; } /* Hide label for value cell */
+
+     /* Keep Total Row as standard table layout */
+     .summary-table tfoot tr.total-row { display: table-row; background: none; box-shadow: none; padding: 0; }
+     .summary-table tfoot tr.total-row td { display: table-cell; width: auto !important; text-align: right !important; position: static; padding: 1em 0.6em !important; border: none; border-top: 2px solid #ccc; font-size: 1.1em; font-weight: 900; color: var(--primary-color-style6); transition: border-color 0.3s ease, color 0.3s ease;}
+     .summary-table tfoot tr.total-row td::before { display: none; }
+     .summary-table tfoot tr.total-row .table-label { text-align: right !important; width: auto !important; padding-right: 0.5em; }
 
 
      /* --- DARK THEME MOBILE TABLE --- */
-    body[data-theme="dark"] .details-table tr, body[data-theme="dark"] .summary-table tbody tr {
-         background: #3f3f43;
-         box-shadow: var(--shadow-inset-dark);
-    }
-    body[data-theme="dark"] .details-table td:before, body[data-theme="dark"] .summary-table .table-label:before {
-         color: #ddd; /* Lighter label color */
-    }
-     body[data-theme="dark"] .details-table td[data-label="#"] {
-         border-bottom-color: #555;
-     }
-     body[data-theme="dark"] .summary-table .table-label:before {
-         color: #ddd;
-     }
-      body[data-theme="dark"] .summary-table tfoot tr.total-row td { border-top-color: #666; color: var(--primary-color-style6-dark); }
-
+    body[data-theme="dark"] .details-table tr, body[data-theme="dark"] .summary-table tbody tr { background: #3f3f43; box-shadow: var(--shadow-inset-dark); }
+    body[data-theme="dark"] .details-table td::before, body[data-theme="dark"] .summary-table .table-label::before { color: #ddd; }
+    body[data-theme="dark"] .details-table td[data-label="#"] { border-bottom-color: #555; }
+    body[data-theme="dark"] .summary-table tfoot tr.total-row td { border-top-color: #666; color: var(--primary-color-style6-dark); }
 
 } /* End @media (max-width: 768px) */
 
 
-@media (max-width: 480px) { /* Small phone */
-     /* ... (Keep body, header, wizard, section, etc. mobile styles) ... */
+@media (max-width: 480px) {
+     /* ... (Keep other 480px styles) ... */
      body { padding: 0.5em; }
      header h1 { font-size: 1.1em; }
      #wizard { padding: 10px; }
@@ -931,97 +443,87 @@ body[data-theme="dark"] .part h2 {
      label { font-size: 0.8em; }
      small { font-size: 0.75em; }
      .invoice { padding: 0.8em; }
-     .summary-table td, .details-table td { padding-top: 0.2em; padding-bottom: 0.2em; font-size: 0.85em; } /* Reduce cell padding */
+     .summary-table td, .details-table td { padding-top: 0.2em; padding-bottom: 0.2em; font-size: 0.85em; }
      .invoice h3 { font-size: 1em; }
      .summary-table .total-row td { font-size: 1em; }
-
      /* Further refine mobile table */
-     .details-table, .summary-table {
-         border-spacing: 0 0.6em; /* Reduce space between rows */
-     }
-     .details-table tr, .summary-table tbody tr {
-         padding: 0.6em 0.8em; /* Adjust padding */
-     }
-     .details-table td, .summary-table tbody td {
-         font-size: 0.85em; /* Adjust font size */
-         padding-left: 45%; /* Adjust content position */
-     }
-     .details-table td:before, .summary-table .table-label:before {
-         width: calc(45% - 15px); /* Adjust label width */
-         left: 8px; /* Adjust label position */
-     }
-     .details-table td[data-label="#"] {
-          padding-bottom: 0.4em;
-          margin-bottom: 0.4em;
-     }
-      .summary-table .table-label {
-          padding-left: 45%;
-      }
-
+     .details-table, .summary-table { border-spacing: 0 0.6em; }
+     .details-table tr, .summary-table tbody tr { padding: 0.6em 0.8em; }
+     .details-table td, .summary-table tbody td { font-size: 0.85em; padding-left: 45%; }
+     .details-table td::before, .summary-table .table-label::before { width: calc(45% - 15px); left: 8px; }
+     .details-table td[data-label="#"] { padding-bottom: 0.4em; margin-bottom: 0.4em; }
+     .summary-table .table-label { padding-left: 45%; }
+     .summary-table .table-value { padding-left: 45%; }
+     .summary-table tfoot tr.total-row td { padding: 0.8em 0.5em !important; font-size: 1em; } /* Adjust total padding */
 }
 
 /* Print Styles */
 /* --- PASTE YOUR WORKING PRINT STYLES HERE --- */
-/* --- Ensure they start with @media print { and end with } --- */
 @media print {
-    /* Basic page setup */
     @page { size: A4; margin: 1cm; }
     body { background: white !important; color: black !important; margin: 0 !important; padding: 0 !important; font-family: Arial, sans-serif !important; font-size: 10pt !important; line-height: 1.3; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; height: auto !important; width: auto !important; overflow: visible !important; }
-    /* Hide unwanted */
     header, #wizard .step-navigation, #wizard .step-indicator, #exampleImageContainer, #addSectionBtn, #calculateBtn, .remove-button, #formActions, #printButtonContainer, #startOverBtn, #themeToggleBtn, small { display: none !important; visibility: hidden !important; }
-    /* Override Wizard */
     #wizard { display: block !important; visibility: visible !important; overflow: visible !important; position: static !important; box-shadow: none !important; border: none !important; background: none !important; min-height: auto !important; height: auto !important; width: auto !important; margin: 0 !important; padding: 0 !important; }
-    /* Hide steps */
      .wizard-step { display: none !important; visibility: hidden !important; }
-    /* Override Step-4 */
     #step-4 { display: block !important; visibility: visible !important; overflow: visible !important; position: static !important; opacity: 1 !important; transform: none !important; padding: 0 !important; margin: 0 !important; background: none !important; width: auto !important; height: auto !important; }
-    /* Results */
     #results { display: block !important; visibility: visible !important; margin: 0; padding: 0; border: none; width: 100%; overflow: visible !important; }
-    /* Invoice container */
     .invoice { visibility: visible !important; display: block !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; border: none !important; box-shadow: none !important; background: white !important; color: black !important; border-radius: 0 !important; font-size: 10pt !important; position: static !important; overflow: visible !important; }
     .invoice > * { visibility: visible !important; }
-    /* Invoice Header */
     .invoice-header { text-align: center; border-bottom: 2px solid black !important; padding-bottom: 0.8em !important; margin-bottom: 1.5em !important; color: black !important; }
     .invoice-header img.invoice-logo { display: block !important; max-height: 60px; margin: 0 auto 0.5em auto;}
     .invoice-header h1 { font-size: 16pt !important; font-weight: bold !important; color: black !important; margin-bottom: 0.1em !important; }
     .invoice-header p { font-size: 9pt !important; color: black !important; margin: 0.2em 0 !important; }
-    /* Section Titles */
     .invoice h3 { font-size: 12pt !important; font-weight: bold !important; color: black !important; margin-top: 1.2em !important; margin-bottom: 0.6em !important; border-bottom: 1px solid #666 !important; padding-bottom: 0.2em !important; text-align: left !important; page-break-after: avoid !important; }
     .invoice h3:first-of-type { margin-top: 0 !important; }
-    /* Table Styling (Must target original structure) */
+
+    /* --- PRINT TABLE CELL & PSEUDO-ELEMENT RESET --- */
+    .invoice table td,
+    .invoice table th { /* Apply base print cell styles FIRST */
+        display: table-cell !important; visibility: visible !important;
+        border: 1px solid #ccc !important; padding: 5px 8px !important; /* Standard print padding */
+        text-align: left !important; /* Default left align */
+        vertical-align: top !important; color: black !important; background: white !important;
+        box-shadow: none !important; word-wrap: break-word; position: static !important;
+    }
+    .invoice table td::before, .invoice table th::before { /* Hide ALL ::before */
+        content: none !important; display: none !important; padding: 0 !important;
+        margin: 0 !important; position: static !important; width: auto !important; left: auto !important;
+    }
+    /* --- END NEW PRINT RESET --- */
+
+    /* --- Print Table Layout & Alignment (Keep these specific rules) --- */
     .invoice table { display: table !important; width: 100% !important; border-collapse: collapse !important; margin-bottom: 1.5em !important; font-size: 9pt !important; border-spacing: 0 !important; page-break-inside: auto; table-layout: fixed !important; }
-    .invoice table thead { display: table-header-group !important; } /* Ensure thead displays */
-    .invoice table tbody { display: table-row-group !important; } /* Ensure tbody displays */
-    .invoice table tr { display: table-row !important; page-break-inside: avoid !important; } /* Ensure tr displays */
-    .invoice table th, .invoice table td { display: table-cell !important; visibility: visible !important; border: 1px solid #ccc !important; padding: 5px 8px !important; text-align: left !important; vertical-align: top !important; color: black !important; background: white !important; box-shadow: none !important; word-wrap: break-word; }
-    .invoice thead th { background-color: #eee !important; font-weight: bold !important; border-bottom: 1px solid #999 !important; color: black !important; page-break-inside: avoid !important; }
-    /* Assign widths for print columns - TARGET TD VIA data-label */
-      .invoice .details-table th:nth-child(1), .invoice .details-table td[data-label="#"] { width: 6%; text-align: center !important;} /* # */
-      .invoice .details-table th:nth-child(2), .invoice .details-table td[data-label="Door Style"] { width: 18%; } /* Door */
-      .invoice .details-table th:nth-child(3), .invoice .details-table td[data-label="Drawer Style"] { width: 18%; } /* Drawer */
-      .invoice .details-table th:nth-child(4), .invoice .details-table td[data-label="Finish"] { width: 15%; text-align: center !important;} /* Finish */
-      .invoice .details-table th:nth-child(5), .invoice .details-table td[data-label="HxW (in)"] { width: 15%; text-align: center !important;} /* HxW */
-      .invoice .details-table th:nth-child(6), .invoice .details-table td[data-label="Area (sqft)"] { width: 13%; text-align: center !important;} /* Area */
-      .invoice .details-table th:nth-child(7), .invoice .details-table td[data-label="Cost"] { width: 15%; text-align: right !important; font-weight: 600 !important;} /* Cost */
+    .invoice table thead { display: table-header-group !important; }
+    .invoice table tbody { display: table-row-group !important; }
+    .invoice table tr { display: table-row !important; page-break-inside: avoid !important; }
+    .invoice thead th { background-color: #eee !important; font-weight: bold !important; border-bottom: 1px solid #999 !important; }
+
+    /* Assign widths & alignment for print columns - TARGET TD VIA NTH-CHILD or DATA-LABEL */
+      .invoice .details-table th:nth-child(1), .invoice .details-table td:nth-child(1) { width: 6%; text-align: center !important;} /* # */
+      .invoice .details-table th:nth-child(2), .invoice .details-table td:nth-child(2) { width: 18%; text-align: left !important;} /* Door */
+      .invoice .details-table th:nth-child(3), .invoice .details-table td:nth-child(3) { width: 18%; text-align: left !important;} /* Drawer */
+      .invoice .details-table th:nth-child(4), .invoice .details-table td:nth-child(4) { width: 15%; text-align: center !important;} /* Finish */
+      .invoice .details-table th:nth-child(5), .invoice .details-table td:nth-child(5) { width: 15%; text-align: center !important;} /* HxW */
+      .invoice .details-table th:nth-child(6), .invoice .details-table td:nth-child(6) { width: 13%; text-align: center !important;} /* Area */
+      .invoice .details-table th:nth-child(7), .invoice .details-table td:nth-child(7) { width: 15%; text-align: right !important; font-weight: 600 !important;} /* Cost */
+
     /* Summary Table */
     .invoice .summary-table { display: table !important; }
     .invoice .summary-table tbody { display: table-row-group !important; }
     .invoice .summary-table tr { display: table-row !important; }
     .invoice .summary-table td { display: table-cell !important; }
-    .invoice .summary-table .table-label { font-weight: normal !important; width: 70%; border-right: none !important; }
-    .invoice .summary-table .table-label:before { display: none !important; } /* Hide pseudo label for summary */
+    .invoice .summary-table .table-label { font-weight: normal !important; width: 70%; border-right: none !important; text-align: left !important; }
     .invoice .summary-table .table-value { border-left: none !important; text-align: right !important; font-weight: normal !important; }
-    .invoice .summary-table .table-value:before { display: none !important; } /* Hide pseudo label for summary value */
     /* Totals Row */
     .invoice tfoot { border-top: none !important; display: table-footer-group !important;}
     .invoice .summary-table tfoot tr { page-break-inside: avoid !important; display: table-row !important; }
     .invoice .total-row { background-color: white !important; border-top: 2px solid black !important; }
     .invoice .total-row td { font-weight: bold !important; font-size: 11pt !important; border: none !important; border-top: 2px solid black !important; padding: 6px 8px !important; color: black !important; display: table-cell !important; }
-    .invoice .total-row td:before { display: none !important; } /* Hide pseudo label for total row */
     .invoice .total-row .table-label { text-align: right !important; width: auto !important; padding-right: 1em; }
     .invoice .total-row .table-value { text-align: right !important; }
     /* Footer */
     .estimate-footer { text-align: center !important; margin-top: 2em !important; padding-top: 1em !important; border-top: 1px solid #ccc !important; font-size: 8pt !important; color: #333 !important; page-break-before: auto; }
     /* Errors */
      .invoice-error { display: none !important; }
-}
+
+} /* End of @media print */
