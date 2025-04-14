@@ -7,7 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <!-- Link the external stylesheet -->
     <link rel="stylesheet" href="style.css">
     <!-- Add favicon links (optional but good practice) -->
     <!-- <link rel="icon" href="/assets/favicon.ico" sizes="any"> -->
@@ -15,10 +14,8 @@
 </head>
 <body>
     <header>
-        <!-- Update image path to use assets folder -->
         <img src="assets/logo.png" alt="nuDoors Logo">
         <h1>DIY Door Estimator</h1>
-        <!-- Add Theme Toggle Button -->
         <button type="button" id="themeToggleBtn" title="Toggle Theme">☀️</button>
     </header>
 
@@ -30,28 +27,19 @@
             <div class="step-indicator">Step 1 of 3</div>
             <h2 class="step-title">Measure Sections</h2>
             <p class="step-instructions">
-                First, Separate your project into sections (see example). 
-				Then, enter those dimensions, your desired styles, and
-				desired finish for each. Press "+ Add Section" for each 
-				additional section.
-				
-				Tip: Start from the top left, and 
-				working your wait to the bottom right!
+                Separate your project into sections (see example). Enter dimensions, styles, and finish for each. Use "+ Add Section" for more.
             </p>
             <div id="exampleImageContainer">
                 <button type="button" id="toggleExampleBtn">Show Example Image</button>
-                 <!-- Update image path -->
-                <div id="exampleImage" style="display: none;"> <img src="assets/examplebreakdown.png" alt="Example Breakdown"> </div>
+                 <div id="exampleImage" style="display: none;"> <img src="assets/examplebreakdown.png" alt="Example Breakdown"> </div>
             </div>
-            <!-- Removed form tag here - will gather data directly from divs -->
             <div id="roughEstimateContainer">
-                <!-- Sections will be dynamically added here by script.js -->
                 <div id="sectionsContainer"></div>
                 <button type="button" id="addSectionBtn">+ Add Section</button>
             </div>
             <div class="step-navigation">
                 <button type="button" class="wizard-nav-btn prev" disabled>Previous</button>
-                <button type="button" class="wizard-nav-btn next">Next</button>
+                <button type="button" class="wizard-nav-btn next">Next</button> <!-- Simplified -->
             </div>
         </div>
 
@@ -62,26 +50,21 @@
             <p class="step-instructions">
                 Enter the TOTAL number of Drawers, Doors (by height), and Lazy Susans for the whole project.
             </p>
-            <!-- Removed form tag -->
-            <div class="part" id="hingeDrilling"> <!-- Keep .part class for styling -->
+            <div class="part" id="hingeDrilling">
                 <label for="numDrawers">Number of Drawers (Total):</label>
                 <input type="number" id="numDrawers" name="numDrawers" value="0" min="0" step="1" inputmode="numeric" />
-
                 <label for="doors_0_36">Doors 0" - 36" (Total Height):</label>
                 <input type="number" id="doors_0_36" name="doors_0_36" value="0" min="0" step="1" inputmode="numeric" />
-
                 <label for="doors_36_60">Doors 36.01" - 60" (Total Height):</label>
                 <input type="number" id="doors_36_60" name="doors_36_60" value="0" min="0" step="1" inputmode="numeric" />
-
                 <label for="doors_60_82">Doors 60.01" - 82" (Total Height):</label>
                 <input type="number" id="doors_60_82" name="doors_60_82" value="0" min="0" step="1" inputmode="numeric" />
-
                 <label for="lazySusanQty">Number of Lazy Susans (Total):</label>
                 <input type="number" id="lazySusanQty" name="lazySusanQty" value="0" min="0" step="1" inputmode="numeric" />
             </div>
             <div class="step-navigation">
-                <button type="button" class="wizard-nav-btn prev">Previous: Sections</button>
-                <<button type="button" class="wizard-nav-btn next">Next</button>
+                <button type="button" class="wizard-nav-btn prev">Previous</button> <!-- Simplified -->
+                <button type="button" class="wizard-nav-btn next">Next</button> <!-- Simplified -->
             </div>
         </div>
 
@@ -92,44 +75,41 @@
             <p class="step-instructions">
                 Need custom paint matching? Enter the number of custom colors below.
             </p>
-            <!-- Removed form tag -->
-            <div class="part" id="specialFeatures"> <!-- Keep .part class for styling -->
+            <div class="part" id="specialFeatures">
                 <label for="customPaintQty">Custom Paint Quantity:</label>
                 <input type="number" id="customPaintQty" name="customPaintQty" value="0" min="0" step="1" inputmode="numeric" />
                 <small>Enter '1' or more for custom paint ($200 fee per color).</small>
             </div>
-            <div id="formActions"> <!-- Wrapper for calculate button -->
+            <div id="formActions">
                 <button type="button" id="calculateBtn">Calculate Estimate</button>
             </div>
             <div class="step-navigation">
-                <button type="button" class="wizard-nav-btn prev">Previous</button>
-                <!-- Keep next button disabled as it's the final input step -->
+                <button type="button" class="wizard-nav-btn prev">Previous</button> <!-- Simplified -->
                 <button type="button" class="wizard-nav-btn next" disabled>Next</button>
             </div>
         </div>
 
         <!-- Step 4: Results -->
         <div class="wizard-step" id="step-4">
-            <!-- Results will be injected here by script.js -->
             <div id="results">
-                <!-- Placeholder structure while loading -->
                  <div class="invoice-loading">
                      <p>Calculating your estimate...</p>
                  </div>
             </div>
-            <!-- Print button container -->
+            <!-- Print/Save button container -->
             <div id="printButtonContainer" style="display: none;">
                 <button type="button" id="printEstimate">Print Estimate</button>
+                <button type="button" id="saveEstimatePdf">Save as PDF</button> <!-- Added Save Button -->
+                <p class="print-instructions"><small>Tip: To save as PDF, choose "Save as PDF" as the Destination/Printer in the print dialog.</small></p>
             </div>
-            <!-- Start Over button now inside its own nav-like container -->
-            <div class="step-navigation" style="justify-content: center;"> <!-- Center single button -->
+            <!-- Start Over button -->
+            <div class="step-navigation" style="justify-content: center;">
                 <button type="button" id="startOverBtn" class="wizard-nav-btn prev">Start Over</button>
             </div>
         </div>
 
     </div> <!-- End Wizard -->
 
-    <!-- Link the script at the end of the body -->
     <script src="script.js"></script>
 </body>
 </html>
