@@ -140,24 +140,83 @@ async function printViaIframe() {
     if (!invoiceElement) { console.error("Cannot print via iframe: Invoice element not found."); alert("Error: Could not find estimate content."); return; }
     const printFrame = document.createElement('iframe');
     printFrame.style.position = 'absolute'; printFrame.style.width = '0'; printFrame.style.height = '0'; printFrame.style.border = '0'; printFrame.style.visibility = 'hidden'; printFrame.setAttribute('aria-hidden', 'true');
+    printFrame.setAttribute('srcdoc', `<!DOCTYPE html><html><head><title>-</title></head><body></body></html>`); // Initial empty srcdoc for onload event
+
     document.body.appendChild(printFrame);
-    try {
-        const frameDoc = printFrame.contentWindow.document;
-        frameDoc.open();
-        frameDoc.write(`<!DOCTYPE html><html><head><title>Print Estimate - nuDoors</title><style>
-/* --- EMBEDDED PRINT STYLES --- */
-@media print { @page{size:A4;margin:1cm}body{background:#fff!important;color:#000!important;margin:0!important;padding:0!important;font-family:Arial,sans-serif!important;font-size:10pt!important;line-height:1.3;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;height:auto!important;width:auto!important;overflow:visible!important}header,#wizard .step-navigation,#wizard .step-indicator,#exampleImageContainer,#addSectionBtn,#calculateBtn,.remove-button,#formActions,#printButtonContainer,#startOverBtn,#themeToggleBtn,small,.print-instructions,#saveEstimatePdf /*Added*/{display:none!important;visibility:hidden!important}#wizard{display:block!important;visibility:visible!important;overflow:visible!important;position:static!important;box-shadow:none!important;border:none!important;background:0 0!important;min-height:auto!important;height:auto!important;width:auto!important;margin:0!important;padding:0!important}.wizard-step{display:none!important;visibility:hidden!important}#step-4{display:block!important;visibility:visible!important;overflow:visible!important;position:static!important;opacity:1!important;transform:none!important;padding:0!important;margin:0!important;background:0 0!important;width:auto!important;height:auto!important}#results{display:block!important;visibility:visible!important;margin:0;padding:0;border:none;width:100%;overflow:visible!important}.invoice{visibility:visible!important;display:block!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;border:none!important;box-shadow:none!important;background:#fff!important;color:#000!important;border-radius:0!important;font-size:10pt!important;position:static!important;overflow:visible!important}.invoice>*{visibility:visible!important}.invoice-header{text-align:center;border-bottom:2px solid #000!important;padding-bottom:.8em!important;margin-bottom:1.5em!important;color:#000!important}.invoice-header img.invoice-logo{display:block!important;max-height:60px;margin:0 auto .5em;filter:grayscale(100%)}.invoice-header h1{font-size:16pt!important;font-weight:700!important;color:#000!important;margin-bottom:.1em!important}.invoice-header p{font-size:9pt!important;color:#000!important;margin:.2em 0!important}.invoice h3{font-size:12pt!important;font-weight:700!important;color:#000!important;margin-top:1.2em!important;margin-bottom:.6em!important;border-bottom:1px solid #666!important;padding-bottom:.2em!important;text-align:left!important;page-break-after:avoid!important}.invoice h3:first-of-type{margin-top:0!important}.invoice table td,.invoice table th{display:table-cell!important;visibility:visible!important;border:1px solid #ccc!important;padding:5px 8px!important;text-align:left!important;vertical-align:top!important;color:#000!important;background:#fff!important;box-shadow:none!important;word-wrap:break-word;position:static!important}.invoice table td::before,.invoice table th::before{content:none!important;display:none!important;padding:0!important;margin:0!important;position:static!important;width:auto!important;left:auto!important}.invoice table{display:table!important;width:100%!important;border-collapse:collapse!important;margin-bottom:1.5em!important;font-size:9pt!important;border-spacing:0!important;page-break-inside:auto;table-layout:fixed!important}.invoice table thead{display:table-header-group!important}.invoice table tbody{display:table-row-group!important}.invoice table tr{display:table-row!important;page-break-inside:avoid!important}.invoice thead th{background-color:#eee!important;font-weight:700!important;border-bottom:1px solid #999!important;color:#000!important;page-break-inside:avoid!important}.invoice .details-table th:nth-child(1),.invoice .details-table td:nth-child(1){width:6%;text-align:center!important}.invoice .details-table th:nth-child(2),.invoice .details-table td:nth-child(2){width:18%;text-align:left!important}.invoice .details-table th:nth-child(3),.invoice .details-table td:nth-child(3){width:18%;text-align:left!important}.invoice .details-table th:nth-child(4),.invoice .details-table td:nth-child(4){width:15%;text-align:center!important}.invoice .details-table th:nth-child(5),.invoice .details-table td:nth-child(5){width:15%;text-align:center!important}.invoice .details-table th:nth-child(6),.invoice .details-table td:nth-child(6){width:13%;text-align:center!important}.invoice .details-table th:nth-child(7),.invoice .details-table td:nth-child(7){width:15%;text-align:right!important;font-weight:600!important}.invoice .summary-table{display:table!important}.invoice .summary-table tbody{display:table-row-group!important}.invoice .summary-table tr{display:table-row!important}.invoice .summary-table td{display:table-cell!important}.invoice .summary-table .table-label{font-weight:400!important;width:70%;border-right:none!important;text-align:left!important}.invoice .summary-table .table-label:before{display:none!important}.invoice .summary-table .table-value{border-left:none!important;text-align:right!important;font-weight:400!important}.invoice .summary-table .table-value:before{display:none!important}.invoice tfoot{border-top:none!important;display:table-footer-group!important}.invoice .summary-table tfoot tr{page-break-inside:avoid!important;display:table-row!important}.invoice .total-row{background-color:#fff!important;border-top:2px solid #000!important}.invoice .total-row td{font-weight:700!important;font-size:11pt!important;border:none!important;border-top:2px solid #000!important;padding:6px 8px!important;color:#000!important;display:table-cell!important}.invoice .total-row td:before{display:none!important}.invoice .total-row .table-label{text-align:right!important;width:auto!important;padding-right:1em}.invoice .total-row .table-value{text-align:right!important}.estimate-footer{text-align:center!important;margin-top:2em!important;padding-top:1em!important;border-top:1px solid #ccc!important;font-size:8pt!important;color:#333!important;page-break-before:auto}.invoice-error{display:none!important}}
+
+    // --- Wait for iframe to load its initial empty document ---
+    printFrame.onload = () => {
+        console.log("[Client UF] iframe initial load complete. Writing content...");
+        try {
+            const frameDoc = printFrame.contentWindow.document;
+            frameDoc.open();
+            frameDoc.write(`<!DOCTYPE html>
+            <html>
+            <head>
+                <title>Print Estimate - nuDoors</title>
+                <style>
+                    /* --- EMBEDDED PRINT STYLES --- */
+                    @media print { @page{size:A4;margin:1cm}body{background:#fff!important;color:#000!important;margin:0!important;padding:0!important;font-family:Arial,sans-serif!important;font-size:10pt!important;line-height:1.3;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;height:auto!important;width:auto!important;overflow:visible!important}header,#wizard .step-navigation,#wizard .step-indicator,#exampleImageContainer,#addSectionBtn,#calculateBtn,.remove-button,#formActions,#printButtonContainer,#startOverBtn,#themeToggleBtn,small,.print-instructions,#saveEstimatePdf{display:none!important;visibility:hidden!important}#wizard{display:block!important;visibility:visible!important;overflow:visible!important;position:static!important;box-shadow:none!important;border:none!important;background:0 0!important;min-height:auto!important;height:auto!important;width:auto!important;margin:0!important;padding:0!important}.wizard-step{display:none!important;visibility:hidden!important}#step-4{display:block!important;visibility:visible!important;overflow:visible!important;position:static!important;opacity:1!important;transform:none!important;padding:0!important;margin:0!important;background:0 0!important;width:auto!important;height:auto!important}#results{display:block!important;visibility:visible!important;margin:0;padding:0;border:none;width:100%;overflow:visible!important}.invoice{visibility:visible!important;display:block!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;border:none!important;box-shadow:none!important;background:#fff!important;color:#000!important;border-radius:0!important;font-size:10pt!important;position:static!important;overflow:visible!important}.invoice>*{visibility:visible!important}.invoice-header{text-align:center;border-bottom:2px solid #000!important;padding-bottom:.8em!important;margin-bottom:1.5em!important;color:#000!important}.invoice-header img.invoice-logo{display:block!important;max-height:60px;margin:0 auto .5em;filter:grayscale(100%)}.invoice-header h1{font-size:16pt!important;font-weight:700!important;color:#000!important;margin-bottom:.1em!important}.invoice-header p{font-size:9pt!important;color:#000!important;margin:.2em 0!important}.invoice h3{font-size:12pt!important;font-weight:700!important;color:#000!important;margin-top:1.2em!important;margin-bottom:.6em!important;border-bottom:1px solid #666!important;padding-bottom:.2em!important;text-align:left!important;page-break-after:avoid!important}.invoice h3:first-of-type{margin-top:0!important}.invoice table td,.invoice table th{display:table-cell!important;visibility:visible!important;border:1px solid #ccc!important;padding:5px 8px!important;text-align:left!important;vertical-align:top!important;color:#000!important;background:#fff!important;box-shadow:none!important;word-wrap:break-word;position:static!important}.invoice table td::before,.invoice table th::before{content:none!important;display:none!important;padding:0!important;margin:0!important;position:static!important;width:auto!important;left:auto!important}.invoice table{display:table!important;width:100%!important;border-collapse:collapse!important;margin-bottom:1.5em!important;font-size:9pt!important;border-spacing:0!important;page-break-inside:auto;table-layout:fixed!important}.invoice table thead{display:table-header-group!important}.invoice table tbody{display:table-row-group!important}.invoice table tr{display:table-row!important;page-break-inside:avoid!important}.invoice thead th{background-color:#eee!important;font-weight:700!important;border-bottom:1px solid #999!important;color:#000!important;page-break-inside:avoid!important}.invoice .details-table th:nth-child(1),.invoice .details-table td:nth-child(1){width:6%;text-align:center!important}.invoice .details-table th:nth-child(2),.invoice .details-table td:nth-child(2){width:18%;text-align:left!important}.invoice .details-table th:nth-child(3),.invoice .details-table td:nth-child(3){width:18%;text-align:left!important}.invoice .details-table th:nth-child(4),.invoice .details-table td:nth-child(4){width:15%;text-align:center!important}.invoice .details-table th:nth-child(5),.invoice .details-table td:nth-child(5){width:15%;text-align:center!important}.invoice .details-table th:nth-child(6),.invoice .details-table td:nth-child(6){width:13%;text-align:center!important}.invoice .details-table th:nth-child(7),.invoice .details-table td:nth-child(7){width:15%;text-align:right!important;font-weight:600!important}.invoice .summary-table{display:table!important}.invoice .summary-table tbody{display:table-row-group!important}.invoice .summary-table tr{display:table-row!important}.invoice .summary-table td{display:table-cell!important}.invoice .summary-table .table-label{font-weight:400!important;width:70%;border-right:none!important;text-align:left!important}.invoice .summary-table .table-label:before{display:none!important}.invoice .summary-table .table-value{border-left:none!important;text-align:right!important;font-weight:400!important}.invoice .summary-table .table-value:before{display:none!important}.invoice tfoot{border-top:none!important;display:table-footer-group!important}.invoice .summary-table tfoot tr{page-break-inside:avoid!important;display:table-row!important}.invoice .total-row{background-color:#fff!important;border-top:2px solid #000!important}.invoice .total-row td{font-weight:700!important;font-size:11pt!important;border:none!important;border-top:2px solid #000!important;padding:6px 8px!important;color:#000!important;display:table-cell!important}.invoice .total-row td:before{display:none!important}.invoice .total-row .table-label{text-align:right!important;width:auto!important;padding-right:1em}.invoice .total-row .table-value{text-align:right!important}.estimate-footer{text-align:center!important;margin-top:2em!important;padding-top:1em!important;border-top:1px solid #ccc!important;font-size:8pt!important;color:#333!important;page-break-before:auto}.invoice-error{display:none!important}}
 /* Minimal Base Styles */ body{font-family:Arial,sans-serif;font-size:10pt;line-height:1.3;color:#000}h1,h3{margin:1em 0 .5em;padding:0}p{margin:0 0 .5em;padding:0}table{border-collapse:collapse;width:100%;margin-bottom:1em;font-size:9pt}th,td{border:1px solid #ccc;padding:5px 8px;text-align:left;vertical-align:top}th{background-color:#eee;font-weight:700}tfoot{font-weight:700}.total-row td{border-top:2px solid #000;font-size:11pt}.invoice{margin:0;padding:0}
-            </style></head><body>${invoiceElement.outerHTML}</body></html>`);
-        frameDoc.close();
-        setTimeout(() => { try { printFrame.contentWindow.focus(); printFrame.contentWindow.print(); console.log('[Client UF] iframe print issued.'); } catch(printError) { console.error('[Client UF] Error printing iframe:', printError); alert("Error trying to print."); } finally { setTimeout(() => { if (printFrame.parentNode) { document.body.removeChild(printFrame); console.log('[Client UF] iframe removed.'); } }, 500); } }, 250);
-    } catch (error) { console.error('[Client UF] Error creating iframe:', error); alert("Error preparing print view."); if (printFrame && printFrame.parentNode) { document.body.removeChild(printFrame); } }
+                </style>
+            </head>
+            <body>${invoiceElement.outerHTML}</body>
+            </html>`);
+            frameDoc.close();
+
+            // Use setTimeout to ensure content is rendered before printing
+            setTimeout(() => {
+                try {
+                    // Double check frame is still valid before printing
+                    if (printFrame.contentWindow && printFrame.contentWindow.document.body.innerHTML.length > 0) {
+                        console.log('[Client UF] iframe content seems ready, focusing and printing...');
+                        printFrame.contentWindow.focus(); // Focus is important for some browsers
+                        printFrame.contentWindow.print();
+                        console.log('[Client UF] iframe print command issued.');
+                    } else {
+                         console.error('[Client UF] iframe content failed to load or is empty before print.');
+                         alert("Error preparing print view. Please try again.");
+                    }
+                } catch(printError) {
+                     console.error('[Client UF] Error calling print on iframe:', printError);
+                      alert("An error occurred trying to print.");
+                      // Optional: Fallback to window.print() on iframe print error?
+                      // console.log('[Client UF] Falling back to window.print() after iframe error.');
+                      // window.print();
+                } finally {
+                     setTimeout(() => { // Delay removal
+                         if (printFrame.parentNode === document.body) { // Check parent before removal
+                             document.body.removeChild(printFrame);
+                             console.log('[Client UF] iframe removed.');
+                         }
+                     }, 1000); // Slightly longer delay for removal
+                }
+            }, 350); // Increased delay before calling print on iframe (try 350ms)
+
+        } catch (error) {
+            console.error('[Client UF] Error creating print iframe:', error);
+            alert("An error occurred preparing the print view.");
+            if (printFrame && printFrame.parentNode === document.body) { // Check parent before removal
+                 document.body.removeChild(printFrame);
+            }
+        }
+    }; // End of onload handler
+
+    // Error handling for iframe load itself
+    printFrame.onerror = (err) => {
+        console.error("[Client UF] iframe onerror triggered:", err);
+        alert("Failed to load print content. Please try again.");
+         if (printFrame.parentNode === document.body) {
+             document.body.removeChild(printFrame);
+         }
+    };
 }
+
 
 /** Handles print request, trying execCommand first, then iframe */
 function handlePrintRequest() {
     console.log('[Client UF] Print button clicked. Preparing print...');
-    // No internal details to toggle class for in UF version
+    // No internal details toggle needed for UF version
     let printedViaExec = false;
     try {
         console.log("[Client UF] Trying document.execCommand('print')...");
@@ -171,7 +230,8 @@ function handlePrintRequest() {
     }
 }
 
-/** Set up wizard navigation and button listeners */
+// --- Keep the rest of the functions (initializeWizard, main, etc.) as they were in the previous correct version ---
+/** Set up wizard navigation and general button listeners */
 function initializeWizard() {
     console.log('[Client UF] Initializing wizard UI...');
     const printBtnActual = document.getElementById('printEstimate'); // Get Print button
