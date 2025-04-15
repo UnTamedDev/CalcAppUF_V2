@@ -1,4 +1,4 @@
-/* --- FILE: public/style.css --- */
+/* --- FILE: public/style.css (UF VERSION - Corrected Theme Scope) --- */
 
 /* Reset and Base Styles Inspired by Style6.css */
 * {
@@ -285,48 +285,17 @@ button.remove-button:active:not(:disabled) { filter: brightness(0.9); box-shadow
 
 /* Footer & Other */
 .estimate-footer { text-align: center; margin-top: 2em; font-size: 0.85em; color: #777; transition: color 0.3s ease;}
-#printButtonContainer {
-    margin-top: 1.5em;
-    text-align: center;
-    display: none; /* Hidden by default */
-    padding: 0 1em; /* Add padding for spacing */
-}
-#printButtonContainer button { /* Style both buttons */
-    padding: 0.8em 1.5em;
-    font-size: 1em;
-    width: auto;
-    margin: 0.5em; /* Add margin between buttons */
-    display: inline-block; /* Allow side-by-side */
-}
-
-
-/* Print instructions text */
-.print-instructions {
-    font-size: 0.8em;
-    color: var(--text-color-light-style6);
-    margin-top: 0.8em;
-    transition: color 0.3s ease;
-}
-@media print {
-    /* Add #saveEstimatePdf and .print-instructions to the list of hidden elements */
-    header, #wizard .step-navigation, #wizard .step-indicator, #exampleImageContainer, #addSectionBtn, #calculateBtn, .remove-button, #formActions, #printButtonContainer, #startOverBtn, #themeToggleBtn, small, #saveEstimatePdf, .print-instructions {
-        display: none !important;
-        visibility: hidden !important;
-    }
-    /* ... rest of print styles ... */
-}
-body[data-theme="dark"] .print-instructions {
-     color: var(--text-color-light-style6-dark);
-}
-
-#printEstimate { padding: 0.8em 1.5em; font-size: 1em; width: auto; }
+#printButtonContainer { margin-top: 1.5em; text-align: center; display: none; padding: 0 1em; }
+#printButtonContainer button { padding: 0.8em 1.5em; font-size: 1em; width: auto; margin: 0.5em; display: inline-block; }
+.print-instructions { font-size: 0.8em; color: var(--text-color-light-style6); margin-top: 0.8em; transition: color 0.3s ease; }
+#printEstimate { padding: 0.8em 1.5em; font-size: 1em; width: auto; } /* Kept specific style */
 small { display: block; font-size: 0.85em; color: #888; margin-top: 5px; margin-left: 5px; line-height: 1.3; text-align: left; transition: color 0.3s ease;}
 .invoice-error { padding: 1em; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; margin: 1em auto; max-width: 95%; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;}
 .invoice-error p { margin: 0.2em 0; }
 .invoice-loading { text-align:center; padding: 2em; color: var(--text-color-light-style6); font-style: italic; transition: color 0.3s ease; }
 
 
-/* --- Dark Theme Application --- RESTORED FULL RULES */
+/* --- Dark Theme Application --- */
 body[data-theme="dark"] {
     --bg-color-main: var(--bg-color-main-dark);
     --bg-color-forms: var(--bg-color-forms-dark);
@@ -339,6 +308,7 @@ body[data-theme="dark"] {
     --primary-color-style6: var(--primary-color-style6-dark);
     --secondary-color-style6: var(--secondary-color-style6-dark);
 }
+/* Specific element overrides for dark theme */
 body[data-theme="dark"] header { border-bottom-color: #444; }
 body[data-theme="dark"] #themeToggleBtn { background: #4a5a6a; color: #ddd; box-shadow: var(--shadow-convex-outer-dark); }
 body[data-theme="dark"] #wizard { background-color: var(--bg-color-forms-dark); box-shadow: var(--shadow-convex-outer-dark); }
@@ -378,6 +348,7 @@ body[data-theme="dark"] .estimate-footer { color: #aaa; }
 body[data-theme="dark"] small { color: #999; }
 body[data-theme="dark"] .invoice-error { background-color: #582a2e; color: #f5c6cb; border-color: #a04a4e; }
 body[data-theme="dark"] .invoice-loading { color: var(--text-color-light-style6-dark); }
+body[data-theme="dark"] .print-instructions { color: var(--text-color-light-style6-dark); }
 
 
 /* Responsive */
@@ -408,7 +379,7 @@ body[data-theme="dark"] .invoice-loading { color: var(--text-color-light-style6-
 
 
     /* --- RESPONSIVE TABLE STYLES (Stacking with Pseudo-elements) --- */
-     .details-table, .summary-table:not(.total-row td) { /* Exclude total row */
+     .details-table, .summary-table:not(.total-row td) {
         border: none; box-shadow: none; border-radius: 0; background: none;
         border-collapse: separate; border-spacing: 0 0.8em; display: block; width: 100%;
         padding: 0; margin-bottom: 1em; table-layout: auto !important;
@@ -440,18 +411,17 @@ body[data-theme="dark"] .invoice-loading { color: var(--text-color-light-style6-
      }
      .details-table td[data-label="#"]::before { display: none; }
      .details-table td[data-label="Cost"], .summary-table .table-value { font-weight: bold; margin-top: 0.3em; }
-     .summary-table .table-label { font-weight: normal; } /* Label cell */
-     .summary-table .table-value { padding-left: 50%; } /* Value cell */
-     .summary-table .table-value::before { display: none; } /* Hide label for value cell */
+     .summary-table .table-label { font-weight: normal; }
+     .summary-table .table-value { padding-left: 50%; }
+     .summary-table .table-value::before { display: none; }
 
-     /* Keep Total Row as standard table layout */
      .summary-table tfoot tr.total-row { display: table-row; background: none; box-shadow: none; padding: 0; }
      .summary-table tfoot tr.total-row td { display: table-cell; width: auto !important; text-align: right !important; position: static; padding: 1em 0.6em !important; border: none; border-top: 2px solid #ccc; font-size: 1.1em; font-weight: 900; color: var(--primary-color-style6); transition: border-color 0.3s ease, color 0.3s ease;}
      .summary-table tfoot tr.total-row td::before { display: none; }
      .summary-table tfoot tr.total-row .table-label { text-align: right !important; width: auto !important; padding-right: 0.5em; }
 
 
-     /* --- DARK THEME MOBILE TABLE --- */
+     /* DARK THEME MOBILE TABLE */
     body[data-theme="dark"] .details-table tr, body[data-theme="dark"] .summary-table tbody tr { background: #3f3f43; box-shadow: var(--shadow-inset-dark); }
     body[data-theme="dark"] .details-table td::before, body[data-theme="dark"] .summary-table .table-label::before { color: #ddd; }
     body[data-theme="dark"] .details-table td[data-label="#"] { border-bottom-color: #555; }
@@ -491,7 +461,6 @@ body[data-theme="dark"] .invoice-loading { color: var(--text-color-light-style6-
 }
 
 /* Print Styles */
-/* --- PASTE YOUR WORKING PRINT STYLES HERE --- */
 @media print {
     @page { size: A4; margin: 1cm; }
     body { background: white !important; color: black !important; margin: 0 !important; padding: 0 !important; font-family: Arial, sans-serif !important; font-size: 10pt !important; line-height: 1.3; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; height: auto !important; width: auto !important; overflow: visible !important; }
@@ -511,18 +480,8 @@ body[data-theme="dark"] .invoice-loading { color: var(--text-color-light-style6-
 
     /* --- PRINT TABLE CELL & PSEUDO-ELEMENT RESET --- */
     .invoice table td,
-    .invoice table th { /* Apply base print cell styles FIRST */
-        display: table-cell !important; visibility: visible !important;
-        border: 1px solid #ccc !important; padding: 5px 8px !important; /* Standard print padding */
-        text-align: left !important; /* Default left align */
-        vertical-align: top !important; color: black !important; background: white !important;
-        box-shadow: none !important; word-wrap: break-word; position: static !important;
-    }
-    .invoice table td::before, .invoice table th::before { /* Hide ALL ::before */
-        content: none !important; display: none !important; padding: 0 !important;
-        margin: 0 !important; position: static !important; width: auto !important; left: auto !important;
-    }
-    /* --- END NEW PRINT RESET --- */
+    .invoice table th { display: table-cell !important; visibility: visible !important; border: 1px solid #ccc !important; padding: 5px 8px !important; text-align: left !important; vertical-align: top !important; color: black !important; background: white !important; box-shadow: none !important; word-wrap: break-word; position: static !important; }
+    .invoice table td::before, .invoice table th::before { content: none !important; display: none !important; padding: 0 !important; margin: 0 !important; position: static !important; width: auto !important; left: auto !important; }
 
     /* --- Print Table Layout & Alignment (Keep these specific rules) --- */
     .invoice table { display: table !important; width: 100% !important; border-collapse: collapse !important; margin-bottom: 1.5em !important; font-size: 9pt !important; border-spacing: 0 !important; page-break-inside: auto; table-layout: fixed !important; }
@@ -531,7 +490,7 @@ body[data-theme="dark"] .invoice-loading { color: var(--text-color-light-style6-
     .invoice table tr { display: table-row !important; page-break-inside: avoid !important; }
     .invoice thead th { background-color: #eee !important; font-weight: bold !important; border-bottom: 1px solid #999 !important; }
 
-    /* Assign widths & alignment for print columns - TARGET TD VIA NTH-CHILD or DATA-LABEL */
+    /* Assign widths & alignment for print columns */
       .invoice .details-table th:nth-child(1), .invoice .details-table td:nth-child(1) { width: 6%; text-align: center !important;} /* # */
       .invoice .details-table th:nth-child(2), .invoice .details-table td:nth-child(2) { width: 18%; text-align: left !important;} /* Door */
       .invoice .details-table th:nth-child(3), .invoice .details-table td:nth-child(3) { width: 18%; text-align: left !important;} /* Drawer */
